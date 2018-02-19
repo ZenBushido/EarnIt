@@ -27,7 +27,7 @@ class VCForgotPassword : UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         self.tfEmail.text = ""
-        self.tfEmail.text = "g@gmail.com"
+//        self.tfEmail.text = "g@gmail.com"
     }
     
     //MARK: Void Methods
