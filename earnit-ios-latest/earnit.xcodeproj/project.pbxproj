@@ -96,7 +96,7 @@
 		479284471F0B32DD00EDAC6D /* earnitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479284461F0B32DD00EDAC6D /* earnitUITests.swift */; };
 		47B4D9411F596199005C587A /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B4D9401F596199005C587A /* Toast.swift */; };
 		47BADF931F849682008E7A38 /* BalanceScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BADF921F849682008E7A38 /* BalanceScreen.swift */; };
-		47E148B81F3C352300448382 /* GoalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E148B71F3C352300448382 /* GoalViewController.swift */; };
+		47E148B81F3C352300448382 /* VCUpdateGoal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E148B71F3C352300448382 /* VCUpdateGoal.swift */; };
 		47E148BA1F3C53E100448382 /* EarnItGoalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E148B91F3C53E100448382 /* EarnItGoalController.swift */; };
 		92879450AB102AA14A90354E /* Pods_earnit_Dev.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EA8A51F8CBB6A64A0D97A18 /* Pods_earnit_Dev.framework */; };
 		ED64C60B1FA852C00058E4FB /* CountryList.json in Resources */ = {isa = PBXBuildFile; fileRef = ED64C60A1FA852C00058E4FB /* CountryList.json */; };
@@ -133,7 +133,7 @@
 		ED89A5571F96F5EE008BC2FD /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095D449B1F2AF6CF000907D5 /* CalendarViewController.swift */; };
 		ED89A5581F96F5EE008BC2FD /* PendingTasksScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47052A3D1F566F1100E05C3C /* PendingTasksScreen.swift */; };
 		ED89A5591F96F5EE008BC2FD /* BorderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095D44A51F2AF6CF000907D5 /* BorderExtension.swift */; };
-		ED89A55A1F96F5EE008BC2FD /* GoalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E148B71F3C352300448382 /* GoalViewController.swift */; };
+		ED89A55A1F96F5EE008BC2FD /* VCUpdateGoal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E148B71F3C352300448382 /* VCUpdateGoal.swift */; };
 		ED89A55B1F96F5EE008BC2FD /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095D44CC1F2AF6CF000907D5 /* DetailView.swift */; };
 		ED89A55C1F96F5EE008BC2FD /* EarnItTaskController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095D44B61F2AF6CF000907D5 /* EarnItTaskController.swift */; };
 		ED89A55D1F96F5EE008BC2FD /* ImageViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095D44CD1F2AF6CF000907D5 /* ImageViewHeader.swift */; };
@@ -193,6 +193,8 @@
 		EDA619DB1F9B0548000794C4 /* TaskApprovalScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA619DA1F9B0548000794C4 /* TaskApprovalScreen.swift */; };
 		EDA619DC1F9B0548000794C4 /* TaskApprovalScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA619DA1F9B0548000794C4 /* TaskApprovalScreen.swift */; };
 		EDF45C6E1F7E11EB00B201B5 /* FirstTimeLoginProfileScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF45C6D1F7E11EB00B201B5 /* FirstTimeLoginProfileScreen.swift */; };
+		F40AA0642043DFB900301232 /* VCAddDeleteGoal.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40AA0632043DFB800301232 /* VCAddDeleteGoal.swift */; };
+		F40AA0652043DFB900301232 /* VCAddDeleteGoal.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40AA0632043DFB800301232 /* VCAddDeleteGoal.swift */; };
 		F447B5CC2031498500380E4E /* VCForgotPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = F447B5CB2031498500380E4E /* VCForgotPassword.swift */; };
 		F4752F982032126A00A31980 /* VCForgotPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = F447B5CB2031498500380E4E /* VCForgotPassword.swift */; };
 		F4C8939E2032E6BF0049F6A4 /* VCHomeAddChild.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C8939D2032E6BE0049F6A4 /* VCHomeAddChild.swift */; };
@@ -318,7 +320,7 @@
 		479284481F0B32DD00EDAC6D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		47B4D9401F596199005C587A /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		47BADF921F849682008E7A38 /* BalanceScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalanceScreen.swift; sourceTree = "<group>"; };
-		47E148B71F3C352300448382 /* GoalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoalViewController.swift; sourceTree = "<group>"; };
+		47E148B71F3C352300448382 /* VCUpdateGoal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCUpdateGoal.swift; sourceTree = "<group>"; };
 		47E148B91F3C53E100448382 /* EarnItGoalController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EarnItGoalController.swift; sourceTree = "<group>"; };
 		69E6330EADCB3E7AAA8D37EC /* Pods_earnit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_earnit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED64C60A1FA852C00058E4FB /* CountryList.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CountryList.json; sourceTree = "<group>"; };
@@ -326,6 +328,7 @@
 		ED89A59C1F96F5EE008BC2FD /* earnit Dev-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "earnit Dev-Info.plist"; path = "/Users/srivathsa/Desktop/EarnIt-New/earnit-ios/earnit/earnit Dev-Info.plist"; sourceTree = "<absolute>"; };
 		EDA619DA1F9B0548000794C4 /* TaskApprovalScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskApprovalScreen.swift; sourceTree = "<group>"; };
 		EDF45C6D1F7E11EB00B201B5 /* FirstTimeLoginProfileScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeLoginProfileScreen.swift; sourceTree = "<group>"; };
+		F40AA0632043DFB800301232 /* VCAddDeleteGoal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCAddDeleteGoal.swift; sourceTree = "<group>"; };
 		F447B5CB2031498500380E4E /* VCForgotPassword.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCForgotPassword.swift; sourceTree = "<group>"; };
 		F4C8939D2032E6BE0049F6A4 /* VCHomeAddChild.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCHomeAddChild.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -380,7 +383,8 @@
 				095D44A31F2AF6CF000907D5 /* TaskViewController.swift */,
 				EDA619DA1F9B0548000794C4 /* TaskApprovalScreen.swift */,
 				473AE34E1F358ABD000B8C5F /* ParentProfilePage.swift */,
-				47E148B71F3C352300448382 /* GoalViewController.swift */,
+				47E148B71F3C352300448382 /* VCUpdateGoal.swift */,
+				F40AA0632043DFB800301232 /* VCAddDeleteGoal.swift */,
 				472C0C2A1F4D3D6F0057AFB8 /* TaskSubmitScreen.swift */,
 				47021C5A1F4E802900FD2191 /* MessageDisplayScreen.swift */,
 				47052A3D1F566F1100E05C3C /* PendingTasksScreen.swift */,
@@ -945,6 +949,7 @@
 				095D44E41F2AF6CF000907D5 /* EarnItDimension.swift in Sources */,
 				095D44E81F2AF6CF000907D5 /* TableViewExtension.swift in Sources */,
 				F4C8939E2032E6BF0049F6A4 /* VCHomeAddChild.swift in Sources */,
+				F40AA0642043DFB900301232 /* VCAddDeleteGoal.swift in Sources */,
 				095D44D91F2AF6CF000907D5 /* LoginPageController.swift in Sources */,
 				095D44F11F2AF6CF000907D5 /* FontHelper.swift in Sources */,
 				095D44F61F2AF6CF000907D5 /* EarnItAppUrl.swift in Sources */,
@@ -969,7 +974,7 @@
 				095D44D71F2AF6CF000907D5 /* CalendarViewController.swift in Sources */,
 				47052A3E1F566F1100E05C3C /* PendingTasksScreen.swift in Sources */,
 				095D44E01F2AF6CF000907D5 /* BorderExtension.swift in Sources */,
-				47E148B81F3C352300448382 /* GoalViewController.swift in Sources */,
+				47E148B81F3C352300448382 /* VCUpdateGoal.swift in Sources */,
 				095D45031F2AF6CF000907D5 /* DetailView.swift in Sources */,
 				095D44F01F2AF6CF000907D5 /* EarnItTaskController.swift in Sources */,
 				095D45041F2AF6CF000907D5 /* ImageViewHeader.swift in Sources */,
@@ -1038,6 +1043,7 @@
 				ED89A5401F96F5EE008BC2FD /* EarnItDimension.swift in Sources */,
 				ED89A5411F96F5EE008BC2FD /* TableViewExtension.swift in Sources */,
 				F4C8939F2032E6BF0049F6A4 /* VCHomeAddChild.swift in Sources */,
+				F40AA0652043DFB900301232 /* VCAddDeleteGoal.swift in Sources */,
 				ED89A5421F96F5EE008BC2FD /* LoginPageController.swift in Sources */,
 				ED89A5431F96F5EE008BC2FD /* FontHelper.swift in Sources */,
 				ED89A5441F96F5EE008BC2FD /* EarnItAppUrl.swift in Sources */,
@@ -1063,7 +1069,7 @@
 				ED89A5571F96F5EE008BC2FD /* CalendarViewController.swift in Sources */,
 				ED89A5581F96F5EE008BC2FD /* PendingTasksScreen.swift in Sources */,
 				ED89A5591F96F5EE008BC2FD /* BorderExtension.swift in Sources */,
-				ED89A55A1F96F5EE008BC2FD /* GoalViewController.swift in Sources */,
+				ED89A55A1F96F5EE008BC2FD /* VCUpdateGoal.swift in Sources */,
 				ED89A55B1F96F5EE008BC2FD /* DetailView.swift in Sources */,
 				ED89A55C1F96F5EE008BC2FD /* EarnItTaskController.swift in Sources */,
 				ED89A55D1F96F5EE008BC2FD /* ImageViewHeader.swift in Sources */,

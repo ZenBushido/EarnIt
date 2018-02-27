@@ -232,6 +232,43 @@ func callSignUpApiForChild(firstName: String,email: String, password: String,chi
     }
 }
 
+//Delete Goal Call
+
+func callForDeleteGoal(goal_id: Int, success: @escaping(String)-> (),failure: @escaping(Bool)-> ()){
+    
+    let keychain = KeychainSwift()
+    guard  let _ = keychain.get("email") else  {
+        print(" /n Unable to fetch user credentials from keychain \n")
+        return
+    }
+    let user : String = keychain.get("email") as! String
+    let password : String = keychain.get("password") as! String
+    var headers : HTTPHeaders = [:]
+    if let authorizationHeader = Request.authorizationHeader(user: user, password: password){
+        headers = [
+            "Accept": "application/json",
+            "Authorization": authorizationHeader.value,
+            "Content-Type": "application/json"
+        ]
+    }
+    //    http://localhost:9191/childrens/{CHILDREN_ID}
+    
+    Alamofire.request("\(EarnItApp_BASE_URL)/goals/\(goal_id)", method: .delete, encoding: JSONEncoding.default, headers: headers).responseJSON{ response in
+        
+        switch(response.result){
+        case .success:
+            
+            let responseJSON = JSON(response.result.value)
+            print("response.result.value EarnIt Child User SignUp,\(responseJSON)")
+            
+            success(responseJSON["code"].stringValue)
+        case .failure(_):
+            
+            print(response.result.error)
+        }
+    }
+}
+
 //Delete Child Call
 
 func callForDeleteChild(children_id: Int, success: @escaping(String)-> (),failure: @escaping(Bool)-> ()){
@@ -280,6 +317,7 @@ func callForgotPasswordApiForUser(email: String!, success: @escaping(JSON) -> ()
         "email": email
         ] as [String : Any]
     
+    //print("\(EarnItApp_BASE_URL)/passwordReminder")
     Alamofire.request("\(EarnItApp_BASE_URL)/passwordReminder",method: .post,parameters: params, encoding: JSONEncoding.default , headers: headers)
         .responseJSON { response in
             switch response.result {
@@ -587,19 +625,10 @@ func getGoalsForChild(childId : Int,success: @escaping([EarnItChildGoal])-> (),f
             "Authorization": authorizationHeader.value,
             "Content-Type": "application/json"
         ]
-        
-        
     }
-
-    
     Alamofire.request("\(EarnItApp_BASE_URL)/goals/\(childId)",method: .get,parameters: nil, encoding: JSONEncoding.default,  headers: headers).responseJSON{ response in
-        
-        
         switch(response.result){
-            
         case .success:
-            
-           
             print("response.result.value  getGoals,\(response.result.value)")
             let responseJSON = JSON(response.result.value)
             

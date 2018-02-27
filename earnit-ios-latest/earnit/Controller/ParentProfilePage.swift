@@ -17,10 +17,7 @@ import ALCameraViewController
 
 class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate, UINavigationControllerDelegate,UITextFieldDelegate{
     
-    
-    
     @IBOutlet var welcomeLabel: UILabel!
-    
     @IBOutlet var childTableHeightConstraint: NSLayoutConstraint!
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     @IBOutlet var userImageView: UIImageView!
@@ -1186,37 +1183,25 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
         let loginController = storyBoard.instantiateViewController(withIdentifier: "LoginController") as! LoginPageController
         self.present(loginController, animated: true, completion: nil)
-        
     }
-
-
-    
     
 //    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
 //        return 1
 //    }
 // 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-     
        return self.earnItChildUsers.count
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        
         var numberOfSection  = 0
-        
         if self.earnItChildUsers.count > 0{
-            
             numberOfSection = 1
-            
         }else {
-            
             numberOfSection = 0
         }
-        
         print("numberOfSection \(numberOfSection)")
         return numberOfSection
-
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -1224,7 +1209,7 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var childCell = self.childUserTable.dequeueReusableCell(withIdentifier: "ChildCell", for: indexPath as IndexPath) as! ChildCell
+        let childCell = self.childUserTable.dequeueReusableCell(withIdentifier: "ChildCell", for: indexPath as IndexPath) as! ChildCell
 
         childCell.childName.text = self.earnItChildUsers[indexPath.row].firstName
         childCell.childImageView.loadImageUsingCache(withUrl: self.earnItChildUsers[indexPath.row].childUserImageUrl!)
@@ -1301,6 +1286,7 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
             print(errorcode)
             
             if (errorcode == "9003"){
+                self.hideLoadingView()
                 self.view.makeToast("Error to delete child. Please try later!")
                 //self.fetchParentUserDetailFromBackground()
             }else {
@@ -1319,7 +1305,7 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
             }
         }) { (error) -> () in
             self.hideLoadingView()
-            self.view.makeToast("Add Child Failed")
+            self.view.makeToast("Failed to Delete!")
             //            let alert = showAlert(title: "Error", message: "Add Child Failed")
             //            self.present(alert, animated: true, completion: nil)
             //            print(" Set status completed failed")

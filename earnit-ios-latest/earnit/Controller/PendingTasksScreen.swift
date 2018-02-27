@@ -1119,19 +1119,19 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
                 // print(earnItGoalList);
                 
                 let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
-                let goalViewController = storyBoard.instantiateViewController(withIdentifier: "GoalViewController") as! GoalViewController
-                
+                let addGoalVC = storyBoard.instantiateViewController(withIdentifier: "VCAddDeleteGoal") as! VCAddDeleteGoal
+
                 if(self.earnItChildUserForParent.earnItGoal.name == "" || self.earnItChildUserForParent.earnItGoal.name == nil){
                     
-                    goalViewController.IS_ADD=true
+                    addGoalVC.IS_ADD=true
                 }else {
                     
-                    goalViewController.IS_ADD=false
+                    addGoalVC.IS_ADD=false
                 }
-                
-                goalViewController.earnItChildUser = self.earnItChildUserForParent
-                goalViewController.earnItChildUsers = self.earnItChildUsers
-                self.present(goalViewController, animated:true, completion:nil)
+                addGoalVC.IS_ADD = false
+                addGoalVC.earnItChildUser = self.earnItChildUserForParent
+                addGoalVC.earnItChildUsers = self.earnItChildUsers
+                self.present(addGoalVC, animated:true, completion:nil)
                 
                 
             })

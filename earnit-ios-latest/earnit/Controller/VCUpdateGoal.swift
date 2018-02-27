@@ -1,5 +1,5 @@
 //
-//  GoalViewController.swift
+//  VCUpdateGoal.swift
 //  earnit
 //
 //  Created by Lovelini Rawat on 8/10/17.
@@ -10,13 +10,17 @@ import Foundation
 import UIKit
 import KeychainSwift
 
-class GoalViewController : UIViewController, UITextFieldDelegate, UITextViewDelegate, UIGestureRecognizerDelegate {
+protocol DelegateUpdateGoal {
+    func getGoalForCurrentUser()
+}
+
+class VCUpdateGoal : UIViewController, UITextFieldDelegate, UITextViewDelegate, UIGestureRecognizerDelegate {
     
     var earnItChildUser  = EarnItChildUser()
     var IS_ADD = true
     var currentKeyboardOffset : CGFloat = 0.0
     
-    @IBOutlet var TopBannerLabel: UILabel!
+    @IBOutlet var lblTitle: UILabel!
     @IBOutlet var headerView: UIView!
     
     @IBOutlet var goalName: UITextField!
@@ -34,11 +38,13 @@ class GoalViewController : UIViewController, UITextFieldDelegate, UITextViewDele
     var constY:NSLayoutConstraint?
     
     var activeField:UITextField?
+    var objEarnItGoal = EarnItChildGoal()
+    var delegate: DelegateUpdateGoal?
 
-    
+    //MARK: View Cycle
+
     override func viewDidLoad() {
-        
-        
+
         self.actionView.frame = CGRect(0 , 0, self.view.frame.width, self.view.frame.height)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.actionViewDidTapped(_:)))
         self.actionView.addGestureRecognizer(tapGesture)
@@ -54,13 +60,15 @@ class GoalViewController : UIViewController, UITextFieldDelegate, UITextViewDele
         
         if(!IS_ADD){
             print("trying to EDIT a goal")
-            TopBannerLabel.text="Edit Goal"
+            //lblTitle.text="Edit Goal"
             saveButton1.setTitle("Update", for: UIControlState.normal)
-            goalName.text = self.earnItChildUser.earnItGoal.name
-            goalAmount.text = String(self.earnItChildUser.earnItGoal.ammount!)
-        
+//            goalName.text = self.earnItChildUser.earnItGoal.name
+//            goalAmount.text = String(self.earnItChildUser.earnItGoal.ammount!)
+            goalName.text = objEarnItGoal.name!
+            goalAmount.text = String(objEarnItGoal.ammount!)
         }
-        
+        self.lblTitle.text = "\(EarnItAccount.currentUser.firstName!)'s Goal"
+
         self.goalName.delegate = self
         self.requestObserver()
         
@@ -68,7 +76,6 @@ class GoalViewController : UIViewController, UITextFieldDelegate, UITextViewDele
         self.creatLeftPadding(textField: goalAmount)
         self.headerView.layer.addBorder(edge: .bottom, color: .white, thickness: 1.0)
         self.messageView.messageToLabel.text = "Message to  \(self.earnItChildUser.firstName!):"
-        
     }
     
     /**
@@ -82,12 +89,10 @@ class GoalViewController : UIViewController, UITextFieldDelegate, UITextViewDele
         let leftPadding = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: textField.frame.size.height))
         textField.leftView = leftPadding
         textField.leftViewMode = UITextFieldViewMode.always
-        
     }
 
     
     @IBAction func goBack(_ sender: Any) {
-        
         self.view.endEditing(true)
        self.dismiss(animated: true, completion: nil)
     }
@@ -95,68 +100,27 @@ class GoalViewController : UIViewController, UITextFieldDelegate, UITextViewDele
     @IBAction func saveButtonClicked(_ sender: Any) {
        
         if self.goalName.text?.characters.count == 0 || self.goalAmount.text?.characters.count == 0{
-            
             self.view.makeToast("Please complete goal name and goal amount")
-//            let alert = showAlert(title: "", message: "Please complete goal name and goal amount")
-//            self.present(alert, animated: true, completion: nil)
-//            
         }else {
             let createdDate = Date().millisecondsSince1970
- 
-        if(IS_ADD)
-            
-        {
+            print("Should edit" )
             self.showLoadingView()
-            print("Should add" )
-            addGoalForChild(childId: self.earnItChildUser.childUserId, amount: Int(self.goalAmount.text!)! ,createdDate : createdDate,goalName:self.goalName.text!, success: {_ in
-                
-                self.hideLoadingView()
-                self.view.makeToast("Goal added for \(self.earnItChildUser.firstName!)")
-                self.view.endEditing(true)
-                self.dismissScreen()
-//                let alert = showAlertWithOption(title: "", message: "Goal added for \(self.earnItChildUser.firstName!)")
-//                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: self.dismissScreen))
-//                self.present(alert, animated: true, completion: nil)
-                
-                
-                
-            }) { (error) -> () in
-                self.hideLoadingView()
-                self.view.makeToast("Add goal failed")
-//                let alert = showAlert(title: "Error", message: "Failed")
-//                self.present(alert, animated: true, completion: nil)
-                
-            }
-        }
-        else
-        {  print("Should edit" )
-
-            self.showLoadingView()
-            editGoalForChild(id: self.earnItChildUser.earnItGoal.id!, childId: self.earnItChildUser.childUserId, amount: Int(self.goalAmount.text!)! ,createdDate : createdDate,goalName:self.goalName.text!, success: {_ in
+            //self.earnItChildUser.childUserId
+            editGoalForChild(id: objEarnItGoal.id!, childId: self.earnItChildUser.childUserId, amount: Int(self.goalAmount.text!)! ,createdDate : createdDate,goalName:self.goalName.text!, success: {_ in
                 
                 self.hideLoadingView()
                 self.view.makeToast("Goal updated for \(self.earnItChildUser.firstName!)")
                 self.view.endEditing(true)
+                self.delegate?.getGoalForCurrentUser()
                 self.dismissScreen()
-//                let alert = showAlertWithOption(title: "", message: "Goal updated for \(self.earnItChildUser.firstName!)")
-//                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: self.dismissScreen))
-//                self.present(alert, animated: true, completion: nil)
-
-                
-                
+                //                let alert = showAlertWithOption(title: "", message: "Goal updated for \(self.earnItChildUser.firstName!)")
+                //                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: self.dismissScreen))
+                //                self.present(alert, animated: true, completion: nil)
             }) { (error) -> () in
-                
                 self.hideLoadingView()
                 self.view.makeToast("Update goal failed")
-//                let alert = showAlert(title: "Error", message: "Failed")
-//                self.present(alert, animated: true, completion: nil)
-                
             }
         }
-     
-        }
-        
-
     }
     
     @IBAction func viewGotTapped(_ sender: Any) {
@@ -164,25 +128,15 @@ class GoalViewController : UIViewController, UITextFieldDelegate, UITextViewDele
         self.view.endEditing(true)
     }
     
-    
-    
     // *Override
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
        if textField == self.goalName{
-            
             guard let text = textField.text else { return true }
             let newLength = text.characters.count + string.characters.count - range.length
             return newLength <= 20
-            
         }
-        
         return true
-        
     }
-    
- 
-    
     
     func dismissScreen(){
         
@@ -191,65 +145,53 @@ class GoalViewController : UIViewController, UITextFieldDelegate, UITextViewDele
   
     func fetchParentUserDetailFromBackground(){
         
-                    DispatchQueue.global().async {
+        DispatchQueue.global().async {
             
-                        let keychain = KeychainSwift()
-                        guard  let _ = keychain.get("email") else  {
-                            print(" /n Unable to fetch user credentials from keychain \n")
-                            return
-                        }
-                        let email : String = (keychain.get("email")!)
-                        let password : String = (keychain.get("password")!)
-            
-                        checkUserAuthentication(email: email, password: password, success: {
-            
-                            (responseJSON) ->() in
-            
-                            if (responseJSON["userType"].stringValue == "CHILD"){
-            
-                                EarnItChildUser.currentUser.setAttribute(json: responseJSON)
-                                //success(true)
-            
-                            }else {
-            
-                                let keychain = KeychainSwift()
-                                if responseJSON["token"].stringValue != keychain.get("token") || responseJSON["token"] == nil{
-                                    
-                                }
-                                EarnItAccount.currentUser.setAttribute(json: responseJSON)
-                                keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
-                                // success(true)
-                            }
-            
-                        }) { (error) -> () in
-            
-                            
-                              self.dismissScreenToLogin()
-//                            let alert = showAlertWithOption(title: "Authentication failed", message: "please login again")
-//                            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: self.dismissScreenToLogin))
-//                            self.present(alert, animated: true, completion: nil)
-            
-                        }
-            
-                        DispatchQueue.main.async {
-            
-                            print("done calling background fetch for Parent....")
-            
-            
-                        }
-                        
-                    }
-                    
+            let keychain = KeychainSwift()
+            guard  let _ = keychain.get("email") else  {
+                print(" /n Unable to fetch user credentials from keychain \n")
+                return
             }
+            let email : String = (keychain.get("email")!)
+            let password : String = (keychain.get("password")!)
+            
+            checkUserAuthentication(email: email, password: password, success: {
+                
+                (responseJSON) ->() in
+                
+                if (responseJSON["userType"].stringValue == "CHILD"){
+                    
+                    EarnItChildUser.currentUser.setAttribute(json: responseJSON)
+                    //success(true)
+                    
+                }else {
+                    
+                    let keychain = KeychainSwift()
+                    if responseJSON["token"].stringValue != keychain.get("token") || responseJSON["token"] == nil{
+                    }
+                    EarnItAccount.currentUser.setAttribute(json: responseJSON)
+                    keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
+                    // success(true)
+                }
+                
+            }) { (error) -> () in
+
+                self.dismissScreenToLogin()
+                //                            let alert = showAlertWithOption(title: "Authentication failed", message: "please login again")
+                //                            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: self.dismissScreenToLogin))
+                //                            self.present(alert, animated: true, completion: nil)
+            }
+            DispatchQueue.main.async {
+                print("done calling background fetch for Parent....")
+            }
+        }
+    }
     
     func dismissScreenToLogin(){
-            
-                let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
-                let loginController = storyBoard.instantiateViewController(withIdentifier: "LoginController") as! LoginPageController
-                self.present(loginController, animated: true, completion: nil)
-                
-      }
-    
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
+        let loginController = storyBoard.instantiateViewController(withIdentifier: "LoginController") as! LoginPageController
+        self.present(loginController, animated: true, completion: nil)
+    }
     
     /**
      Add observer to the View
@@ -261,10 +203,7 @@ class GoalViewController : UIViewController, UITextFieldDelegate, UITextViewDele
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardDidHide  , object: nil)
-        
     }
-    
-    
     
     /**
      Responds to keyboard showing and adjusts the scrollview.

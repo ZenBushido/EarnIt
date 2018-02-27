@@ -68,10 +68,10 @@ class VCForgotPassword : UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func CheckValidityAndCallSignUpApi(_ sender: Any) {
+    @IBAction func CheckValidityAndCallForgotPasswordApi(_ sender: Any) {
         self.view.endEditing(true)
         self.isValidEmail()
-        print("Inside CheckValidityAndCallSignUpApi")
+        print("Inside CheckValidityAndCallForgotPasswordApi")
         self.showLoadingView()
         if (self.tfEmail.text?.count)! == 0  {
             self.hideLoadingView()

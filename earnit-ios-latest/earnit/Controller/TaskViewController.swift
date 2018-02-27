@@ -1359,20 +1359,17 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
                 // print(earnItGoalList);
                 
                 let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
-                let goalViewController = storyBoard.instantiateViewController(withIdentifier: "GoalViewController") as! GoalViewController
-                
+                let addGoalVC = storyBoard.instantiateViewController(withIdentifier: "VCAddDeleteGoal") as! VCAddDeleteGoal
                 if(self.earnItChildUser.earnItGoal.name == "" || self.earnItChildUser.earnItGoal.name == nil){
-                    
-                    goalViewController.IS_ADD=true
+                    addGoalVC.IS_ADD = true
                 }else {
                     
-                    goalViewController.IS_ADD=false
+                    addGoalVC.IS_ADD = false
                 }
-                goalViewController.earnItChildUser = self.earnItChildUser
-                goalViewController.earnItChildUsers = self.earnItChildUsers
-                self.present(goalViewController, animated:true, completion:nil)
-                
-                
+                addGoalVC.IS_ADD = false
+                addGoalVC.earnItChildUser = self.earnItChildUser
+                addGoalVC.earnItChildUsers = self.earnItChildUsers
+                self.present(addGoalVC, animated:true, completion:nil)
             })
             { (error) -> () in
                 

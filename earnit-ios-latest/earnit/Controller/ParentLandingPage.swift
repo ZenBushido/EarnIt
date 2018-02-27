@@ -632,22 +632,19 @@ class ParentLandingPage: UIViewController,UITableViewDelegate, UITableViewDataSo
            // print(earnItGoalList);
             
             let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
-            let goalViewController = storyBoard.instantiateViewController(withIdentifier: "GoalViewController") as! GoalViewController
-            
+            let addGoalVC = storyBoard.instantiateViewController(withIdentifier: "VCAddDeleteGoal") as! VCAddDeleteGoal
+
             print("earnItGoalList.count>0 \(earnItGoalList.count)")
             if(self.selectedChildUser.earnItGoal.name == "" || self.selectedChildUser.earnItGoal.name == nil){
-                
-                goalViewController.IS_ADD=true
+                addGoalVC.IS_ADD = true
             }else {
-                
-                 goalViewController.IS_ADD=false
+                 addGoalVC.IS_ADD = false
             }
-            
-            goalViewController.earnItChildUser = self.selectedChildUser
-            goalViewController.earnItChildUsers = self.earnItChildUsers
-            self.present(goalViewController, animated:true, completion:nil)
-
-
+            addGoalVC.IS_ADD = false
+            addGoalVC.earnItChildUser = self.selectedChildUser
+            addGoalVC.earnItChildUsers = self.earnItChildUsers
+            addGoalVC.earnItChildGoalList = earnItGoalList
+            self.present(addGoalVC, animated:true, completion:nil)
         })
         { (error) -> () in
             
@@ -655,15 +652,12 @@ class ParentLandingPage: UIViewController,UITableViewDelegate, UITableViewDataSo
             
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
-            
-            
         }
-
      
         /*let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
-        let goalViewController = storyBoard.instantiateViewController(withIdentifier: "GoalViewController") as! GoalViewController
-        goalViewController.earnItChildUser = self.selectedChildUser
-        self.present(goalViewController, animated:true, completion:nil)*/
+         let addGoalVC = storyBoard.instantiateViewController(withIdentifier: "VCAddDeleteGoal") as! VCAddDeleteGoal
+        addGoalVC.earnItChildUser = self.selectedChildUser
+        self.present(addGoalVC, animated:true, completion:nil)*/
     }
     
     func goToCheckInScreen(){
