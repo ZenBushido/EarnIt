@@ -12,6 +12,7 @@ import UIKit
 class ChildCell : UITableViewCell {
     
     @IBOutlet var childName: UILabel!
+    @IBOutlet var lblPercentValue: UILabel!
     @IBOutlet var childImageView: UIImageView!
     @IBOutlet var btnDeleteChildRow: UIButton!
     @IBOutlet var btnCellRowBG: UIButton!

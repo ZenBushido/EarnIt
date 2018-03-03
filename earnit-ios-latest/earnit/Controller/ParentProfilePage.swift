@@ -525,13 +525,10 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
     @IBAction func goToAddChildUserPage(_ sender: Any) {
         
         print("add child clicked ")
-        
-        
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
         let addChildPage = storyBoard.instantiateViewController(withIdentifier: "AddChildPage") as! AddChildPage
 //        let addChildPage = storyBoard.instantiateViewController(withIdentifier: "VCHomeAddChild") as! VCHomeAddChild
         self.didShownImagePicker = false
-       
         
         let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
         
@@ -1185,6 +1182,8 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
         self.present(loginController, animated: true, completion: nil)
     }
     
+    //MARK: TableView Delegates
+    
 //    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
 //        return 1
 //    }
@@ -1210,7 +1209,6 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let childCell = self.childUserTable.dequeueReusableCell(withIdentifier: "ChildCell", for: indexPath as IndexPath) as! ChildCell
-
         childCell.childName.text = self.earnItChildUsers[indexPath.row].firstName
         childCell.childImageView.loadImageUsingCache(withUrl: self.earnItChildUsers[indexPath.row].childUserImageUrl!)
         childCell.btnDeleteChildRow.tag = self.earnItChildUsers[indexPath.row].childUserId
@@ -1232,30 +1230,29 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
         //self.bottomView.frame.origin.y =  self.childUserTable.frame.origin.y
     }
     
+    //MARK: Show & Hide Loading View
+    
     func showLoadingView(){
-        
         self.view.alpha = 0.7
         self.view.isUserInteractionEnabled = false
         self.activityIndicator.startAnimating()
     }
     
     func hideLoadingView(){
-        
         self.view.alpha = 1
         self.view.isUserInteractionEnabled = true
         self.activityIndicator.stopAnimating()
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool
-    {
-     
+    //MARK: Text View Update
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
         if let nextField = textField.superview?.viewWithTag(textField.tag + 1) as? UITextField {
             nextField.becomeFirstResponder()
         } else {
-           
             textField.resignFirstResponder()
         }
-      
         return false
     }
     

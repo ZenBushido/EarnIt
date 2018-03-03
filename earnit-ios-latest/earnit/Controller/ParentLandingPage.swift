@@ -96,9 +96,7 @@ class ParentLandingPage: UIViewController,UITableViewDelegate, UITableViewDataSo
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         
         //print("cellForRowAt")
-      
         var taskCell = self.childUserTable.dequeueReusableCell(withIdentifier: "childTaskCellForParent", for: indexPath as IndexPath) as! ChildTaskCellForParent
-
         //taskCell.addTaskButton.isHidden = false
         taskCell.taskTime.isHidden = false
         taskCell.taskName.isHidden = false
@@ -149,8 +147,6 @@ class ParentLandingPage: UIViewController,UITableViewDelegate, UITableViewDataSo
                     slideMenuController.automaticallyAdjustsScrollViewInsets = true
                     //slideMenuController.delegate = pendingTasksScreen
                     self.present(slideMenuController, animated:false, completion:nil)
-                    
-                    
                 }
                 //taskCell.taskName.text = "More..."
             }
@@ -284,7 +280,6 @@ class ParentLandingPage: UIViewController,UITableViewDelegate, UITableViewDataSo
                 
                 self.removeActionView()
                 self.goToCheckInScreen()
-                
             }
             
             optionView.doActionForThirdOption = {
@@ -613,10 +608,7 @@ class ParentLandingPage: UIViewController,UITableViewDelegate, UITableViewDataSo
             
             self.present(balanceScreen, animated:true, completion:nil)
         }
-
     }
-    
-    
     
     func goToAddGoalPage(){
         

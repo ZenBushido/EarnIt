@@ -713,9 +713,7 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
             self.password.text = self.earnItChildUser.password
             self.confirmPassword.text = self.earnItChildUser.password
             
-           
-                
-          self.phone.text = self.getPhoneNumber()
+            self.phone.text = self.getPhoneNumber()
             self.userImageView.loadImageUsingCache(withUrl: self.earnItChildUser.childUserImageUrl)
             self.saveButton.setTitle("Update", for: .normal)
             self.childImageUrl = self.earnItChildUser.childUserImageUrl?.replacingOccurrences(of: "\"", with:  " ")
@@ -724,7 +722,6 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
             
             self.setCountryCode()
         }
-        
     }
     
     
