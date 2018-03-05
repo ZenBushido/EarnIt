@@ -125,6 +125,7 @@ extension OptionViewController : UITableViewDelegate{
                 self.closeLeft()
                 let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
                 let parentProfile = storyBoard.instantiateViewController(withIdentifier: "ParentProfilePage") as! ParentProfilePage
+
 //                let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
 //
 //                let slideMenuController  = SlideMenuViewController(mainViewController: parentProfile, leftMenuViewController: optionViewController)

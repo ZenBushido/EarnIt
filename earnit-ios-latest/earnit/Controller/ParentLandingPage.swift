@@ -13,7 +13,7 @@ import SlideMenuControllerSwift
 import CircleMenu
 import KeychainSwift
 
-class ParentLandingPage: UIViewController,UITableViewDelegate, UITableViewDataSource,CircleMenuDelegate,UITextViewDelegate,UIGestureRecognizerDelegate {
+class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataSource, CircleMenuDelegate, UITextViewDelegate, UIGestureRecognizerDelegate {
 
     @IBOutlet var childUserTable: UITableView!
     @IBOutlet var tipsContainer: UIView!
@@ -50,12 +50,14 @@ class ParentLandingPage: UIViewController,UITableViewDelegate, UITableViewDataSo
 
         ]
    
-    
-       //override
+    //MARK: View Cycle
+    //override
     override func viewDidLoad() {
         super.viewDidLoad()
         //print("viewDidLoad")
         print("Parent Landing view did load")
+
+        NotificationCenter.default.addObserver(self, selector: #selector(self.getEarntitUserData), name: NSNotification.Name(rawValue: "getEarntit_UserData"), object: nil)
         self.actionView.frame = CGRect(0 , 0, self.view.frame.width, self.view.frame.height)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.actionViewDidTapped(_:)))
         self.actionView.addGestureRecognizer(tapGesture)
@@ -69,8 +71,68 @@ class ParentLandingPage: UIViewController,UITableViewDelegate, UITableViewDataSo
         self.childUserTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
-    @IBAction func openSideMenu(_ sender: Any) {
-         self.openLeft()
+    override func viewWillAppear(_ animated: Bool) {
+        
+        super.viewWillAppear(true)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        print("Parent Landing view did appear")
+        createEarnItAppChildUser( success: {
+            (earnItChildUsers) -> () in
+            EarnItAccount.currentUser.earnItChildUsers = earnItChildUsers
+            self.earnItChildUsers = EarnItAccount.currentUser.earnItChildUsers
+            self.childUserTable.reloadData()
+            self.hideLoadingView()
+            //Check for parent has child or not
+            if (EarnItAccount.currentUser.earnItChildUsers.count == 0) {
+                let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                let parentLandingPage  = storyBoard.instantiateViewController(withIdentifier: "VCHomeAddChild") as! VCHomeAddChild
+                let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
+                let slideMenuController  = SlideMenuViewController(mainViewController: parentLandingPage, leftMenuViewController: optionViewController)
+                slideMenuController.automaticallyAdjustsScrollViewInsets = true
+                //            slideMenuController.delegate = parentLandingPage
+                self.present(slideMenuController, animated:false, completion:nil)
+            }
+        }) {  (error) -> () in
+            print("error")
+        }
+        self.childUserTable.reloadData()
+        self.welcomLabel.text = "Hi" + " " + EarnItAccount.currentUser.firstName
+        _ = Timer.scheduledTimer(timeInterval: 300.0, target: self, selector: #selector(self.fetchParentUserDetailFromBackground), userInfo: nil, repeats: true)
+        
+        _ = Timer.scheduledTimer(timeInterval: 300.0, target: self, selector: #selector(self.fetchChildUserDetailFromBackground), userInfo: nil, repeats: true)
+    }
+
+    func getEarntitUserData() {
+        createEarnItAppChildUser( success: {
+            (earnItChildUsers) -> () in
+            EarnItAccount.currentUser.earnItChildUsers = earnItChildUsers
+            self.earnItChildUsers = EarnItAccount.currentUser.earnItChildUsers
+            self.childUserTable.reloadData()
+            self.hideLoadingView()
+            //Check for parent has child or not
+            if (EarnItAccount.currentUser.earnItChildUsers.count == 0) {
+                let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                let parentLandingPage  = storyBoard.instantiateViewController(withIdentifier: "VCHomeAddChild") as! VCHomeAddChild
+                let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
+                let slideMenuController  = SlideMenuViewController(mainViewController: parentLandingPage, leftMenuViewController: optionViewController)
+                slideMenuController.automaticallyAdjustsScrollViewInsets = true
+                //            slideMenuController.delegate = parentLandingPage
+                self.present(slideMenuController, animated:false, completion:nil)
+                
+                //                self.present(parentLandingPage, animated:false, completion:nil)
+                
+                //                self.navigationController?.pushViewController(parentLandingPage, animated: false)
+            }
+            else {
+                self.dismiss(animated: true, completion: nil)
+            }
+            
+        }) {  (error) -> () in
+            print("error")
+        }
+        self.childUserTable.reloadData()
     }
     
     //override
@@ -78,6 +140,11 @@ class ParentLandingPage: UIViewController,UITableViewDelegate, UITableViewDataSo
         super.didReceiveMemoryWarning()
     }
     
+    @IBAction func openSideMenu(_ sender: Any) {
+         self.openLeft()
+    }
+
+    //MARK: Table View Delegate
     //override
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -338,40 +405,6 @@ class ParentLandingPage: UIViewController,UITableViewDelegate, UITableViewDataSo
         self.view.alpha = 1
         self.view.isUserInteractionEnabled = true
         self.activityIndicator.stopAnimating()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        print("Parent Landing view did appear")
-        createEarnItAppChildUser( success: {
-            (earnItChildUsers) -> () in
-            EarnItAccount.currentUser.earnItChildUsers = earnItChildUsers
-            self.earnItChildUsers = EarnItAccount.currentUser.earnItChildUsers
-            self.childUserTable.reloadData()
-            self.hideLoadingView()
-            //Check for parent has child or not
-            if (EarnItAccount.currentUser.earnItChildUsers.count == 0) {
-                let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                let parentLandingPage  = storyBoard.instantiateViewController(withIdentifier: "VCHomeAddChild") as! VCHomeAddChild
-                let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
-                let slideMenuController  = SlideMenuViewController(mainViewController: parentLandingPage, leftMenuViewController: optionViewController)
-                slideMenuController.automaticallyAdjustsScrollViewInsets = true
-                //            slideMenuController.delegate = parentLandingPage
-                self.present(slideMenuController, animated:false, completion:nil)
-
-//                self.present(parentLandingPage, animated:false, completion:nil)
-                
-//                self.navigationController?.pushViewController(parentLandingPage, animated: false)
-            }
-
-        }) {  (error) -> () in
-            print("error")
-        }
-        self.childUserTable.reloadData()
-        self.welcomLabel.text = "Hi" + " " + EarnItAccount.currentUser.firstName
-        
-        _ = Timer.scheduledTimer(timeInterval: 300.0, target: self, selector: #selector(self.fetchParentUserDetailFromBackground), userInfo: nil, repeats: true)
-        
-        _ = Timer.scheduledTimer(timeInterval: 300.0, target: self, selector: #selector(self.fetchChildUserDetailFromBackground), userInfo: nil, repeats: true)
     }
     
     // configure buttons

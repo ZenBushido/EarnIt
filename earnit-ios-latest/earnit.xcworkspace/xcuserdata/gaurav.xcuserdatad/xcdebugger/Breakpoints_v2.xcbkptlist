@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "earnit/Controller/ChildDashBoard.swift"
-            timestampString = "541391108.842804"
+            timestampString = "541905611.5442539"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "84"
@@ -32,6 +32,38 @@
             startingLineNumber = "22"
             endingLineNumber = "22"
             landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "earnit/Controller/ParentLandingPage.swift"
+            timestampString = "541972416.093381"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "805"
+            endingLineNumber = "805"
+            landmarkName = "fetchParentUserDetailFromBackground()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "earnit/Controller/ParentProfilePage.swift"
+            timestampString = "541972416.093521"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1176"
+            endingLineNumber = "1176"
+            landmarkName = "dismissScreenToLogin()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

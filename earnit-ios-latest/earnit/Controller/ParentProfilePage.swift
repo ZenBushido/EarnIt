@@ -14,7 +14,6 @@ import AVFoundation
 import AWSS3
 import ALCameraViewController
 
-
 class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate, UINavigationControllerDelegate,UITextFieldDelegate{
     
     @IBOutlet var welcomeLabel: UILabel!
@@ -62,7 +61,7 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
     var isCountryPickerShown = false
     var selectedCountryDetails : [String:String]!
     var idForDeleteChild = Int()
-    
+
     //MARK: View Cycle
     
     override func viewDidLoad() {
@@ -73,7 +72,6 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
         self.childUserTable.tableFooterView = UIView()
         self.scrollView.contentSize = CGSize(290, 1000)
         userImageView.loadImageUsingCache(withUrl: EarnItAccount.currentUser.avatar!)
-        
         
         self.creatLeftPadding(textField: firstName)
         self.creatLeftPadding(textField: lastName)
@@ -527,7 +525,6 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
         print("add child clicked ")
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
         let addChildPage = storyBoard.instantiateViewController(withIdentifier: "AddChildPage") as! AddChildPage
-//        let addChildPage = storyBoard.instantiateViewController(withIdentifier: "VCHomeAddChild") as! VCHomeAddChild
         self.didShownImagePicker = false
         
         let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
@@ -556,9 +553,8 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
             self.present(slideMenuController, animated:false, completion:nil)
             
         }else {
-            
+            NotificationCenter.default.post(name: Notification.Name("getEarntit_UserData"), object: nil)
             self.dismiss(animated: true, completion: nil)
-            
         }
     }
     

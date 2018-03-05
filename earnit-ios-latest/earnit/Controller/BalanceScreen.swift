@@ -89,24 +89,18 @@ class BalanceScreeen : UIViewController,UITextViewDelegate,UIGestureRecognizerDe
     //MARK: Action Methods
     
     @IBAction func adjustButtonClicked(_ sender: Any) {
-        
         if self.isActiveUserChild == true {
-            
             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let childDashBoard = storyBoard.instantiateViewController(withIdentifier: "childDashBoard") as! ChildDashBoard
             self.present(childDashBoard, animated: true, completion: nil)
-            
-        }else {
-            
+        }
+        else {
             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let parentLandingPage  = storyBoard.instantiateViewController(withIdentifier: "ParentLandingPage") as! ParentLandingPage
-            let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
-            let slideMenuController  = SlideMenuViewController(mainViewController: parentLandingPage, leftMenuViewController: optionViewController)
-            
-            slideMenuController.automaticallyAdjustsScrollViewInsets = true
-            slideMenuController.delegate = parentLandingPage
-            
-            self.present(slideMenuController, animated:false, completion:nil)
+            let adjustBalance = storyBoard.instantiateViewController(withIdentifier: "VCAdjustBalance") as! VCAdjustBalance
+            adjustBalance.earnItChildUsers = self.earnItChildUsers
+            adjustBalance.earnItChildUser = self.earnItChildUser
+            adjustBalance.earnItChildGoalList = self.earnItChildGoalList
+            self.present(adjustBalance, animated: true, completion: nil)
         }
     }
     

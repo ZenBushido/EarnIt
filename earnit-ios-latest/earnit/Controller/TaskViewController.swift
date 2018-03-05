@@ -356,15 +356,10 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
             self.selectedGoal = self.earnItTaskToEdit.goal
             
             if self.earnItTaskToEdit.goal.name == " " || self.earnItTaskToEdit.goal.name == nil{
-                
                 self.applyToGoalField.text = "None"
-                
             }else {
-                
                 self.applyToGoalField.text = self.earnItTaskToEdit.goal.name
-                
             }
-            
             self.ammountField.text = String(Double(round(1000 * self.earnItTaskToEdit.allowance)/1000))
             self.taskDetailField.text = self.earnItTaskToEdit.taskDescription
             self.dueDateLabel.text = getDueDateAndTime(dueDate: self.earnItTaskToEdit.dueDate)
@@ -815,10 +810,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
          activeTextView = textView
-        
-      
-        return true
-        
+        return true        
     }
 
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -832,7 +824,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     func textViewDidEndEditing(_ textView: UITextView) {
         activeTextView = nil
     }
-
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int{
         

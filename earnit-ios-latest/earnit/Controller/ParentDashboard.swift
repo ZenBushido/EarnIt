@@ -1183,12 +1183,9 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
         }
         
         optionView.doActionForFourthOption = {
-            
             self.removeActionView()
             self.goToBalanceScreen()
-            
         }
-        
         
         optionView.doActionForFifthOption = {
             
@@ -1355,16 +1352,12 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
         let balanceScreen = storyBoard.instantiateViewController(withIdentifier: "BalanceScreen") as! BalanceScreeen
         balanceScreen.earnItChildUsers = self.earnItChildUsers
         balanceScreen.earnItChildUser = self.earnItChildUserForParent
-        
         if self.earnItChildUserForParent.earnItGoal.cash! + self.earnItChildUserForParent.earnItGoal.tally! + self.earnItChildUserForParent.earnItGoal.ammount! == 0 {
-            
             self.view.makeToast("No balance to display!!")
-            
-        }else {
-            
+        }
+        else {
             self.present(balanceScreen, animated:true, completion:nil)
         }
     }
-
 }
 
