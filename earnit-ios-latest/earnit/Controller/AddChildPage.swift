@@ -61,6 +61,35 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
     var isCountryPickerShown = false
     var selectedCountryDetails : [String:String]!
     
+    //MARK: View Cycle
+    
+    override func viewDidLoad() {
+        
+        _ = Timer.scheduledTimer(timeInterval: 300.0, target: self, selector: #selector(self.fetchParentUserDetailFromBackground), userInfo: nil, repeats: true)
+        self.readJson()
+        self.childImageUrl = ""
+        self.userImageView.image = EarnItImage.defaultUserImage()
+        
+        self.isImageChanged = false
+        self.requestObserver()
+        self.assignLeftPaddingForTF()
+        self.addButtonsOnKeyboard()
+        //self.welcomeLabel.text = "Welcome" + EarnItAccount.currentUser.firstName
+        
+        self.counrtyPicker.dataSource = self
+        self.counrtyPicker.delegate = self
+        self.countryCodeField.inputView = counrtyPicker
+        
+        
+        selectedCountryDetails = countryList![0]
+        self.countryNameLabel.text = selectedCountryDetails["code"]
+        self.countryCodeLabel.text = selectedCountryDetails["dial_code"]
+        
+        self.setUpEditViewForChild()
+    }
+    
+    //MARK: Action Methods
+    
     @IBAction func emailDidChanged(_ sender: Any) {
         
         if (email.text?.isEmail)! {
@@ -73,42 +102,6 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
         }
         
     }
-    override func viewDidLoad() {
-       
-        _ = Timer.scheduledTimer(timeInterval: 300.0, target: self, selector: #selector(self.fetchParentUserDetailFromBackground), userInfo: nil, repeats: true)
-        self.readJson()
-        self.childImageUrl = ""
-        self.userImageView.image = EarnItImage.defaultUserImage()
-       
-        self.isImageChanged = false
-        self.requestObserver()
-        self.assignLeftPaddingForTF()
-        self.addButtonsOnKeyboard()
-        //self.welcomeLabel.text = "Welcome" + EarnItAccount.currentUser.firstName
-        
-         self.counrtyPicker.dataSource = self
-          self.counrtyPicker.delegate = self
-          self.countryCodeField.inputView = counrtyPicker
-        
-        
-        selectedCountryDetails = countryList![0]
-        self.countryNameLabel.text = selectedCountryDetails["code"]
-        self.countryCodeLabel.text = selectedCountryDetails["dial_code"]
-        
-         self.setUpEditViewForChild()
-    }
-    
-    
-    func assignLeftPaddingForTF() {
-        
-        self.creatLeftPadding(textField: firstName)
-        self.creatLeftPadding(textField: email)
-        self.creatLeftPadding(textField: password)
-        self.creatLeftPadding(textField: confirmPassword)
-        //self.creatLeftPadding(textField: phone)
-    }
-    
-   
 
     @IBAction func confirmPasswordDidEndEditing(_ sender: Any) {
       
@@ -210,6 +203,16 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
         }
     }
     
+    //MARK: Void Methods
+    
+    func assignLeftPaddingForTF() {
+        
+        self.creatLeftPadding(textField: firstName)
+        self.creatLeftPadding(textField: email)
+        self.creatLeftPadding(textField: password)
+        self.creatLeftPadding(textField: confirmPassword)
+        //self.creatLeftPadding(textField: phone)
+    }
     
     func callSignUpForChild(firstName: String,email: String,password: String,childAvatar: String,phoneNumber: String){
         

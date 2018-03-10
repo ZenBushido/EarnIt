@@ -102,9 +102,9 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     var actionView = UIView()
     
     var messageView = MessageView()
-    
 
-   
+    //MARK: View Cycle
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -131,6 +131,11 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        
+        self.getGoalListForCurrentUser()
+        self.messageView.messageToLabel.text = "Message to  \(self.earnItChildUser.firstName!):"
+    }
     
     func pickerViewSetup()  {
         
@@ -191,18 +196,8 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     }
    
     func repeatTaskDoneButtonClicked() {
-        
         activeField?.resignFirstResponder()
     }
-    
-    
-    override func viewDidAppear(_ animated: Bool) {
-        
-        self.getGoalListForCurrentUser()
-        self.messageView.messageToLabel.text = "Message to  \(self.earnItChildUser.firstName!):"
-    }
-    
-    
     
     @IBAction func amountValueDidChange(_ sender: UITextField) {
         
@@ -417,15 +412,8 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         self.view.endEditing(true)
         
     }
-
-    
-    
-   
-
     
     func fetchDateFromSelectedDate(_ sender: UIDatePicker) {
-        
-        
         print("fetchDateFromSelectedDate....")
         self.dueDate = sender.date as NSDate
         let formatter = DateFormatter()
@@ -439,10 +427,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         self.dueDateLabel.text = dateMonthString + " @ " + dueTime
         
     }
-    
-    
-    
-    
     
     // MARK: - NonSpecific User Functions
     
@@ -460,10 +444,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         NotificationCenter.default.addObserver(self, selector: #selector(TaskViewController.keyboardWillHide), name: NSNotification.Name.UIKeyboardDidHide  , object: nil)
         
     }
-    
-
-    
-    
     
     /**
      Responds to keyboard showing and adjusts the scrollview.
@@ -1008,29 +988,20 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
 
         
       }
-        
-        
-        
-        func callAddTask(earnItTask : EarnItTask){
-            
-            print("Calling add task")
-            
+    
+        func callAddTask(earnItTask : EarnItTask) {
+            //print("Calling add task")
             earnItTask.status = TaskStatus.created
-            
+
             addTaskForChild(childId : self.earnItChildUserId,earnItTask: earnItTask,earnItSelectedGoal: self.selectedGoal ,success: {
-                
                 (responseJSON) ->() in
-                
                 self.hideLoadingView()
                 //self.dismiss(animated: true, completion: nil)
-                
-                let alert = showAlertWithOption(title: "Task added", message: "Do you want to add more task?")
+                let alert = showAlertWithOption(title: "Task added", message: "Do you want to add another task?")
                 
                 alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: self.setForNewTask))
                 alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: self.dismissView))
                 self.present(alert, animated: true, completion: nil)
-                
-                
             })
                 
             { (error) -> () in
@@ -1039,26 +1010,16 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
 //                let alert = showAlertWithOption(title: "Add task failed ", message: "")
 //                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
 //                self.present(alert, animated: true, completion: nil)
-                
-                
             }
-    
-    
     }
     
-    
-    func dismissView(alert: UIAlertAction){
-        
+    func dismissView(alert: UIAlertAction) {
         self.dismiss(animated: true, completion: nil)
         self.repeatsField.text = repeatTasks[0]
-
     }
     
-    
-    func setForNewTask(alert: UIAlertAction){
-        
+    func setForNewTask(alert: UIAlertAction) {
         self.view.endEditing(true)
-
         self.taskNameField.text = ""
         self.taskDetailField.text = ""
         self.ammountField.text = ""
@@ -1074,12 +1035,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         self.requiresPhotoOption.setImage(nil, for: .normal)
         self.requiresPhotoOption.backgroundColor = UIColor.clear
         self.datePickerHolder.timePicker.setDate(Date(), animated: true)
-   
     }
-            
-    
-        
-        
     
     @IBAction func goBackToParentLandingPage(_ sender: Any) {
         

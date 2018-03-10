@@ -333,6 +333,33 @@ func callForgotPasswordApiForUser(email: String!, success: @escaping(JSON) -> ()
     }
 }
 
+func callAdjustBalanceApiForUser(email: String!, success: @escaping(JSON) -> (), failure: @escaping(NSError) -> ()){
+    let headers: HTTPHeaders = [
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+    ]
+    print("user email is \(email!)")
+    var params = [String:Any]()
+    params = [
+        "email": email
+        ] as [String : Any]
+    
+    //print("\(EarnItApp_BASE_URL)/passwordReminder")
+    Alamofire.request("\(EarnItApp_BASE_URL)/passwordReminder",method: .post,parameters: params, encoding: JSONEncoding.default , headers: headers)
+        .responseJSON { response in
+            switch response.result {
+            case .success:
+                let  responseJSON = JSON(response.result.value!)
+                print("response.result.value for forgot password \(String(describing: response.result.value))")
+                success(responseJSON)
+                
+            case .failure(_):
+                print("response.result.error forgot password--- \(String(describing: response.result.error))")
+                failure(response.result.error as! NSError)
+            }
+    }
+}
+
 func callUpdateApiForChild(firstName: String,childEmail: String, childPassword: String,childAvatar: String,createDate: Int,childUserId: Int,childuserAccountId: Int,phoneNumber: String?,fcmKey: String?,message: String?, success: @escaping(Bool)-> (),failure: @escaping(Bool)-> ()){
     
     

@@ -25,8 +25,6 @@ class CalendarViewController: UIViewController, FSCalendarDataSource, FSCalendar
         // Dispose of any resources that can be recreated.
     }
     
-
-    
     override func loadView() {
         
         let view = UIView(frame: UIScreen.main.bounds)

@@ -578,15 +578,11 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
      */
     
     func requestObserver(){
-        
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardDidHide  , object: nil)
-        
     }
-    
 
-
-
+    //MARK: Keyboard Show/Hide
     
     func keyboardWillShow(notification: NSNotification){
         //Need to calculate keyboard exact size due to Apple suggestions
@@ -622,6 +618,8 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
         self.view.endEditing(true)
         // self.scrollView.isScrollEnabled = false
     }
+    
+    //MARK: TextView Delegate
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {

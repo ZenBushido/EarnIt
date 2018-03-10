@@ -31,7 +31,10 @@ class BalanceScreeen : UIViewController,UITextViewDelegate,UIGestureRecognizerDe
     @IBOutlet var tvGoals: UITableView!
     var earnItChildGoalList = [EarnItChildGoal]()
     @IBOutlet var lblTitle: UILabel!
-    
+    @IBOutlet var btnAdjust: UIButton!
+    var cashAmount:Int = 0
+    var goalsAmount:Int = 0
+
     //MARK: View Cycle
     
     override func viewDidLoad() {
@@ -40,6 +43,7 @@ class BalanceScreeen : UIViewController,UITextViewDelegate,UIGestureRecognizerDe
         self.actionView.frame = CGRect(0 , 0, self.view.frame.width, self.view.frame.height)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.actionViewDidTapped(_:)))
         self.actionView.addGestureRecognizer(tapGesture)
+//        self.btnAdjust.isHidden = true
         
         self.messageView = (Bundle.main.loadNibNamed("MessageView", owner: self, options: nil)?[0] as? MessageView)!
         self.messageView.center = CGPoint(x: self.view.center.x,y :self.view.center.y-80)
@@ -64,6 +68,8 @@ class BalanceScreeen : UIViewController,UITextViewDelegate,UIGestureRecognizerDe
         getGoalsForChild(childId : self.earnItChildUser.childUserId,success: {
             (earnItGoalList) ->() in
             for earnItGoal in earnItGoalList{
+                print(earnItGoal.cash!)
+
                 self.earnItChildGoalList.append(earnItGoal)
                 self.earnItChildUser.earnItGoal = earnItGoal
                 if earnItGoal.name == "" || earnItGoal.name == nil {
@@ -72,10 +78,16 @@ class BalanceScreeen : UIViewController,UITextViewDelegate,UIGestureRecognizerDe
                 else {
                     self.GoalName.text = earnItGoal.name! + ":  " + "$\(earnItGoal.tally!) of $\(earnItGoal.ammount!)  / \(earnItGoal.tallyPercent!)%"
                 }
-                self.totalAccountBalance.text = "\(earnItGoal.cash! + earnItGoal.tally!)"
+                self.cashAmount = earnItGoal.cash! + self.cashAmount
+                self.goalsAmount = earnItGoal.tally! + self.goalsAmount
+                /*self.totalAccountBalance.text = "\(earnItGoal.cash! + earnItGoal.tally!)"
                 self.cashLabel.text = "\(earnItGoal.cash!)"
-                self.goalTotal.text = "\(earnItGoal.tally!)"
+                self.goalTotal.text = "\(earnItGoal.tally!)"*/
             }
+            self.cashLabel.text = "$\(self.cashAmount)"
+            self.goalTotal.text = "$\(self.goalsAmount)"
+            self.totalAccountBalance.text = "$\(self.cashAmount + self.goalsAmount)"
+            
             self.GoalName.isHidden = true
             self.earnItChildGoalList = self.earnItChildGoalList.reversed()
             self.tvGoals.reloadData()
