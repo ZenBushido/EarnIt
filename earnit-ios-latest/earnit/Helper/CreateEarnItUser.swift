@@ -288,7 +288,6 @@ func callForDeleteChild(children_id: Int, success: @escaping(String)-> (),failur
             "Content-Type": "application/json"
         ]
     }
-//    http://localhost:9191/childrens/{CHILDREN_ID}
     
     Alamofire.request("\(EarnItApp_BASE_URL)/childrens/\(children_id)", method: .delete, encoding: JSONEncoding.default, headers: headers).responseJSON{ response in
         
@@ -307,16 +306,26 @@ func callForDeleteChild(children_id: Int, success: @escaping(String)-> (),failur
 }
 
 func callForgotPasswordApiForUser(email: String!, success: @escaping(JSON) -> (), failure: @escaping(NSError) -> ()){
-    let headers: HTTPHeaders = [
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-    ]
+    let keychain = KeychainSwift()
+    guard  let _ = keychain.get("email") else  {
+        print(" /n Unable to fetch user credentials from keychain \n")
+        return
+    }
+    let user : String = keychain.get("email") as! String
+    let password : String = keychain.get("password") as! String
+    var headers : HTTPHeaders = [:]
+    if let authorizationHeader = Request.authorizationHeader(user: user, password: password){
+        headers = [
+            "Accept": "application/json",
+            "Authorization": authorizationHeader.value,
+            "Content-Type": "application/json"
+        ]
+    }
     print("user email is \(email!)")
     var params = [String:Any]()
     params = [
         "email": email
         ] as [String : Any]
-    
     //print("\(EarnItApp_BASE_URL)/passwordReminder")
     Alamofire.request("\(EarnItApp_BASE_URL)/passwordReminder",method: .post,parameters: params, encoding: JSONEncoding.default , headers: headers)
         .responseJSON { response in
@@ -333,19 +342,32 @@ func callForgotPasswordApiForUser(email: String!, success: @escaping(JSON) -> ()
     }
 }
 
-func callAdjustBalanceApiForUser(email: String!, success: @escaping(JSON) -> (), failure: @escaping(NSError) -> ()){
-    let headers: HTTPHeaders = [
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-    ]
-    print("user email is \(email!)")
+func callAdjustBalanceApiForUser(amount: Int, strReason: String!, strOperation: String!, idGoal: Int, success: @escaping(JSON) -> (), failure: @escaping(NSError) -> ()){
+    let keychain = KeychainSwift()
+    guard  let _ = keychain.get("email") else  {
+        print(" /n Unable to fetch user credentials from keychain \n")
+        return
+    }
+    let userEmail : String = keychain.get("email")!
+    let password : String = keychain.get("password")! //as! String
+    var headers : HTTPHeaders = [:]
+    if let authorizationHeader = Request.authorizationHeader(user: userEmail, password: password){
+        headers = [
+            "Accept": "application/json",
+            "Authorization": authorizationHeader.value,
+            "Content-Type": "application/json"
+        ]
+    }
     var params = [String:Any]()
     params = [
-        "email": email
+        "amount": "\(strOperation!)\(amount)",
+        "reason": "\(strReason!)",
+        "goal": ["id": idGoal]
         ] as [String : Any]
+    print(params)
     
     //print("\(EarnItApp_BASE_URL)/passwordReminder")
-    Alamofire.request("\(EarnItApp_BASE_URL)/passwordReminder",method: .post,parameters: params, encoding: JSONEncoding.default , headers: headers)
+    Alamofire.request("\(EarnItApp_BASE_URL)/adjustments",method: .post,parameters: params, encoding: JSONEncoding.default , headers: headers)
         .responseJSON { response in
             switch response.result {
             case .success:

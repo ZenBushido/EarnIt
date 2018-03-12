@@ -1,24 +1,24 @@
 //
-//  BalanceScreen.swift
+//  VCAdjustBalance.swift
 //  earnit
 //
-//  Created by Lovelini Rawat on 10/4/17.
-//  Copyright © 2017 Mobile-Di. All rights reserved.
+//  Created by Gaurav on 10/4/17.
+//  Copyright © 2018 Mobile-Di. All rights reserved.
 //
 
 import Foundation
 import UIKit
 import KeychainSwift
 
-class BalanceScreeen : UIViewController,UITextViewDelegate,UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource {
+class VCAdjustBalance : UIViewController, UITextViewDelegate, UIGestureRecognizerDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
     @IBOutlet var GoalName: UILabel!
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
 
     @IBOutlet var goalNameHeight: NSLayoutConstraint!
-    @IBOutlet var totalAccountBalance: UILabel!
-    @IBOutlet var cashLabel: UILabel!
-    @IBOutlet var goalTotal: UILabel!
+    @IBOutlet var lblTotalAccountBalance: UILabel!
+    @IBOutlet var lblCurrentBalance: UILabel!
+    @IBOutlet var lblAdjustmentAmount: UILabel!
     @IBOutlet var userImageView: UIImageView!
     var earnItChildUser =  EarnItChildUser()
     var earnItChildUsers = [EarnItChildUser]()
@@ -28,105 +28,215 @@ class BalanceScreeen : UIViewController,UITextViewDelegate,UIGestureRecognizerDe
     var constY:NSLayoutConstraint?
     var isActiveUserChild = false
 
-    @IBOutlet var tvGoals: UITableView!
     var earnItChildGoalList = [EarnItChildGoal]()
+    var objChildGoal = EarnItChildGoal()
     @IBOutlet var lblTitle: UILabel!
-    @IBOutlet var btnAdjust: UIButton!
+    @IBOutlet var lblBarTitle: UILabel!
+    @IBOutlet var btnCancel: UIButton!
+    @IBOutlet var btnSave: UIButton!
+    @IBOutlet var tvAdjustmentReason: UITextView!
+    var activeTextView:UITextView?
+    var activeField:UITextField?
+    var indexObject: Int = 0
+    var goalPicker = UIPickerView()
+    let arrayPickerSelection = ["Add", "Subtract"]
+    @IBOutlet var tfOperation:UITextField?
+    @IBOutlet var tfAdjustBalance:UITextField?
     var cashAmount:Int = 0
     var goalsAmount:Int = 0
 
     //MARK: View Cycle
     
     override func viewDidLoad() {
-        
-        self.lblTitle.text = "Hi" + " " + EarnItAccount.currentUser.firstName
+        self.lblTitle.text = "\(EarnItAccount.currentUser.firstName!)" + "'s " + "Balances"
         self.actionView.frame = CGRect(0 , 0, self.view.frame.width, self.view.frame.height)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.actionViewDidTapped(_:)))
         self.actionView.addGestureRecognizer(tapGesture)
-//        self.btnAdjust.isHidden = true
-        NotificationCenter.default.addObserver(self, selector: #selector(self.getGoalListForCurrentUser), name: NSNotification.Name(rawValue: "getGoalList_UserData"), object: nil)
+        
         self.messageView = (Bundle.main.loadNibNamed("MessageView", owner: self, options: nil)?[0] as? MessageView)!
         self.messageView.center = CGPoint(x: self.view.center.x,y :self.view.center.y-80)
         self.messageView.messageText.delegate = self
         
         let userAvatarUrlString = self.earnItChildUser.childUserImageUrl
         self.userImageView.loadImageUsingCache(withUrl: self.earnItChildUser.childUserImageUrl)
-        self.messageView.messageToLabel.text = "Message to  \(self.earnItChildUser.firstName!):"
-        
-        self.GoalName.isHidden = true
-        self.tvGoals.allowsSelection = true
-        self.tvGoals.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        self.tvGoals.tableFooterView = UIView()
-        self.tvGoals.reloadData()
-        self.getGoalListForCurrentUser()
+        self.setupUI()
+        self.changeGoalValues(indexx: self.indexObject)
     }
     
-    //MARK: Get Goal List
-
-    func getGoalListForCurrentUser(){
+    //MARK: Void Methods
+    
+    func setupUI() {
+        self.messageView.messageToLabel.text = "Message to  \(self.earnItChildUser.firstName!):"
+        self.GoalName.isHidden = true
+        self.lblTotalAccountBalance.textColor = UIColor.clear
+        self.tvAdjustmentReason.delegate = self
+        self.tvAdjustmentReason.text = ""
+        self.tfOperation?.attributedPlaceholder = NSAttributedString(string:"Select", attributes: [NSForegroundColorAttributeName: UIColor.gray])
+        self.tfOperation?.text = "Add"
+        
+        self.lblCurrentBalance.textAlignment = NSTextAlignment.center
+        self.lblCurrentBalance.layer.borderWidth = 1.0
+        self.lblCurrentBalance.layer.borderColor = UIColor.white.cgColor
+        self.lblCurrentBalance.layer.cornerRadius = 4
+        self.tvAdjustmentReason.layer.borderWidth = 1.0
+        self.tvAdjustmentReason.layer.borderColor = UIColor.white.cgColor
+        self.tvAdjustmentReason.layer.cornerRadius = 4
+        self.lblAdjustmentAmount.textAlignment = NSTextAlignment.center
+        self.lblAdjustmentAmount.layer.borderWidth = 1.0
+        self.lblAdjustmentAmount.layer.borderColor = UIColor.white.cgColor
+        self.lblAdjustmentAmount.layer.cornerRadius = 4
+        self.lblTotalAccountBalance.textAlignment = NSTextAlignment.center
+        self.lblTotalAccountBalance.layer.borderWidth = 1.0
+        self.lblTotalAccountBalance.layer.borderColor = UIColor.white.cgColor
+        self.lblTotalAccountBalance.layer.cornerRadius = 4
+    }
+    
+    //MARK: Void Methods
+    
+    func actionViewDidTapped(_ sender: UITapGestureRecognizer){
+        print("actionViewDidTapped..")
+        self.removeActionView()
+    }
+    
+    func removeActionView(){
+        for view in self.actionView.subviews {
+            view.removeFromSuperview()
+        }
+        self.actionView.removeFromSuperview()
+    }
+    
+    func messageContainerDidTap(_ sender: UITapGestureRecognizer) {
+        self.view.endEditing(true)
+    }
+    
+    func showLoadingView(){
+        self.view.alpha = 0.7
+        self.view.isUserInteractionEnabled = false
+        self.activityIndicator.startAnimating()
+    }
+    
+    func hideLoadingView(){
+        self.view.alpha = 1
+        self.view.isUserInteractionEnabled = true
+        self.activityIndicator.stopAnimating()
+    }
+    
+    //MARK: Goal Balance Vlaues Change Methods
+    
+    func changeGoalValues(indexx : Int) {
+        //let earnItGoal = self.earnItChildGoalList[indexx]
+        self.objChildGoal = self.earnItChildGoalList[indexx]
+        self.lblBarTitle.text = "\(self.objChildGoal.name!)"
+        self.tfAdjustBalance?.text = ""
+        self.tvAdjustmentReason?.text = ""
         self.cashAmount = 0
         self.goalsAmount = 0
-        self.earnItChildGoalList.removeAll()
-        getGoalsForChild(childId : self.earnItChildUser.childUserId,success: {
-            (earnItGoalList) ->() in
-            for earnItGoal in earnItGoalList{
-                print(earnItGoal.cash!)
-                self.earnItChildGoalList.append(earnItGoal)
-                self.earnItChildUser.earnItGoal = earnItGoal
-                if earnItGoal.name == "" || earnItGoal.name == nil {
-                     self.GoalName.text = "No goal assigned yet!!"
-                }
-                else {
-                    self.GoalName.text = earnItGoal.name! + ":  " + "$\(earnItGoal.tally!) of $\(earnItGoal.ammount!)  / \(earnItGoal.tallyPercent!)%"
-                }
-                self.cashAmount = earnItGoal.cash! + self.cashAmount
-                self.goalsAmount = earnItGoal.tally! + self.goalsAmount
-                /*self.totalAccountBalance.text = "\(earnItGoal.cash! + earnItGoal.tally!)"
-                self.cashLabel.text = "\(earnItGoal.cash!)"
-                self.goalTotal.text = "\(earnItGoal.tally!)"*/
+        for earnItGoalObj in self.earnItChildGoalList {
+            self.earnItChildUser.earnItGoal = earnItGoalObj
+            /*if earnItGoal.name == "" || earnItGoal.name == nil {
+                self.GoalName.text = "No goal assigned yet!!"
             }
-            self.cashLabel.text = "$\(self.cashAmount)"
-            self.goalTotal.text = "$\(self.goalsAmount)"
-            self.totalAccountBalance.text = "$\(self.cashAmount + self.goalsAmount)"
-            
-            self.GoalName.isHidden = true
-            self.earnItChildGoalList = self.earnItChildGoalList.reversed()
-            self.tvGoals.reloadData()
-
-        })
-        { (error) -> () in
-            self.view.makeToast("get goal failed")
+            else {
+                self.GoalName.text = earnItGoal.name! + ":  " + "$\(earnItGoal.tally!) of $\(earnItGoal.ammount!)  / \(earnItGoal.tallyPercent!)%"
+            }*/
+            self.cashAmount = earnItGoalObj.cash! + self.cashAmount
+            self.goalsAmount = earnItGoalObj.tally! + self.goalsAmount
         }
+//        self.cashAmount = self.objChildGoal.cash! + self.cashAmount
+//        self.goalsAmount = self.objChildGoal.tally! + self.goalsAmount
+        self.lblCurrentBalance.text = "\(self.objChildGoal.tally!)/\(self.cashAmount + self.goalsAmount)"
+    }
+    
+    @IBAction func backwardForwardButton_Tap(_ sender: Any) {
+        if ((sender as AnyObject).tag == 10) {
+            //backward
+            self.indexObject = self.indexObject-1
+            if (self.indexObject < 0) {
+                self.indexObject = 0
+            }
+        }
+        else {
+            //forward
+            self.indexObject = self.indexObject+1
+            if (self.indexObject >= self.earnItChildGoalList.count) {
+                self.indexObject = self.earnItChildGoalList.count-1
+            }
+        }
+        self.changeGoalValues(indexx: self.indexObject)
+    }
+    
+    //MARK: Select Operation
+    
+    @IBAction func dropdownButton_Tap(_ sender: Any) {
+//        self.pickerViewSetup()
+    }
+
+    func pickerViewSetup() {
+//         goalPicker = UIPickerView(frame: CGRect(x:0,y:0,width:self.view.frame.size.width,height:216))
+        self.goalPicker.dataSource = self
+        self.goalPicker.delegate = self
+        self.goalPicker.backgroundColor = UIColor.white
+        
+        //ToolBar
+        let pickerToolBar = UIToolbar()
+        pickerToolBar.barStyle = .default
+        pickerToolBar.isTranslucent = true
+        pickerToolBar.sizeToFit()
+        
+        //Adding ToolBar Button
+        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target:self , action: #selector(self.pickerViewDoneButton_Tap))
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        pickerToolBar.setItems([spaceButton, doneButton], animated: false)
+        pickerToolBar.isUserInteractionEnabled = true
+        self.activeField = self.tfOperation
+        self.activeField?.inputAccessoryView = pickerToolBar
+        self.activeField?.inputView = goalPicker
+        if activeField == self.tfOperation {
+            goalPicker.selectRow(arrayPickerSelection.index(of: "Add")!, inComponent: 0, animated: false)
+//            goalPicker.selectRow(0, inComponent: 0, animated: false)
+        }
+    }
+
+    func pickerViewDoneButton_Tap() {
+        activeField = nil
+        activeField?.resignFirstResponder()
+        self.view.endEditing(true)
+    }
+
+    //MARK: TextField Delegate
+    
+    func textFieldDidBeginEditing(_ textField: UITextField){
+        activeField = textField
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField){
+        activeField = nil
+        if textField == self.tfOperation  {
+//            self.hideRepeatTasksTable()
+        }
+    }
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        activeField = textField
+        if textField == self.tfOperation {
+            self.pickerViewSetup()
+         }
+        return true
     }
     
     //MARK: Action Methods
     
-    @IBAction func adjustButtonClicked(_ sender: Any) {
-        if self.isActiveUserChild == true {
+    @IBAction func viewGotTapped(_ sender: Any) {
+        self.view.endEditing(true)
+    }
+    
+    @IBAction func cancelButton_Tap(_ sender: Any) {
+        if self.isActiveUserChild == true {            
             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let childDashBoard = storyBoard.instantiateViewController(withIdentifier: "childDashBoard") as! ChildDashBoard
             self.present(childDashBoard, animated: true, completion: nil)
         }
         else {
-            let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let adjustBalance = storyBoard.instantiateViewController(withIdentifier: "VCAdjustBalance") as! VCAdjustBalance
-            adjustBalance.earnItChildUsers = self.earnItChildUsers
-            adjustBalance.earnItChildUser = self.earnItChildUser
-            adjustBalance.earnItChildGoalList = self.earnItChildGoalList
-            self.present(adjustBalance, animated: true, completion: nil)
-        }
-    }
-    
-    @IBAction func homeButtonClicked(_ sender: Any) {
-        
-        if self.isActiveUserChild == true {
-            
-            let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let childDashBoard = storyBoard.instantiateViewController(withIdentifier: "childDashBoard") as! ChildDashBoard
-            self.present(childDashBoard, animated: true, completion: nil)
-            
-        }else {
-            
             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let parentLandingPage  = storyBoard.instantiateViewController(withIdentifier: "ParentLandingPage") as! ParentLandingPage
             let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
@@ -139,11 +249,53 @@ class BalanceScreeen : UIViewController,UITextViewDelegate,UIGestureRecognizerDe
         }
     }
     
+    @IBAction func saveButton_Tap(_ sender: Any) {
+        self.view.endEditing(true)
+        if (self.tfAdjustBalance?.text?.count)! == 0  {
+            self.view.makeToast("Please input adjustment amount.")
+            return
+        }
+        var strOperationMode:String!
+        if (self.tfOperation?.text == "Add") {
+            strOperationMode = "+"
+        }
+        else {
+            strOperationMode = "-"
+        }
+        callAdjustBalanceApiForUser(amount: Int((self.tfAdjustBalance?.text)!)!, strReason: self.tvAdjustmentReason?.text, strOperation: strOperationMode!, idGoal: self.objChildGoal.id! , success: {
+            (responseJSON) ->() in
+            self.hideLoadingView()
+            NotificationCenter.default.post(name: Notification.Name("getGoalList_UserData"), object: nil)
+            self.dismiss(animated: true, completion: nil)
+            /*if (responseJSON["message"][0].stringValue == "Mail sent."){
+                self.dismiss(animated: true, completion: nil)
+            }
+            else if (responseJSON["code"][0] == 9001) {
+                //let alert = showAlertWithOption(title: "This email is not associated and an EarnIt! account, please try again.", message: "")
+                let alert = showAlertWithOption(title: "Sorry, we don't have that username or account in our system.Please verify the information or contact support at\nsupport@myearnitapp.com", message: "")
+                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: nil))
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+            else {
+                let alert = showAlertWithOption(title: "This email is not associated and an EarnIt! account, Failed to send password, please try again!", message: "")
+                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: nil))
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }*/
+        }) { (error) -> () in
+            self.view.makeToast("Failed to adjust balance request, please try again!")
+        }
+        
+    }
+    
     @IBAction func backButtonClicked(_ sender: Any) {
         self.dismiss(animated: false, completion: nil)
     }
     
     @IBAction func userImageViewGotTapped(_ sender: UITapGestureRecognizer) {
+        
+        return
         
         var childOptionView = (Bundle.main.loadNibNamed("ChildOptionView", owner: self, options: nil)?[0] as? ChildOptionView)!
         var optionView  = (Bundle.main.loadNibNamed("OptionView", owner: self, options: nil)?[0] as? OptionView)!
@@ -190,15 +342,6 @@ class BalanceScreeen : UIViewController,UITextViewDelegate,UIGestureRecognizerDe
             childOptionView.frame.origin.x = self.view.frame.origin.x + 200
             optionView.frame.origin.x = self.view.frame.origin.x + 200
         }
-        
-        //        optionView.addTaskButton.setImage(EarnItImage.setEarnItAddIcon(), for: .normal)
-        //        optionView.showAllTaskButton.setImage(EarnItImage.setEarnItPageIcon(), for: .normal)
-        //        optionView.approveTaskButton.setImage(EarnItImage.setEarnItAppShowTaskIcon(), for: .normal)
-        //        optionView.showBalanceButton.setImage(EarnItImage.setEarnItAppBalanceIcon(), for: .normal)
-        //        optionView.showGoalButton.setImage(EarnItImage.setEarnItGoalIcon(), for: .normal)
-        //        optionView.messageButton.setImage(EarnItImage.setEarnItCommentIcon(), for: .normal)
-        
-        
         if self.isActiveUserChild == true {
             
             childOptionView.firstOption.setImage(EarnItImage.setEarnItPageIcon(), for: .normal)
@@ -447,62 +590,72 @@ class BalanceScreeen : UIViewController,UITextViewDelegate,UIGestureRecognizerDe
         }
     }
     
-    //MARK: Void Methods
+    //MARK: Picker View Delegate
     
-    func actionViewDidTapped(_ sender: UITapGestureRecognizer){
-        print("actionViewDidTapped..")
-        self.removeActionView()
+    func numberOfComponents(in pickerView: UIPickerView) -> Int{
+        return 1
     }
     
-    func removeActionView(){
-        for view in self.actionView.subviews {
-            view.removeFromSuperview()
-        }
-        self.actionView.removeFromSuperview()
-    }
-    
-    func messageContainerDidTap(_ sender: UITapGestureRecognizer) {
-        self.view.endEditing(true)
-    }
-    
-    func showLoadingView(){
-        self.view.alpha = 0.7
-        self.view.isUserInteractionEnabled = false
-        self.activityIndicator.startAnimating()
-    }
-    
-    func hideLoadingView(){
-        self.view.alpha = 1
-        self.view.isUserInteractionEnabled = true
-        self.activityIndicator.stopAnimating()
-    }
-    
-    //MARK: TableView Delegates
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.earnItChildGoalList.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let childCell = self.tvGoals.dequeueReusableCell(withIdentifier: "ChildCell", for: indexPath as IndexPath) as! ChildCell
-        let earnItGoal = self.earnItChildGoalList[indexPath.row]
+    @available(iOS 2.0, *)
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         
-        if earnItGoal.name == "" || earnItGoal.name == nil {
-            childCell.childName.text = "No goal assigned yet!!"
-            childCell.lblPercentValue.text = ""
-        }
-        else {
-            childCell.childName.text = "\(earnItGoal.name!):"
-            childCell.lblPercentValue.text = "$\(earnItGoal.tally!) of $\(earnItGoal.ammount!)  / \(earnItGoal.tallyPercent!)%"
-        }
-        childCell.childName.isUserInteractionEnabled = false
-        childCell.lblPercentValue.isUserInteractionEnabled = false
-
-        return childCell
+        return self.arrayPickerSelection.count
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("yes selected....")
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return self.arrayPickerSelection[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        //self.lblTotalAccountBalance.text = self.arrayPickerSelection[row]
+        self.tfOperation?.text = self.arrayPickerSelection[row]
+    }
+    
+    //MARK: TextView Delegate
+    
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        activeTextView = textView
+        return true
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        activeTextView = nil
+    }
+
+    //MARK: Keyboard Notification
+    
+    func keyboardWillShow(notification: NSNotification){
+        //Need to calculate keyboard exact size due to Apple suggestions
+        var info = notification.userInfo!
+        if let activeField = self.activeField {
+            let keyboardSize = (info[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size
+            let contentInsets : UIEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize!.height+100, 0.0)
+            
+            var aRect : CGRect = self.view.frame
+            aRect.size.height -= keyboardSize!.height
+            
+            if (!aRect.contains(activeField.frame.origin)){
+            }
+        }
+        if let activeTextView = self.activeTextView {
+            let keyboardSize = (info[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue.size
+            let contentInsets : UIEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize!.height+200, 0.0)
+            var aRect : CGRect = self.view.frame
+            aRect.size.height -= keyboardSize!.height
+        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification){
+        //Once keyboard disappears, restore original positions
+        self.view.endEditing(true)
     }
     
 }
