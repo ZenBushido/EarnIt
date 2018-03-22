@@ -206,7 +206,6 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
     //MARK: Void Methods
     
     func assignLeftPaddingForTF() {
-        
         self.creatLeftPadding(textField: firstName)
         self.creatLeftPadding(textField: email)
         self.creatLeftPadding(textField: password)
