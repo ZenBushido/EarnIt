@@ -48,7 +48,8 @@ class VCAdjustBalance : UIViewController, UITextViewDelegate, UIGestureRecognize
     //MARK: View Cycle
     
     override func viewDidLoad() {
-        self.lblTitle.text = "\(EarnItAccount.currentUser.firstName!)" + "'s " + "Balances"
+        //self.lblTitle.text = "\(EarnItAccount.currentUser.firstName!)" + "'s " + "Balances"
+        self.lblTitle.text = "Balance Adjustment"
         self.actionView.frame = CGRect(0 , 0, self.view.frame.width, self.view.frame.height)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.actionViewDidTapped(_:)))
         self.actionView.addGestureRecognizer(tapGesture)
@@ -58,7 +59,7 @@ class VCAdjustBalance : UIViewController, UITextViewDelegate, UIGestureRecognize
         self.messageView.messageText.delegate = self
         
         let userAvatarUrlString = self.earnItChildUser.childUserImageUrl
-        self.userImageView.loadImageUsingCache(withUrl: self.earnItChildUser.childUserImageUrl)
+        self.userImageView.loadImageUsingCache(withUrl: userAvatarUrlString)
         self.setupUI()
         self.changeGoalValues(indexx: self.indexObject)
     }
@@ -133,18 +134,34 @@ class VCAdjustBalance : UIViewController, UITextViewDelegate, UIGestureRecognize
         self.goalsAmount = 0
         for earnItGoalObj in self.earnItChildGoalList {
             self.earnItChildUser.earnItGoal = earnItGoalObj
-            /*if earnItGoal.name == "" || earnItGoal.name == nil {
-                self.GoalName.text = "No goal assigned yet!!"
-            }
-            else {
-                self.GoalName.text = earnItGoal.name! + ":  " + "$\(earnItGoal.tally!) of $\(earnItGoal.ammount!)  / \(earnItGoal.tallyPercent!)%"
-            }*/
+//            var amountValue:Int = 0
+//            for objAdjustment in earnItGoalObj.arrAdjustments {
+//                amountValue = (objAdjustment["amount"]! as? Int)! + amountValue
+//            }
             self.cashAmount = earnItGoalObj.cash! + self.cashAmount
             self.goalsAmount = earnItGoalObj.tally! + self.goalsAmount
+//            self.lblCurrentBalance.text = "\(earnItGoalObj.ammount! + amountValue)" //Int("\(self.objChildGoal.ammount!)")! + amountValue
+            
         }
 //        self.cashAmount = self.objChildGoal.cash! + self.cashAmount
 //        self.goalsAmount = self.objChildGoal.tally! + self.goalsAmount
-        self.lblCurrentBalance.text = "\(self.objChildGoal.tally!)/\(self.cashAmount + self.goalsAmount)"
+//        self.adjustBalanceValues_Calculation()
+//        self.lblCurrentBalance.text = "\(self.objChildGoal.tally!)/\(self.cashAmount + self.goalsAmount)"
+        var amountValue:Int = 0
+        for objAdjustment in self.objChildGoal.arrAdjustments {
+            amountValue = (objAdjustment["amount"]! as? Int)! + amountValue
+        }
+        self.lblCurrentBalance.text = "\(self.objChildGoal.ammount! + amountValue)"
+    }
+    
+    func adjustBalanceValues_Calculation() {
+        var amountValue:Int = 0
+        for objAdjustment in self.objChildGoal.arrAdjustments {
+            print(objAdjustment)
+            //            print(objAdjustment["amount"])
+            //            amountValue = objAdjustment["amount"] + amountValue
+        }
+        print(amountValue)
     }
     
     @IBAction func backwardForwardButton_Tap(_ sender: Any) {
@@ -257,7 +274,7 @@ class VCAdjustBalance : UIViewController, UITextViewDelegate, UIGestureRecognize
         }
         var strOperationMode:String!
         if (self.tfOperation?.text == "Add") {
-            strOperationMode = "+"
+            strOperationMode = ""
         }
         else {
             strOperationMode = "-"
@@ -286,7 +303,6 @@ class VCAdjustBalance : UIViewController, UITextViewDelegate, UIGestureRecognize
         }) { (error) -> () in
             self.view.makeToast("Failed to adjust balance request, please try again!")
         }
-        
     }
     
     @IBAction func backButtonClicked(_ sender: Any) {

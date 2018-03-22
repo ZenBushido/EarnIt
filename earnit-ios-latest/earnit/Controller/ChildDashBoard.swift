@@ -220,9 +220,8 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
         let calendarView = storyBoard.instantiateViewController(withIdentifier: "CalendarView") as! CalendarViewController
         self.present(calendarView, animated: false, completion: nil)
-
-        
     }
+    
        //override
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

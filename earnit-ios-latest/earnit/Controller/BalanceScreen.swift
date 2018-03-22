@@ -38,7 +38,6 @@ class BalanceScreeen : UIViewController,UITextViewDelegate,UIGestureRecognizerDe
     //MARK: View Cycle
     
     override func viewDidLoad() {
-        
         self.lblTitle.text = "Hi" + " " + EarnItAccount.currentUser.firstName
         self.actionView.frame = CGRect(0 , 0, self.view.frame.width, self.view.frame.height)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.actionViewDidTapped(_:)))
@@ -79,8 +78,14 @@ class BalanceScreeen : UIViewController,UITextViewDelegate,UIGestureRecognizerDe
                 else {
                     self.GoalName.text = earnItGoal.name! + ":  " + "$\(earnItGoal.tally!) of $\(earnItGoal.ammount!)  / \(earnItGoal.tallyPercent!)%"
                 }
+                var amountValue:Int = 0
+                for objAdjustment in earnItGoal.arrAdjustments {
+                    amountValue = (objAdjustment["amount"]! as? Int)! + amountValue
+                }
+//                self.cashAmount = earnItGoal.cash! + self.cashAmount
+//                self.goalsAmount = earnItGoal.tally! + self.goalsAmount + amountValue
                 self.cashAmount = earnItGoal.cash! + self.cashAmount
-                self.goalsAmount = earnItGoal.tally! + self.goalsAmount
+                self.goalsAmount = earnItGoal.ammount! + self.goalsAmount + amountValue
                 /*self.totalAccountBalance.text = "\(earnItGoal.cash! + earnItGoal.tally!)"
                 self.cashLabel.text = "\(earnItGoal.cash!)"
                 self.goalTotal.text = "\(earnItGoal.tally!)"*/
@@ -493,7 +498,12 @@ class BalanceScreeen : UIViewController,UITextViewDelegate,UIGestureRecognizerDe
         }
         else {
             childCell.childName.text = "\(earnItGoal.name!):"
-            childCell.lblPercentValue.text = "$\(earnItGoal.tally!) of $\(earnItGoal.ammount!)  / \(earnItGoal.tallyPercent!)%"
+//            childCell.lblPercentValue.text = "$\(earnItGoal.tally!) of $\(earnItGoal.ammount!)  / \(earnItGoal.tallyPercent!)%"
+            var amountValue:Int = 0
+            for objAdjustment in earnItGoal.arrAdjustments {
+                amountValue = (objAdjustment["amount"]! as? Int)! + amountValue
+            }
+            childCell.lblPercentValue.text = "$\(earnItGoal.ammount! + amountValue) of $\(earnItGoal.ammount!)" // / \(earnItGoal.tallyPercent!)%"
         }
         childCell.childName.isUserInteractionEnabled = false
         childCell.lblPercentValue.isUserInteractionEnabled = false

@@ -35,6 +35,9 @@ class EarnItChildGoal : NSObject {
     //cash amount
     var cash : Int? = 0
     
+    //Adjustments
+    var arrAdjustments : [AnyObject] = [AnyObject]()  //[Dictionary<String,String>]() //= [String: Any]()
+
     
     override init(){
         
@@ -42,7 +45,7 @@ class EarnItChildGoal : NSObject {
     }
     
     
-    init(id: Int, createdDate: String, updateDate: String, name : String, ammount: Int, cash: Int){
+    init(id: Int, createdDate: String, updateDate: String, name : String, ammount: Int, cash: Int){ //, arrAdjustments:
         
         super.init()
         self.id = id
@@ -51,12 +54,9 @@ class EarnItChildGoal : NSObject {
         self.ammount = ammount
         self.name = name
         self.cash = cash
-        
-        
     }
     
     init(json: JSON){
-        
         super.init()
         self.id = json["id"].intValue
         self.createdDate = json["createdDate"].stringValue
@@ -64,13 +64,11 @@ class EarnItChildGoal : NSObject {
         self.ammount = json["ammount"].intValue
         self.name = json["name"].stringValue
         self.cash = json["cash"].intValue
-        
+        self.arrAdjustments = json["adjustments"].arrayObject! as [AnyObject] //arrayObject as! [Dictionary<String, String>]
     }
     
     
     func setAttribute(json: JSON){
-        
-
         self.id = json["id"].intValue
         self.createdDate = json["createdDate"].stringValue
         self.updateDate = json["updateDate"].stringValue
@@ -79,8 +77,7 @@ class EarnItChildGoal : NSObject {
         self.tally = json["tally"].intValue
         self.tallyPercent = json["tallyPercent"].intValue
         self.cash = json["cash"].intValue
-
-        
+        self.arrAdjustments = json["adjustments"].arrayObject! as [AnyObject] //as! [Dictionary<String, String>]
     }
     
 }

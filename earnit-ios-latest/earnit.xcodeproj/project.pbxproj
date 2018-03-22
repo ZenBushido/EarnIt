@@ -199,6 +199,8 @@
 		F44E1AB4204B09BC002B4A2A /* VCAdjustBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44E1AB3204B09BC002B4A2A /* VCAdjustBalance.swift */; };
 		F44E1AB5204B09BC002B4A2A /* VCAdjustBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44E1AB3204B09BC002B4A2A /* VCAdjustBalance.swift */; };
 		F4752F982032126A00A31980 /* VCForgotPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = F447B5CB2031498500380E4E /* VCForgotPassword.swift */; };
+		F478135B2062837200E65E44 /* VCCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F478135A2062837100E65E44 /* VCCalendar.swift */; };
+		F478135C2062837200E65E44 /* VCCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F478135A2062837100E65E44 /* VCCalendar.swift */; };
 		F4C8939E2032E6BF0049F6A4 /* VCHomeAddChild.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C8939D2032E6BE0049F6A4 /* VCHomeAddChild.swift */; };
 		F4C8939F2032E6BF0049F6A4 /* VCHomeAddChild.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C8939D2032E6BE0049F6A4 /* VCHomeAddChild.swift */; };
 /* End PBXBuildFile section */
@@ -333,6 +335,7 @@
 		F40AA0632043DFB800301232 /* VCAddDeleteGoal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCAddDeleteGoal.swift; sourceTree = "<group>"; };
 		F447B5CB2031498500380E4E /* VCForgotPassword.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCForgotPassword.swift; sourceTree = "<group>"; };
 		F44E1AB3204B09BC002B4A2A /* VCAdjustBalance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCAdjustBalance.swift; sourceTree = "<group>"; };
+		F478135A2062837100E65E44 /* VCCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCCalendar.swift; sourceTree = "<group>"; };
 		F4C8939D2032E6BE0049F6A4 /* VCHomeAddChild.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCHomeAddChild.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -395,6 +398,7 @@
 				F44E1AB3204B09BC002B4A2A /* VCAdjustBalance.swift */,
 				473AE3501F35BF2A000B8C5F /* AddChildPage.swift */,
 				F4C8939D2032E6BE0049F6A4 /* VCHomeAddChild.swift */,
+				F478135A2062837100E65E44 /* VCCalendar.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -978,6 +982,7 @@
 				095D44DD1F2AF6CF000907D5 /* ParentLandingPage.swift in Sources */,
 				095D44D71F2AF6CF000907D5 /* CalendarViewController.swift in Sources */,
 				47052A3E1F566F1100E05C3C /* PendingTasksScreen.swift in Sources */,
+				F478135B2062837200E65E44 /* VCCalendar.swift in Sources */,
 				095D44E01F2AF6CF000907D5 /* BorderExtension.swift in Sources */,
 				47E148B81F3C352300448382 /* VCUpdateGoal.swift in Sources */,
 				095D45031F2AF6CF000907D5 /* DetailView.swift in Sources */,
@@ -1073,6 +1078,7 @@
 				ED89A5551F96F5EE008BC2FD /* ImageExtension.swift in Sources */,
 				ED89A5561F96F5EE008BC2FD /* ParentLandingPage.swift in Sources */,
 				ED89A5571F96F5EE008BC2FD /* CalendarViewController.swift in Sources */,
+				F478135C2062837200E65E44 /* VCCalendar.swift in Sources */,
 				ED89A5581F96F5EE008BC2FD /* PendingTasksScreen.swift in Sources */,
 				ED89A5591F96F5EE008BC2FD /* BorderExtension.swift in Sources */,
 				ED89A55A1F96F5EE008BC2FD /* VCUpdateGoal.swift in Sources */,

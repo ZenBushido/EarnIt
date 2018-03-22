@@ -9,22 +9,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "earnit/Controller/ChildDashBoard.swift"
-            timestampString = "541905611.5442539"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "84"
-            endingLineNumber = "84"
-            landmarkName = "setChildInfo()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "earnit/Controller/MessageDisplayScreen.swift"
             timestampString = "540232256.14098"
             startingColumnNumber = "9223372036854775807"
@@ -41,24 +25,8 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "earnit/Controller/ParentLandingPage.swift"
-            timestampString = "541972416.093381"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "805"
-            endingLineNumber = "805"
-            landmarkName = "fetchParentUserDetailFromBackground()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "earnit/Controller/ParentProfilePage.swift"
-            timestampString = "542516843.386436"
+            timestampString = "542721381.430534"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1176"
@@ -73,13 +41,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "earnit/Controller/VCAdjustBalance.swift"
-            timestampString = "542516843.386542"
+            filePath = "earnit/Model/EarnItChildGoal.swift"
+            timestampString = "542823302.346022"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "128"
-            endingLineNumber = "128"
-            landmarkName = "changeGoalValues(indexx:)"
+            startingLineNumber = "61"
+            endingLineNumber = "61"
+            landmarkName = "init(json:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -89,13 +57,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "earnit/Controller/VCAdjustBalance.swift"
-            timestampString = "542516843.386624"
+            filePath = "earnit/Model/EarnItChildGoal.swift"
+            timestampString = "542823302.34631"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "147"
-            endingLineNumber = "147"
-            landmarkName = "changeGoalValues(indexx:)"
+            startingLineNumber = "50"
+            endingLineNumber = "50"
+            landmarkName = "init(id:createdDate:updateDate:name:ammount:cash:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

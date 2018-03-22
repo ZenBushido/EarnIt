@@ -103,11 +103,15 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     
     var messageView = MessageView()
 
+    @IBOutlet var lblRepeats: UILabel!
+
     //MARK: View Cycle
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        self.lblRepeats.isHidden = true
+        self.repeatsField.isHidden = true
         
         self.actionView.frame = CGRect(0 , 0, self.view.frame.width, self.view.frame.height)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.actionViewDidTapped(_:)))
@@ -118,7 +122,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         self.messageView.center = CGPoint(x: self.view.center.x,y :self.view.center.y-80)
         self.messageView.messageText.delegate = self
         
-        
         _ = Timer.scheduledTimer(timeInterval: 300.0, target: self, selector: #selector(self.fetchParentUserDetailFromBackground), userInfo: nil, repeats: true)
         self.dateTextField.delegate = self
         self.taskDetailField.delegate = self
@@ -128,7 +131,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         self.setUpEditViewForUser()
         self.addButtonsOnKeyboard()
         //self.datePickerHolder.timePicker.addTarget(self, action: #selector(self.fetchDateFromSelectedDate(_:)), for: .valueChanged)
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -207,24 +209,65 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
             if sender.text?.isNumber == false {
                 
                 self.ammountIsValid = false
-                
-                
             }else{
-                
                 self.ammountIsValid = true
-  
             }
-            
-            
         }
         
     }
     
+    //MARK: Void Methods
+    
+    func gotoCalenderView() {
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
+        let calendarView = storyBoard.instantiateViewController(withIdentifier: "VCCalendar") as! VCCalendar
+        calendarView.earnItChildUser = self.earnItChildUser
+        self.present(calendarView, animated: false, completion: nil)
+    }
+    
+    //MARK: TextField Delegate
+    func textFieldDidBeginEditing(_ textField: UITextField){
+        activeField = textField
+        
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField){
+        activeField = nil
+        //        if textField == repeatsField  {
+        //            self.hideRepeatTasksTable()
+        //        }
+    }
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        
+        activeField = textField
+        
+        if textField == repeatsField || textField == applyToGoalField  {
+            self.pickerViewSetup()
+        }
+        return true
+    }
+    
+    //MARK: TextView Delegate
+    
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        activeTextView = textView
+        return true
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        activeTextView = nil
+    }
     
     //MARK: -UIPickerView Datasource & Delegate
-    
-    
-    
     
      // *Override
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -256,12 +299,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         
   }
     
-    
-    
-    
     func setUpUserInfoView(){
-        
-        
         for user in self.earnItChildUsers{
             
             if user.childUserId == self.earnItChildUserId{
@@ -767,44 +805,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         // self.scrollView.isScrollEnabled = false
     }
     
-    func textFieldDidBeginEditing(_ textField: UITextField){
-        activeField = textField
-       
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField){
-        activeField = nil
-//        if textField == repeatsField  {
-//            self.hideRepeatTasksTable()
-//        }
-    }
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        
-        activeField = textField
-
-        if textField == repeatsField || textField == applyToGoalField  {
-            self.pickerViewSetup()
-        }
-        return true
-    }
-    
-    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
-         activeTextView = textView
-        return true        
-    }
-
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n" {
-            textView.resignFirstResponder()
-            return false
-        }
-        return true
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        activeTextView = nil
-    }
-    
     func numberOfComponents(in pickerView: UIPickerView) -> Int{
         
         return 1
@@ -854,7 +854,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     @IBAction func viewGotTapped(_ sender: Any) {
 
         self.view.endEditing(true)
-
     }
     
     
@@ -1060,9 +1059,11 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
    
     @IBAction func showDatePicker(_ sender: Any) {
         
+        self.view.endEditing(true)
+        self.gotoCalenderView()
+        return
+        
        print("showDatePicker")
-        
-        
        self.dateTextField.inputView = datePickerHolder
        datePickerHolder.setSelectedDate =  {
             
