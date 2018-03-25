@@ -166,8 +166,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
             goalPicker.selectRow(repeatTasks.index(of: repeatsField.text!)!, inComponent: 0, animated: false)
         }
         else if activeField == applyToGoalField && activeField?.text != "None" {
-            
-            
             var tempSelectedGoal = EarnItChildGoal()
             tempSelectedGoal.id = 0
             
@@ -228,7 +226,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     //MARK: TextField Delegate
     func textFieldDidBeginEditing(_ textField: UITextField){
         activeField = textField
-        
     }
 
     func textFieldDidEndEditing(_ textField: UITextField){
@@ -269,6 +266,50 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     
     //MARK: -UIPickerView Datasource & Delegate
     
+    func numberOfComponents(in pickerView: UIPickerView) -> Int{
+        
+        return 1
+    }
+    
+    
+    @available(iOS 2.0, *)
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        
+        if activeField == repeatsField {
+            return self.repeatTasks.count
+        }
+        else  {
+            return self.earnItChildGoalList.count
+        }
+    }
+    
+    
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        
+        if activeField == repeatsField {
+            return self.repeatTasks[row]
+        }
+        else  {
+            return earnItChildGoalList[row].name
+        }
+    }
+    
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        if activeField == repeatsField {
+            repeatsField.text = repeatTasks[row]
+            
+        }
+        else  {
+            applyToGoalField.text = earnItChildGoalList[row].name
+            self.selectedGoal = earnItChildGoalList[row]
+        }
+        
+        
+    }
+
      // *Override
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
     
@@ -429,26 +470,17 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
             default:
                 i = 0
             }
-            
             repeatsField.text = repeatTasks[i]
-
-            
         }
-        
     }
-    
-    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
     
     func datePickerCancelPressed(){
-    
         self.view.endEditing(true)
-        
     }
     
     func fetchDateFromSelectedDate(_ sender: UIDatePicker) {
@@ -463,7 +495,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         formatter.dateFormat = "M/dd"
         let dateMonthString = formatter.string(from: self.dueDate  as Date)
         self.dueDateLabel.text = dateMonthString + " @ " + dueTime
-        
     }
     
     // MARK: - NonSpecific User Functions
@@ -477,10 +508,8 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
      */
     
     private func requestObserver(){
-        
         NotificationCenter.default.addObserver(self, selector: #selector(TaskViewController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(TaskViewController.keyboardWillHide), name: NSNotification.Name.UIKeyboardDidHide  , object: nil)
-        
     }
     
     /**
@@ -805,54 +834,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         // self.scrollView.isScrollEnabled = false
     }
     
-    func numberOfComponents(in pickerView: UIPickerView) -> Int{
-        
-        return 1
-    }
-    
-    
-    @available(iOS 2.0, *)
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        
-        if activeField == repeatsField {
-            return self.repeatTasks.count
-        }
-        else  {
-            return self.earnItChildGoalList.count
-        }
-    }
-    
-
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        
-        if activeField == repeatsField {
-            return self.repeatTasks[row]
-        }
-        else  {
-            return earnItChildGoalList[row].name
-        }
-    }
-    
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        
-        if activeField == repeatsField {
-            repeatsField.text = repeatTasks[row]
-            
-        }
-        else  {
-            applyToGoalField.text = earnItChildGoalList[row].name
-            self.selectedGoal = earnItChildGoalList[row]
-        }
-        
-        
-    }
-    
-    
-    
     @IBAction func viewGotTapped(_ sender: Any) {
-
         self.view.endEditing(true)
     }
     
