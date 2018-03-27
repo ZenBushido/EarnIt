@@ -134,8 +134,6 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
         
         
         if (self.firstName.text?.characters.count == 0 || self.email.text?.characters.count == 0 || self.phone.text?.characters.count == 0 || self.password.text?.characters.count == 0){
-
-            
             var errorFields = "\(self.firstName.text?.characters.count == 0 ? " Name and":"")\(self.email.text?.characters.count == 0 ? " Email and":"")\(self.phone.text?.characters.count == 0 ? " Phone and":"")\(self.password.text?.characters.count == 0 ? " Password":"")"
             
             let last3 = errorFields.substring(from:errorFields.index(errorFields.endIndex, offsetBy: -3))
@@ -168,10 +166,7 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
             self.confirmPassword.text = ""
             self.hideLoadingView()
         }
-            
-            
         else {
-            
             if self.isImageChanged == true{
                 
                 DispatchQueue.global().async {
@@ -183,23 +178,16 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
                         print("Done with image Upload and updated to backend!")
                     }
                 }
-                
                 //self.prepareUserImageForUpload()
-                
             }
             
             let contactNumber = "\(self.countryCodeLabel.text!)\(self.phone.text!)"
-            
                 if self.isInEditingMode == true{
-                    
                     self.callUpdateForChild(firstName: self.firstName.text!,email: self.email.text!,password: self.password.text!,childAvatar: self.childImageUrl,phoneNumber: contactNumber)
-                    
                 }else {
                     
                      self.callSignUpForChild(firstName: self.firstName.text!,email: self.email.text!,password: self.password.text!,childAvatar: "",phoneNumber: contactNumber)
-                    
                 }
-        
         }
     }
     

@@ -185,14 +185,11 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
             else {
                 goalPicker.selectRow(0, inComponent: 0, animated: false)
             }
-
         }
         else {
             goalPicker.selectRow(0, inComponent: 0, animated: false)
 
         }
-
-        
     }
    
     func repeatTaskDoneButtonClicked() {
@@ -200,8 +197,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     }
     
     @IBAction func amountValueDidChange(_ sender: UITextField) {
-        
-        
         if sender == self.ammountField {
             
             if sender.text?.isNumber == false {
@@ -211,7 +206,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
                 self.ammountIsValid = true
             }
         }
-        
     }
     
     //MARK: Void Methods
@@ -297,17 +291,13 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        
         if activeField == repeatsField {
             repeatsField.text = repeatTasks[row]
-            
         }
         else  {
             applyToGoalField.text = earnItChildGoalList[row].name
             self.selectedGoal = earnItChildGoalList[row]
         }
-        
-        
     }
 
      // *Override
@@ -333,11 +323,8 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
             guard let text = textField.text else { return true }
             let newLength = text.characters.count + string.characters.count - range.length
             return newLength <= 40
-    
         }
-            
         return true
-        
   }
     
     func setUpUserInfoView(){
