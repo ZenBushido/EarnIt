@@ -1132,8 +1132,6 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
                 addGoalVC.earnItChildUser = self.earnItChildUserForParent
                 addGoalVC.earnItChildUsers = self.earnItChildUsers
                 self.present(addGoalVC, animated:true, completion:nil)
-                
-                
             })
             { (error) -> () in
                 

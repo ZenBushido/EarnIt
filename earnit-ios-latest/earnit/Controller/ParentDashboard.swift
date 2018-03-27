@@ -1331,19 +1331,15 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
     func actionViewDidTapped(_ sender: UITapGestureRecognizer){
         print("actionViewDidTapped..")
         self.removeActionView()
-        
     }
     
     
     func removeActionView(){
-        
         for view in self.actionView.subviews {
             
             view.removeFromSuperview()
         }
         self.actionView.removeFromSuperview()
-       
-        
     }
     
     func goToBalanceScreen(){

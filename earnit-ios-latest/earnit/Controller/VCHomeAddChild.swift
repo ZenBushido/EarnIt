@@ -960,10 +960,7 @@ class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextF
  
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        
         if textField == countryCodeField {
-            
-            
             let CC = self.selectedCountryDetails["dial_code"]
             
             var i = 0
@@ -973,12 +970,10 @@ class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextF
                     counrtyPicker.selectRow(i, inComponent: 0, animated: false)
                     return true
                 }
-                
                 i = i+1
             }
             counrtyPicker.selectRow(0, inComponent: 0, animated: false)
         }
-        
         return true
     }
   
