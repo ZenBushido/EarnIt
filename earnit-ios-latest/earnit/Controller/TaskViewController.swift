@@ -108,10 +108,11 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     //MARK: View Cycle
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
         self.lblRepeats.isHidden = true
         self.repeatsField.isHidden = true
+        self.lblRepeats.isHidden = false
+        self.repeatsField.isHidden = false
         
         self.actionView.frame = CGRect(0 , 0, self.view.frame.width, self.view.frame.height)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.actionViewDidTapped(_:)))
@@ -134,13 +135,11 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        
         self.getGoalListForCurrentUser()
         self.messageView.messageToLabel.text = "Message to  \(self.earnItChildUser.firstName!):"
     }
     
     func pickerViewSetup()  {
-        
         //UIPickerView
        // goalPicker = UIPickerView(frame: CGRect(x:0,y:0,width:self.view.frame.size.width,height:216))
         goalPicker.dataSource = self
@@ -154,7 +153,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         pickerToolBar.sizeToFit()
         
         //Adding ToolBar Button
-        
         let doneButton = UIBarButtonItem(title: "Done", style: .plain, target:self , action: #selector(self.repeatTaskDoneButtonClicked))
         let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         pickerToolBar.setItems([spaceButton,doneButton], animated: false)
@@ -230,9 +228,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     }
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        
         activeField = textField
-        
         if textField == repeatsField || textField == applyToGoalField  {
             self.pickerViewSetup()
         }
@@ -261,14 +257,11 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     //MARK: -UIPickerView Datasource & Delegate
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int{
-        
         return 1
     }
     
-    
     @available(iOS 2.0, *)
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        
         if activeField == repeatsField {
             return self.repeatTasks.count
         }
@@ -277,10 +270,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         }
     }
     
-    
-    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        
         if activeField == repeatsField {
             return self.repeatTasks[row]
         }
@@ -288,7 +278,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
             return earnItChildGoalList[row].name
         }
     }
-    
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if activeField == repeatsField {
@@ -314,7 +303,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
             let compSepByCharInSet = string.components(separatedBy: aSet)
             let numberFiltered = compSepByCharInSet.joined(separator: "")
             return string == numberFiltered
-            
           }
           return false
             
@@ -363,16 +351,11 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
 //                }
 //             
             }
-            
         }
-    
     }
     
-    
     func getGoalListForCurrentUser(){
-        
         self.showLoadingView()
-        
         getGoalsForChild(childId : self.earnItChildUserId,success: {
             
             (earnItGoalList) ->() in
@@ -382,9 +365,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
             earnItGoalForNone.name = "None"
             earnItGoalForNone.id = 0
             self.earnItChildGoalList.append(earnItGoalForNone)
-            
             for earnItGoal in earnItGoalList{
-                
                 if earnItGoal.id != 0 {
                     self.earnItChildGoalList.append(earnItGoal)
                 }
@@ -401,14 +382,10 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
             self.hideLoadingView()
             self.dismiss(animated: true, completion: nil)
         }
-        
     }
     
-    
     func setUpEditViewForUser(){
-        
         if self.isInEditingMode == true{
-            
            // self.topBannerLabel.text = "Edit Task For" + " " + self.earnItChildUser.firstName
             self.topBannerLabel.text = self.earnItTaskToEdit.taskName
             self.selectedGoal.name = self.earnItTaskToEdit.goal.name
@@ -442,8 +419,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
                 self.requiresPhotoOption.backgroundColor = UIColor.white
                 self.isPhotoRequired = 1
             }
-
-          
          
             var i = 0
             switch   self.earnItTaskToEdit.repeatMode {
@@ -775,8 +750,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         //Need to calculate keyboard exact size due to Apple suggestions
         self.scrollView.isScrollEnabled = true
         var info = notification.userInfo!
-        
-        
         if let activeField = self.activeField {
             
             let keyboardSize = (info[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size
@@ -786,10 +759,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
             self.scrollView.scrollIndicatorInsets = contentInsets
             var aRect : CGRect = self.view.frame
             aRect.size.height -= keyboardSize!.height
-
-            
             if (!aRect.contains(activeField.frame.origin)){
-                
                 self.scrollView.scrollRectToVisible(activeField.frame, animated: true)
             }
         }
@@ -802,13 +772,9 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
             self.scrollView.scrollIndicatorInsets = contentInsets
             var aRect : CGRect = self.view.frame
             aRect.size.height -= keyboardSize!.height
-            
-            
 //            if (!aRect.contains(activeTextView.frame.origin)){
-            
                 self.scrollView.scrollRectToVisible(activeTextView.frame, animated: true)
         //    }
-
         }
     }
     
@@ -825,36 +791,26 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         self.view.endEditing(true)
     }
     
-    
     func showLoadingView(){
-        
         self.view.alpha = 0.7
         self.view.isUserInteractionEnabled = false
         self.activityIndicator.startAnimating()
-
     }
     
-    
     func hideLoadingView(){
-        
         self.view.alpha = 1
         self.view.isUserInteractionEnabled = true
         self.activityIndicator.stopAnimating()
     }
     
-    
     @IBAction func callSaveTaskApiBasedOnValidation(_ sender: Any) {
-        
         print("self.ammountField.text \(self.ammountField.text)")
-        
         self.view.endEditing(true)
 
         self.showLoadingView()
-        
         let earnItTask = EarnItTask()
-        
         earnItTask.taskName = self.taskNameField.text
-        
+
         earnItTask.createdDateTimeStamp = self.createdDate.millisecondsSince1970
         earnItTask.updateDateTimeStamp = self.updatedDate.millisecondsSince1970
         earnItTask.dueDateTimeStamp = self.dueDate.millisecondsSince1970
@@ -888,73 +844,40 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
             earnItTask.allowance = Double(self.ammountField.text!)
             
             }
-            
-            
             if (dueDateLabel.text?.isEmpty)! {
-                
                 self.hideLoadingView()
                 self.view.makeToast("Please select a due date for the task")
                 return
             }
-            
-            
-            
             if self.isInEditingMode == true {
-                
                 self.callEditTask(earnItTask: earnItTask)
-                
-                
             }else {
-                
                 self.callAddTask(earnItTask: earnItTask)
-                
             }
-            
-            
         }else{
-                
                 self.hideLoadingView()
                 self.view.makeToast("Please complete the Task Name ")
-            
-                
         }
-        
     }
-    
-        
-        
         
       func callEditTask(earnItTask: EarnItTask){
-        
-            print("Calling edit task")
-        
-            earnItTask.status = self.earnItTaskToEdit.status
-        
-            earnItTask.taskId = self.earnItTaskToEdit.taskId
+        print("Calling edit task")
+        earnItTask.status = self.earnItTaskToEdit.status
+        earnItTask.taskId = self.earnItTaskToEdit.taskId
         earnItTask.repeatScheduleDic = self.earnItTaskToEdit.repeatScheduleDic
-        
             if self.selectedGoal.name == "None"{
-            
                 earnItTask.goal.id = nil
             }else {
-                
                 earnItTask.goal.id = self.selectedGoal.id
            }
-        
             callApiForUpdateTaskByParent(earnItTaskChildId:self.earnItChildUserId ,earnItTask: earnItTask, success: {_ in
-                
                self.dismiss(animated: true, completion: nil)
-                
             }) { (error) -> () in
-                
                 self.hideLoadingView()
                 self.view.makeToast("update Failed")
 //                let alert = showAlert(title: "Error", message: "Failed")
 //                self.present(alert, animated: true, completion: nil)
-                
             }
-
-        
       }
     
         func callAddTask(earnItTask : EarnItTask) {
@@ -1006,11 +929,8 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     }
     
     @IBAction func goBackToParentLandingPage(_ sender: Any) {
-        
         self.view.endEditing(true)
         dismiss(animated: true, completion: nil)
-        
-        
        /* let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         
         let parentLandingPage  = storyBoard.instantiateViewController(withIdentifier: "ParentLandingPage") as! ParentLandingPage
@@ -1023,55 +943,46 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         slideMenuController.delegate = parentLandingPage
         
         self.present(slideMenuController, animated: true, completion:nil)*/
-
     }
    
     @IBAction func showDatePicker(_ sender: Any) {
         
-        self.view.endEditing(true)
+        //Calendar View Navigation
+        /*self.view.endEditing(true)
         self.gotoCalenderView()
-        return
+        return*/
         
        print("showDatePicker")
        self.dateTextField.inputView = datePickerHolder
        datePickerHolder.setSelectedDate =  {
-            
            print("didDateSelectedFromPicker")
            self.fetchDateFromSelectedDate(self.datePickerHolder.timePicker)
            self.view.endEditing(true)
-            
         }
         datePickerHolder.closeDatePicker = {
-            
             print("closeDatePicker")
             self.view.endEditing(true)
         }
        self.datePickerHolder.timePicker.minimumDate = Date()
        self.datePickerHolder.timePicker.setDate(self.dueDate as Date, animated: true)
-        
     }
     
     @IBAction func showSideMenu(_ sender: Any) {
         print("Opening slideview")
-        self.openRight();
-        
+        self.openRight()
     }
     
     @IBAction func photoRequiresButtonClicked(_ sender: UIButton) {
-        
         if ( isPhotoRequired  == 0 ){
-            
             self.requiresPhotoOption.setImage(Icon.check, for: .normal)
             self.requiresPhotoOption.backgroundColor = UIColor.white
             isPhotoRequired = 1
             
         }else if (isPhotoRequired == 1){
-            
             self.requiresPhotoOption.setImage(nil, for: .normal)
             self.requiresPhotoOption.backgroundColor = UIColor.clear
             isPhotoRequired = 0
         }
-        
     }
     
     func fetchParentUserDetailFromBackground(){
@@ -1090,9 +1001,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
             checkUserAuthentication(email: email, password: password, success: {
                 
                 (responseJSON) ->() in
-                
                 if (responseJSON["userType"].stringValue == "CHILD"){
-                    
                     EarnItChildUser.currentUser.setAttribute(json: responseJSON)
                     //success(true)
                     
@@ -1154,45 +1063,28 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         if UIDevice().userInterfaceIdiom == .phone {
             switch UIScreen.main.nativeBounds.height {
             case 480:
-                
-                
                 optionView.frame.origin.x = self.view.frame.origin.x + 160
-                
                 
             case 960:
-                
-                
                 optionView.frame.origin.x = self.view.frame.origin.x + 160
                 
-                
-                
             case 1136:
-                
-                
                 optionView.frame.origin.x = self.view.frame.origin.x + 100
                 
             case 1334:
-                
-                
                 optionView.frame.origin.x = self.view.frame.origin.x + 160
                 
-                
             case 2208:
-                
-                
                 optionView.frame.origin.x = self.view.frame.origin.x + 200
                 
             default:
                 
                 print("unknown")
             }
-            
         }
         else if  UIDevice().userInterfaceIdiom == .pad {
-            
             optionView.frame.origin.x = self.view.frame.origin.x + 200
         }
-        
         
 //        optionView.addTaskButton.setImage(EarnItImage.setEarnItAddIcon(), for: .normal)
 //        optionView.showAllTaskButton.setImage(EarnItImage.setEarnItPageIcon(), for: .normal)
@@ -1200,8 +1092,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
 //        optionView.showBalanceButton.setImage(EarnItImage.setEarnItAppBalanceIcon(), for: .normal)
 //        optionView.showGoalButton.setImage(EarnItImage.setEarnItGoalIcon(), for: .normal)
 //        optionView.messageButton.setImage(EarnItImage.setEarnItCommentIcon(), for: .normal)
-        
-        
         
         optionView.firstOption.setImage(EarnItImage.setEarnItAddIcon(), for: .normal)
         optionView.secondOption.setImage(EarnItImage.setEarnItPageIcon(), for: .normal)
@@ -1217,21 +1107,13 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         optionView.fifthOption.setTitle("Goals", for: .normal)
         optionView.sixthOption.setTitle("Message", for: .normal)
         
-        
         self.actionView.addSubview(optionView)
         self.actionView.backgroundColor = UIColor.clear
         self.view.addSubview(self.actionView)
         
-        
-        
-        
         optionView.doActionForSecondOption = {
-            
             self.removeActionView()
-            
             if self.earnItChildUser.earnItTasks.count  > 0 {
-                
-                
                 let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
                 let parentDashBoardCheckin = storyBoard.instantiateViewController(withIdentifier: "parentDashBoard") as! ParentDashBoard
                 parentDashBoardCheckin.prepareData(earnItChildUserForParent: self.earnItChildUser, earnItChildUsers: self.earnItChildUsers)
@@ -1244,13 +1126,8 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
                 self.present(slideMenuController, animated:false, completion:nil)
                 
             }else {
-                
-                
                 self.view.makeToast("No task available")
-                
             }
-            
-            
         }
         
         optionView.doActionForFirstOption = {
@@ -1295,14 +1172,11 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             }
-            
         }
         
         optionView.doActionForFourthOption = {
-            
             self.removeActionView()
             self.goToBalanceScreen()
-            
         }
         
         optionView.doActionForThirdOption = {
@@ -1340,10 +1214,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
                 slideMenuController.automaticallyAdjustsScrollViewInsets = true
                 //slideMenuController.delegate = pendingTasksScreen
                 self.present(slideMenuController, animated:false, completion:nil)
-                
             }
-            
-            
         }
         
         optionView.doActionForSixthOption = {
@@ -1362,11 +1233,9 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
             messageContainerView.addGestureRecognizer(tap)
             
             self.messageView.dissmissMe = {
-                
                 self.messageView.removeFromSuperview()
                 messageContainerView.removeFromSuperview()
                 //self.enableBackgroundView()
-                
             }
             
             self.messageView.callControllerForSendMessage = {
@@ -1381,10 +1250,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
                     self.messageView.activityIndicator.stopAnimating()
                     //                let alert = showAlert(title: "", message: "Please enter a message")
                     //                self.present(alert, animated: true, completion: nil)
-                    
                 }else {
-                    
-                    
                     callUpdateApiForChild(firstName: self.earnItChildUser.firstName,childEmail: self.earnItChildUser.email,childPassword: self.earnItChildUser.password,childAvatar: self.earnItChildUser.childUserImageUrl!,createDate: self.earnItChildUser.createDate,childUserId: self.earnItChildUser.childUserId, childuserAccountId: self.earnItChildUser.childAccountId,phoneNumber: self.earnItChildUser.phoneNumber,fcmKey : self.earnItChildUser.fcmToken, message: self.messageView.messageText.text, success: {
                         
                         (childUdateInfo) ->() in
@@ -1400,24 +1266,18 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
                             messageContainerView.removeFromSuperview()
                             
                         }) {  (error) -> () in
-                            
                             print("error")
-                            
                         }
                         
                     }) { (error) -> () in
                         self.hideLoadingView()
                         self.messageView.activityIndicator.stopAnimating()
                         self.view.makeToast("Send Message Failed")
-                        
-                        
                         //                let alert = showAlert(title: "Error", message: "Update Child Failed")
                         //                self.present(alert, animated: true, completion: nil)
                         print(" Set status completed failed")
                     }
-                    
                 }
-                
             }
             
             var dView:[String:UIView] = [:]
@@ -1443,26 +1303,19 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
             }) { (value:Bool) -> Void in
                 
             }
-            
         }
-        
     }
     
     func actionViewDidTapped(_ sender: UITapGestureRecognizer){
         print("actionViewDidTapped..")
         self.removeActionView()
-        
     }
     
-    
     func removeActionView(){
-        
         for view in self.actionView.subviews {
-            
             view.removeFromSuperview()
         }
         self.actionView.removeFromSuperview()
-        
     }
     
     func messageContainerDidTap(_ sender: UITapGestureRecognizer) {
@@ -1477,15 +1330,11 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         balanceScreen.earnItChildUser = self.earnItChildUser
         
         if self.earnItChildUser.earnItGoal.cash! + self.earnItChildUser.earnItGoal.tally! + self.earnItChildUser.earnItGoal.ammount! == 0{
-            
             self.view.makeToast("No balance to display!!")
-            
         }else {
-            
             self.present(balanceScreen, animated:true, completion:nil)
         }
     }
-
     
     //MARK: -Keypad Butoons
     func addButtonsOnKeyboard()
@@ -1495,7 +1344,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         toolBar.isTranslucent = true
         toolBar.sizeToFit()
         
-        
         let doneButton = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(nextButtonPressed))
         
         let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
@@ -1503,22 +1351,16 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         
         toolBar.setItems([cancelButton,spaceButton, doneButton], animated: false)
         toolBar.isUserInteractionEnabled = true
-        
         self.ammountField.inputAccessoryView = toolBar
-        
     }
     
-    func nextButtonPressed()
-    {
+    func nextButtonPressed() {
         self.taskDetailField.becomeFirstResponder()
-        
     }
-    func closeButtonPressed()
-    {
+    
+    func closeButtonPressed(){
         self.view.endEditing(true)
     }
- 
-    
     
 }
 
