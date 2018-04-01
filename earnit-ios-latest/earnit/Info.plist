@@ -27,9 +27,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Advertisement would like to use bluetooth.</string>
+	<string>Earnit would like to use bluetooth.</string>
 	<key>NSCalendarsUsageDescription</key>
-	<string>Advertisement would like to create a calendar event.</string>
+	<string>Earnit would like to create a calendar event.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>App would like to store a photo.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -37,7 +37,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>App needs location service for stuff</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Advertisement would like to store a photo.</string>
+	<string>Earnit would like to store a photo.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Roboto-Bold.ttf</string>
