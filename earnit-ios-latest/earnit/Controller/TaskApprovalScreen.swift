@@ -39,7 +39,8 @@ class TaskApprovalScreen: UIViewController {
         if completedTask.isPictureRequired == 1 {
             print("has task image")
             if taskComment?.taskImageUrl != nil{
-                self.taskImageView.loadImageUsingCacheForTask(withUrl: (taskComment?.taskImageUrl)!)
+                //self.taskImageView.loadImageUsingCacheForTask(withUrl: (taskComment?.taskImageUrl)!)
+                self.taskImageView.loadImageUsingCacheForTask(withUrl: "https://s3-us-west-2.amazonaws.com/earnitapp-dev/new/" + (taskComment?.taskImageUrl)!)
             }
             self.isPhotoRequiredLabel.text = colonSpace +  "Yes"
         }

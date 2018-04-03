@@ -64,14 +64,10 @@ extension UIImageView {
     
     
     func loadImageUsingCacheForTask(withUrl urlString : String?) {
-        
-        self.image = EarnItImage.setLoadingImageForTask();
+        self.image = EarnItImage.setLoadingImageForTask()
         //self.contentMode = UIViewContentMode.scaleAspectFill
         //self.contentMode = UIViewContentMode.center
-        
-     
         if let url = URL(string: urlString!){
-            
             // check cached image
             if let cachedImage = imageCache.object(forKey: urlString as! NSString) as? UIImage {
                 self.image = cachedImage
