@@ -98,7 +98,12 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
             print("error")
         }
         self.childUserTable.reloadData()
-        self.welcomLabel.text = "Hi" + " " + EarnItAccount.currentUser.firstName
+        if (EarnItAccount.currentUser.firstName != nil) {
+            self.welcomLabel.text = "Hi" + " " + EarnItAccount.currentUser.firstName
+        }
+        else {
+            self.welcomLabel.text = "Hi"
+        }
         _ = Timer.scheduledTimer(timeInterval: 300.0, target: self, selector: #selector(self.fetchParentUserDetailFromBackground), userInfo: nil, repeats: true)
         
         _ = Timer.scheduledTimer(timeInterval: 300.0, target: self, selector: #selector(self.fetchChildUserDetailFromBackground), userInfo: nil, repeats: true)
@@ -826,18 +831,15 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
 //                    self.present(alert, animated: true, completion: nil)
                     
                 }
-                
                 DispatchQueue.main.async {
-                    
                     print("done calling background fetch....")
-                    
                     if EarnItAccount.currentUser.firstName != nil{
-                        
                          self.welcomLabel.text = "Hi" + " " + EarnItAccount.currentUser.firstName
                     }
-                    
+                    else {
+                        self.welcomLabel.text = "Hi"
+                    }
                 }
-            
           }
     }
     

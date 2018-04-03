@@ -38,7 +38,12 @@ class BalanceScreeen : UIViewController,UITextViewDelegate,UIGestureRecognizerDe
     //MARK: View Cycle
     
     override func viewDidLoad() {
-        self.lblTitle.text = "Hi" + " " + EarnItAccount.currentUser.firstName
+        if (EarnItAccount.currentUser.firstName != nil) {
+         self.lblTitle.text = "Hi" + " " + EarnItAccount.currentUser.firstName
+        }
+        else {
+         self.lblTitle.text = "Hi" + " " + self.earnItChildUser.firstName!
+        }
         self.actionView.frame = CGRect(0 , 0, self.view.frame.width, self.view.frame.height)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.actionViewDidTapped(_:)))
         self.actionView.addGestureRecognizer(tapGesture)

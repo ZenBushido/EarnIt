@@ -82,7 +82,12 @@ class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextF
         
         self.setUpEditViewForChild()
         
-        self.lblTitle.text = "Hi" + " " + EarnItAccount.currentUser.firstName
+        if (EarnItAccount.currentUser.firstName != nil) {
+            self.lblTitle.text = "Hi" + " " + EarnItAccount.currentUser.firstName
+        }
+        else {
+            self.lblTitle.text = "Hi" + " " + self.earnItChildUser.firstName!
+        }
         self.btnCancel.isUserInteractionEnabled = false
         self.btnCancel.isHidden = true
     }
