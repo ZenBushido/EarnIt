@@ -703,7 +703,7 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
             self.confirmPassword.text = self.earnItChildUser.password
             
             self.phone.text = self.getPhoneNumber()
-            self.userImageView.loadImageUsingCache(withUrl: self.earnItChildUser.childUserImageUrl)
+            self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUser.childUserImageUrl!)
             self.saveButton.setTitle("Update", for: .normal)
             self.childImageUrl = self.earnItChildUser.childUserImageUrl?.replacingOccurrences(of: "\"", with:  " ")
             self.isConfirmPasswordCorrect = true

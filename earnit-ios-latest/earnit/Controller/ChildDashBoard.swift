@@ -80,7 +80,7 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
         self.overDueTasks = getOverDueTaskListForChildDashBoard(earnItTasks: EarnItChildUser.currentUser.earnItTasks)
         self.pendingApprovalTasks = getPendingApprovalTasks(earnItTasks: EarnItChildUser.currentUser.earnItTasks)
 
-        self.userImageVieqw.loadImageUsingCache(withUrl: EarnItChildUser.currentUser.childUserImageUrl)
+        self.userImageVieqw.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + EarnItChildUser.currentUser.childUserImageUrl!)
         self.childUserTable.reloadData()
         self.getGoalForCurrentUser()
 

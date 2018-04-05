@@ -18,6 +18,7 @@ let AWS_URL = "https://s3-us-west-2.amazonaws.com/"
 let AWS_ACCESS_ID = "AKIAJIN35A42G33VAWQA"
 let AWS_SECRET_KEY = "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"
 let EarnItApp_LocalHost_BASE_URL = "http://localhost:9191"
+let EarnItApp_Image_BASE_URL_PREFIX = "https://s3-us-west-2.amazonaws.com/earnitapp-dev/new/"
 
 #if DEVELOPMENT
 let EarnItApp_BASE_URL = "http://35.162.48.144:8080/earnit-api"

@@ -130,7 +130,7 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
         //self.sendMessageButton.setTitle("Send a message to  " + self.earnItChildUserForParent.firstName, for: .normal)
         
         self.childTableForTodayTask.reloadData()
-        self.userImageView.loadImageUsingCache(withUrl: self.earnItChildUserForParent.childUserImageUrl )
+        self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUserForParent.childUserImageUrl!)
         self.childTableForTodayTask.tableFooterView = UIView()
         self.taskApprovalView.removeFromSuperview()
         

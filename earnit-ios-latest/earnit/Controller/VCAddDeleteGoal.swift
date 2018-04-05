@@ -59,7 +59,7 @@ class VCAddDeleteGoal : UIViewController, UITextFieldDelegate, UITextViewDelegat
         let userAvatarUrlString = self.earnItChildUser.childUserImageUrl
         _ = Timer.scheduledTimer(timeInterval: 300.0, target: self, selector: #selector(self.fetchParentUserDetailFromBackground), userInfo: nil, repeats: true)
         
-        self.userImageView.loadImageUsingCache(withUrl: self.earnItChildUser.childUserImageUrl)
+        self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUser.childUserImageUrl!)
         
         /*if(!IS_ADD){
             print("trying to EDIT a goal")

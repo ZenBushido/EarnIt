@@ -254,7 +254,7 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
         let view  = Bundle.main.loadNibNamed("ChildUserHeaderView", owner: nil, options: nil)?.first as! ChildUserHeaderView
 
           view.childUserName.text = self.earnItChildUsers[section].firstName
-          view.checkInImage.loadImageUsingCache(withUrl: self.earnItChildUsers[section].childUserImageUrl!)
+          view.checkInImage.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUsers[section].childUserImageUrl!)
         
           view.showActionButton = {
             

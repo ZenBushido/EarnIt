@@ -104,7 +104,7 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
 //            self.userImageView.image = EarnItImage.defaultUserImage()
 //        }
 
-        self.userImageView.loadImageUsingCache(withUrl: self.earnItChildUserForParent.childUserImageUrl )
+        self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUserForParent.childUserImageUrl!)
         self.childTableForTodayTask.tableFooterView = UIView()
         self.taskApprovalView.removeFromSuperview()
         

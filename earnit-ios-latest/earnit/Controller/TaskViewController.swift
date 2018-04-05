@@ -326,7 +326,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
                 self.topBannerLabel.text = self.topBannerLabel.text! + " " + user.firstName
                 self.selectedGoal.name = "None"
                 
-                self.userImageView.loadImageUsingCache(withUrl: user.childUserImageUrl)
+                self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + user.childUserImageUrl!)
 //                let url = URL(string: userAvatarUrlString!)
               
 //                if url != nil{

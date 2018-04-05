@@ -58,7 +58,7 @@ class OptionViewController: UIViewController, OptionMenuProtocol {
         self.imageViewHeader.userName.text = EarnItAccount.currentUser.firstName
         self.imageViewHeader.email.text = EarnItAccount.currentUser.email
         
-        imageViewHeader.userProfileImageView.loadImageUsingCache(withUrl: EarnItAccount.currentUser.avatar)
+        imageViewHeader.userProfileImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX +  EarnItAccount.currentUser.avatar!)
         //imageViewHeader.userProfileImageView.downloadedFrom(url: url!)
         imageViewHeader.userProfileImageView.contentMode = .scaleAspectFill
         self.tableView.backgroundView?.backgroundColor = UIColor.EarnItAppBackgroundColor()
@@ -73,7 +73,7 @@ class OptionViewController: UIViewController, OptionMenuProtocol {
     override func viewWillAppear(_ animated: Bool) {
         
         self.imageViewHeader.userProfileImageView.image = EarnItImage.defaultUserImage()
-        self.imageViewHeader.userProfileImageView.loadImageUsingCache(withUrl: EarnItAccount.currentUser.avatar)
+        self.imageViewHeader.userProfileImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + EarnItAccount.currentUser.avatar!)
         self.imageViewHeader.userName.text = EarnItAccount.currentUser.firstName
         self.imageViewHeader.email.text = EarnItAccount.currentUser.email
     }

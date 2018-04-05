@@ -47,7 +47,7 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
        
         self.isImageChanged = false
 
-        profileImageView.loadImageUsingCache(withUrl: EarnItAccount.currentUser.avatar!)
+        profileImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + EarnItAccount.currentUser.avatar!)
         self.creatLeftPadding(textField: firstNameField)
         self.creatLeftPadding(textField: lastNameField)
         self.creatLeftPadding(textField: phoneField)

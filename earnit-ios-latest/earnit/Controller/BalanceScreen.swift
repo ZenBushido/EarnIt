@@ -54,7 +54,7 @@ class BalanceScreeen : UIViewController,UITextViewDelegate,UIGestureRecognizerDe
         self.messageView.messageText.delegate = self
         
         let userAvatarUrlString = self.earnItChildUser.childUserImageUrl
-        self.userImageView.loadImageUsingCache(withUrl: self.earnItChildUser.childUserImageUrl)
+        self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUser.childUserImageUrl!)
         self.messageView.messageToLabel.text = "Message to  \(self.earnItChildUser.firstName!):"
         
         self.GoalName.isHidden = true

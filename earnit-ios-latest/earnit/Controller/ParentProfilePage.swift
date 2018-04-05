@@ -71,7 +71,7 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
         self.childUserTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         self.childUserTable.tableFooterView = UIView()
         self.scrollView.contentSize = CGSize(290, 1000)
-        userImageView.loadImageUsingCache(withUrl: EarnItAccount.currentUser.avatar!)
+        userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + EarnItAccount.currentUser.avatar!)
         
         self.creatLeftPadding(textField: firstName)
         self.creatLeftPadding(textField: lastName)
@@ -1206,7 +1206,7 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let childCell = self.childUserTable.dequeueReusableCell(withIdentifier: "ChildCell", for: indexPath as IndexPath) as! ChildCell
         childCell.childName.text = self.earnItChildUsers[indexPath.row].firstName
-        childCell.childImageView.loadImageUsingCache(withUrl: self.earnItChildUsers[indexPath.row].childUserImageUrl!)
+        childCell.childImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUsers[indexPath.row].childUserImageUrl!)
         childCell.btnDeleteChildRow.tag = self.earnItChildUsers[indexPath.row].childUserId
         childCell.btnDeleteChildRow.setTitleColor(UIColor.clear, for: UIControlState.normal)
         childCell.btnDeleteChildRow.titleLabel?.text = self.earnItChildUsers[indexPath.row].firstName

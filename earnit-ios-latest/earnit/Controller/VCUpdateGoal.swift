@@ -53,10 +53,10 @@ class VCUpdateGoal : UIViewController, UITextFieldDelegate, UITextViewDelegate, 
         self.messageView.center = CGPoint(x: self.view.center.x,y :self.view.center.y-80)
         self.messageView.messageText.delegate = self
         
-        let userAvatarUrlString = self.earnItChildUser.childUserImageUrl
+        _ = self.earnItChildUser.childUserImageUrl
         _ = Timer.scheduledTimer(timeInterval: 300.0, target: self, selector: #selector(self.fetchParentUserDetailFromBackground), userInfo: nil, repeats: true)
         
-        self.userImageView.loadImageUsingCache(withUrl: self.earnItChildUser.childUserImageUrl)
+        self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUser.childUserImageUrl!)
         
         if(!IS_ADD){
             print("trying to EDIT a goal")

@@ -59,7 +59,7 @@ class VCAdjustBalance : UIViewController, UITextViewDelegate, UIGestureRecognize
         self.messageView.messageText.delegate = self
         
         let userAvatarUrlString = self.earnItChildUser.childUserImageUrl
-        self.userImageView.loadImageUsingCache(withUrl: userAvatarUrlString)
+        self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + userAvatarUrlString!)
         self.setupUI()
         self.changeGoalValues(indexx: self.indexObject)
     }
