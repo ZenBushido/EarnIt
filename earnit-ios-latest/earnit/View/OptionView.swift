@@ -21,14 +21,16 @@ class OptionView : UIView {
     @IBOutlet var forthOption: UIButton!
     @IBOutlet var fifthOption: UIButton!
     @IBOutlet var sixthOption: UIButton!
-    
+    @IBOutlet var btnAppsMonitorOption: UIButton!
+
     var doActionForFirstOption: (() -> Void)?
     var doActionForSecondOption: (() -> Void)?
     var doActionForThirdOption: (() -> Void)?
     var doActionForFourthOption: (() -> Void)?
     var doActionForFifthOption: (() -> Void)?
     var doActionForSixthOption: (() -> Void)?
-    
+    var doActionForButtonAppsMonitorOption: (() -> Void)?
+
     class func instanceFromNib() -> UIView {
         
         return UINib(nibName: "OptionView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! UIView
@@ -64,6 +66,8 @@ class OptionView : UIView {
         self.doActionForSixthOption!()
     }
     
- 
+    @IBAction func appsMonitorOptionClicked(_ sender: Any) {
+        self.doActionForButtonAppsMonitorOption!()
+    }
     
 }

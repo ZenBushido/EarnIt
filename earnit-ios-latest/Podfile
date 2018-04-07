@@ -21,6 +21,7 @@ def earnIt_PodFiles
     pod 'Firebase/Core'
     pod 'Firebase/Messaging'
     pod 'ALCameraViewController', '~> 2.0.3'
+    pod 'KDCircularProgress'
     
 end
 

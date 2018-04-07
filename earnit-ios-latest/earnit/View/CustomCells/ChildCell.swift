@@ -16,4 +16,5 @@ class ChildCell : UITableViewCell {
     @IBOutlet var childImageView: UIImageView!
     @IBOutlet var btnDeleteChildRow: UIButton!
     @IBOutlet var btnCellRowBG: UIButton!
+    @IBOutlet weak var viewProg: UIView!
 }

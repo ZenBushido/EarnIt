@@ -45,7 +45,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var scrollView: UIScrollView!
     
-    
     var activeField:UITextField?
     var activeTextView:UITextView?
     let repeatTasks = ["None","Daily","Weekly","Monthly"]
@@ -104,6 +103,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     var messageView = MessageView()
 
     @IBOutlet var lblRepeats: UILabel!
+    @IBOutlet var ivDropDownRepeat: UIImageView!
 
     //MARK: View Cycle
     
@@ -113,6 +113,8 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         self.repeatsField.isHidden = true
         self.lblRepeats.isHidden = false
         self.repeatsField.isHidden = false
+        self.repeatsField.isUserInteractionEnabled = false
+        self.ivDropDownRepeat.isHidden = true
         
         self.actionView.frame = CGRect(0 , 0, self.view.frame.width, self.view.frame.height)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.actionViewDidTapped(_:)))
