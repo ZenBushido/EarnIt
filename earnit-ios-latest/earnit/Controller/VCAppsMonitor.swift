@@ -52,11 +52,9 @@ class VCAppsMonitor : UIViewController,UITextViewDelegate,UIGestureRecognizerDel
 //        let userAvatarUrlString = self.earnItChildUser.childUserImageUrl
 //        self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUser.childUserImageUrl!)
 //        self.messageView.messageToLabel.text = "Message to  \(self.earnItChildUser.firstName!):"
-        
-        self.changeSubtileTitle(str: "Overall")
-//        self.segControl.backgroundColor = UIColor.earnItAppPinkColor()
-        self.segControl.tintColor = UIColor.white
-//        (self.segControl.subviews[0] as UIView).tintColor = UIColor.earnItAppPinkColor()
+        self.changeSubtileTitle()
+        self.segControl.tintColor = UIColor.earnItAppPinkColor() //UIColor.white
+        self.segControl.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.white], for: UIControlState.selected)
         
         self.tvAppsUsage.allowsSelection = true
         self.tvAppsUsage.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -68,6 +66,7 @@ class VCAppsMonitor : UIViewController,UITextViewDelegate,UIGestureRecognizerDel
     //MARK: Segment Control
     
     @IBAction func monitorOptionSegmentChange(sender: UISegmentedControl) {
+        self.changeSubtileTitle()
         return
         let sortedViews = sender.subviews.sorted( by: { $0.frame.origin.x < $1.frame.origin.x } )
         for (index, view) in sortedViews.enumerated() {
@@ -79,8 +78,9 @@ class VCAppsMonitor : UIViewController,UITextViewDelegate,UIGestureRecognizerDel
         }
     }
     
-    func changeSubtileTitle(str:String) {
-        self.lblSubtitle.text = str + " Usage"
+    func changeSubtileTitle() {
+        let strSelectedSegment = segControl.titleForSegment(at: segControl.selectedSegmentIndex)
+        self.lblSubtitle.text = strSelectedSegment! + " Usage"
     }
     
     //MARK: Get Goal List
