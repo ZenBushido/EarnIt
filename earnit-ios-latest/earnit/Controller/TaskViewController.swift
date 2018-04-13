@@ -83,6 +83,9 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     var isPhotoRequired = 0
    
     var selectedGoal =  EarnItChildGoal()
+    @IBOutlet var lblSubtitle: UILabel!
+    @IBOutlet var btnApprovalTick: UIButton!
+    @IBOutlet var btnDelete: UIButton!
     
     //keyboardOffset
     var currentKeyboardOffset : CGFloat = 0.0
@@ -115,7 +118,9 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         self.repeatsField.isHidden = false
         self.repeatsField.isUserInteractionEnabled = false
         self.ivDropDownRepeat.isHidden = true
-        
+        self.btnApprovalTick.isHidden = true
+        self.btnDelete.isHidden = true
+
         self.actionView.frame = CGRect(0 , 0, self.view.frame.width, self.view.frame.height)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.actionViewDidTapped(_:)))
         self.actionView.addGestureRecognizer(tapGesture)
@@ -188,7 +193,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         }
         else {
             goalPicker.selectRow(0, inComponent: 0, animated: false)
-
         }
     }
    
@@ -319,13 +323,18 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     
     func setUpUserInfoView(){
         for user in self.earnItChildUsers{
-            
             if user.childUserId == self.earnItChildUserId{
-                
                 self.earnItChildUser = user
                 //let userAvatarUrlString = user.childUserImageUrl
                 self.assignToField.text = user.firstName
-                self.topBannerLabel.text = self.topBannerLabel.text! + " " + user.firstName
+                //self.topBannerLabel.text = self.topBannerLabel.text! + " " + user.firstName
+                if (EarnItAccount.currentUser.firstName != nil) {
+                    self.topBannerLabel.text = "Hi" + " " + EarnItAccount.currentUser.firstName
+                }
+                else {
+                    self.topBannerLabel.text = "Hi" + " " + self.earnItChildUser.firstName!
+                }
+                self.lblSubtitle.text = user.firstName
                 self.selectedGoal.name = "None"
                 
                 self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + user.childUserImageUrl!)
@@ -388,8 +397,13 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     
     func setUpEditViewForUser(){
         if self.isInEditingMode == true{
-           // self.topBannerLabel.text = "Edit Task For" + " " + self.earnItChildUser.firstName
-            self.topBannerLabel.text = self.earnItTaskToEdit.taskName
+            if (EarnItAccount.currentUser.firstName != nil) {
+                self.topBannerLabel.text = "Hi" + " " + EarnItAccount.currentUser.firstName
+            }
+            else {
+                self.topBannerLabel.text = "Hi" + " " + self.earnItChildUser.firstName!
+            }
+            self.lblSubtitle.text = self.earnItTaskToEdit.taskName
             self.selectedGoal.name = self.earnItTaskToEdit.goal.name
             self.taskNameField.text = self.earnItTaskToEdit.taskName
             self.selectedGoal.id = self.earnItTaskToEdit.goal.id
@@ -404,13 +418,13 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
             self.taskDetailField.text = self.earnItTaskToEdit.taskDescription
             self.dueDateLabel.text = getDueDateAndTime(dueDate: self.earnItTaskToEdit.dueDate)
             self.saveButton.setTitle("Update", for: .normal)
+            self.btnApprovalTick.isHidden = false
+            self.btnDelete.isHidden = false
             self.isPhotoRequired  = self.earnItTaskToEdit.isPictureRequired
             self.dueDate = self.earnItTaskToEdit.dueDate as NSDate
             self.createdDate = Date(milliseconds: self.earnItTaskToEdit.createdDateTimeStamp)
             self.updatedDate = Date()
-            
             if ( self.isPhotoRequired  == 0 ){
-                
                 self.requiresPhotoOption.setImage(nil, for: .normal)
                 self.requiresPhotoOption.backgroundColor = UIColor.clear
                 self.isPhotoRequired = 0
@@ -421,7 +435,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
                 self.requiresPhotoOption.backgroundColor = UIColor.white
                 self.isPhotoRequired = 1
             }
-         
             var i = 0
             switch   self.earnItTaskToEdit.repeatMode {
             case .Daily:
@@ -930,69 +943,9 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         self.datePickerHolder.timePicker.setDate(Date(), animated: true)
     }
     
-    @IBAction func goBackToParentLandingPage(_ sender: Any) {
-        self.view.endEditing(true)
-        dismiss(animated: true, completion: nil)
-       /* let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        
-        let parentLandingPage  = storyBoard.instantiateViewController(withIdentifier: "ParentLandingPage") as! ParentLandingPage
-        
-        let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
-        
-        let slideMenuController  = SlideMenuViewController(mainViewController: parentLandingPage, rightMenuViewController: optionViewController)
-        
-        slideMenuController.automaticallyAdjustsScrollViewInsets = true
-        slideMenuController.delegate = parentLandingPage
-        
-        self.present(slideMenuController, animated: true, completion:nil)*/
-    }
-   
-    @IBAction func showDatePicker(_ sender: Any) {
-        
-        //Calendar View Navigation
-        /*self.view.endEditing(true)
-        self.gotoCalenderView()
-        return*/
-        
-       print("showDatePicker")
-       self.dateTextField.inputView = datePickerHolder
-       datePickerHolder.setSelectedDate =  {
-           print("didDateSelectedFromPicker")
-           self.fetchDateFromSelectedDate(self.datePickerHolder.timePicker)
-           self.view.endEditing(true)
-        }
-        datePickerHolder.closeDatePicker = {
-            print("closeDatePicker")
-            self.view.endEditing(true)
-        }
-       self.datePickerHolder.timePicker.minimumDate = Date()
-       self.datePickerHolder.timePicker.setDate(self.dueDate as Date, animated: true)
-    }
-    
-    @IBAction func showSideMenu(_ sender: Any) {
-        print("Opening slideview")
-        self.openRight()
-    }
-    
-    @IBAction func photoRequiresButtonClicked(_ sender: UIButton) {
-        if ( isPhotoRequired  == 0 ){
-            self.requiresPhotoOption.setImage(Icon.check, for: .normal)
-            self.requiresPhotoOption.backgroundColor = UIColor.white
-            isPhotoRequired = 1
-            
-        }else if (isPhotoRequired == 1){
-            self.requiresPhotoOption.setImage(nil, for: .normal)
-            self.requiresPhotoOption.backgroundColor = UIColor.clear
-            isPhotoRequired = 0
-        }
-    }
-    
     func fetchParentUserDetailFromBackground(){
-        
         DispatchQueue.global().async {
-            
             let keychain = KeychainSwift()
-            
             guard  let _ = keychain.get("email") else  {
                 print(" /n Unable to fetch user credentials from keychain \n")
                 return
@@ -1019,8 +972,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
                 }
                 
             }) { (error) -> () in
-                
-                
                  self.dismissScreenToLogin()
                 
 //                let alert = showAlertWithOption(title: "Authentication failed", message: "please login again")
@@ -1028,34 +979,106 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
 //                self.present(alert, animated: true, completion: nil)
                 
             }
-            
             DispatchQueue.main.async {
-                
                 print("done calling background fetch for Parent....")
-                
-                
             }
-            
         }
-        
     }
     
     func dismissScreenToLogin(){
-        
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
         let loginController = storyBoard.instantiateViewController(withIdentifier: "LoginController") as! LoginPageController
         self.present(loginController, animated: true, completion: nil)
-        
+    }
+    
+    //MARK: Action Methods
+    
+    @IBAction func showDatePicker(_ sender: Any) {
+        //Calendar View Navigation
+        /*self.view.endEditing(true)
+         self.gotoCalenderView()
+         return*/
+        print("showDatePicker")
+        self.dateTextField.inputView = datePickerHolder
+        datePickerHolder.setSelectedDate =  {
+            print("didDateSelectedFromPicker")
+            self.fetchDateFromSelectedDate(self.datePickerHolder.timePicker)
+            self.view.endEditing(true)
+        }
+        datePickerHolder.closeDatePicker = {
+            print("closeDatePicker")
+            self.view.endEditing(true)
+        }
+        self.datePickerHolder.timePicker.minimumDate = Date()
+        self.datePickerHolder.timePicker.setDate(self.dueDate as Date, animated: true)
+    }
+    
+    @IBAction func showSideMenu(_ sender: Any) {
+        print("Opening slideview")
+        self.openRight()
+    }
+    
+    @IBAction func photoRequiresButtonClicked(_ sender: UIButton) {
+        if ( isPhotoRequired  == 0 ){
+            self.requiresPhotoOption.setImage(Icon.check, for: .normal)
+            self.requiresPhotoOption.backgroundColor = UIColor.white
+            isPhotoRequired = 1
+            
+        }else if (isPhotoRequired == 1){
+            self.requiresPhotoOption.setImage(nil, for: .normal)
+            self.requiresPhotoOption.backgroundColor = UIColor.clear
+            isPhotoRequired = 0
+        }
+    }
+
+    @IBAction func goBackToParentLandingPage(_ sender: Any) {
+        self.view.endEditing(true)
+        dismiss(animated: true, completion: nil)
+        /* let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+         let parentLandingPage  = storyBoard.instantiateViewController(withIdentifier: "ParentLandingPage") as! ParentLandingPage
+         let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
+         let slideMenuController  = SlideMenuViewController(mainViewController: parentLandingPage, rightMenuViewController: optionViewController)
+         slideMenuController.automaticallyAdjustsScrollViewInsets = true
+         slideMenuController.delegate = parentLandingPage
+         self.present(slideMenuController, animated: true, completion:nil)*/
+    }
+    
+    @IBAction func backButtonTapped(_ sender: Any) {
+        self.view.endEditing(true)
+        self.dismiss(animated: false, completion: nil)
+    }
+
+    @IBAction func btnApprovalTask_Tapped(_ sender: Any) {
+        self.view.endEditing(true)
+        let alert = showAlertWithOption(title: "Are you sure, you want to approve this task? Any credit towards this task will be applied.", message: "")
+        alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: self.instaneApprovalForTask))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func instaneApprovalForTask(_ sender: Any) {
+        print("Instant Approval")
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func btnDelete_Tapped(_ sender: Any) {
+        self.view.endEditing(true)
+        let alert = showAlertWithOption(title: "Are you sure, you want to delete this task?", message: "")
+        alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: self.deleteTask))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func deleteTask(_ sender: Any) {
+        print("Delete Task")
+        self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func calendarImageTapped(_ sender: Any) {
-   
         self.dateTextField.becomeFirstResponder()
-    
     }
+    
     @IBAction func userImageGotTapped(_ sender: UITapGestureRecognizer) {
-        
-        
         let optionView  = (Bundle.main.loadNibNamed("OptionView", owner: self, options: nil)?[0] as? OptionView)!
         optionView.center = self.view.center
         optionView.userImageView.image = self.userImageView.image
@@ -1220,9 +1243,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         }
         
         optionView.doActionForSixthOption = {
-            
             self.removeActionView()
-            
             let messageContainerView = UIView()
             messageContainerView.frame = CGRect(0 , 0, self.view.frame.width, self.view.frame.height)
             messageContainerView.backgroundColor = UIColor.clear
@@ -1239,9 +1260,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
                 messageContainerView.removeFromSuperview()
                 //self.enableBackgroundView()
             }
-            
             self.messageView.callControllerForSendMessage = {
-                
                 self.showLoadingView()
                 self.messageView.activityIndicator.startAnimating()
                 if self.messageView.messageText.text.characters.count == 0 || self.messageView.messageText.text.isEmptyField == true{
@@ -1293,7 +1312,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
             
             self.constY = NSLayoutConstraint(item: self.messageView, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0)
             self.view.addConstraint(self.constY!)
-            
             
             self.constX = NSLayoutConstraint(item: self.messageView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0)
             self.view.addConstraint(self.constX!)

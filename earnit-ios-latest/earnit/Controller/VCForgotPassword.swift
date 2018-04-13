@@ -101,13 +101,6 @@ class VCForgotPassword : UIViewController {
                     alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: self.goBackToLoginSignup))
                     alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                     self.present(alert, animated: true, completion: nil)
-                    
-                    //
-                    /*let alert = showAlertWithOption(title: "Are you sure, you want to approve this task? Any credit towards this task will be applied.", message: "")
-                    alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: self.goBackToLoginSignup))
-                    alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.default, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
-                    */
                 }
             }) { (error) -> () in
                 self.view.makeToast("Failed to send password, please try again!")
@@ -115,13 +108,6 @@ class VCForgotPassword : UIViewController {
             }
         }
     }
-    
-    func instaneApprovalForTask(_ sender: Any) {
-        print("Instant Approval")
-        self.view.endEditing(true)
-        self.dismiss(animated: true, completion: nil)
-    }
-
     
     //MARK: go to login/signup
     func goBackToLoginSignup(_ sender: Any) {
