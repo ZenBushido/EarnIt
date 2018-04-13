@@ -307,27 +307,28 @@ func callForDeleteChild(children_id: Int, success: @escaping(String)-> (),failur
 
 func callForgotPasswordApiForUser(email: String!, success: @escaping(JSON) -> (), failure: @escaping(NSError) -> ()){
     let keychain = KeychainSwift()
-    guard  let _ = keychain.get("email") else  {
+    var headers : HTTPHeaders = [:]
+    /*guard  let _ = keychain.get("email") else  {
         print(" /n Unable to fetch user credentials from keychain \n")
         return
     }
     let user : String = keychain.get("email") as! String
     let password : String = keychain.get("password") as! String
-    var headers : HTTPHeaders = [:]
+
     if let authorizationHeader = Request.authorizationHeader(user: user, password: password){
         headers = [
             "Accept": "application/json",
             "Authorization": authorizationHeader.value,
             "Content-Type": "application/json"
         ]
-    }
+    }*/
     print("user email is \(email!)")
     var params = [String:Any]()
     params = [
         "email": email
         ] as [String : Any]
     //print("\(EarnItApp_BASE_URL)/passwordReminder")
-    Alamofire.request("\(EarnItApp_BASE_URL)/passwordReminder",method: .post,parameters: params, encoding: JSONEncoding.default , headers: headers)
+    Alamofire.request("\(EarnItApp_BASE_URL)/passwordReminder",method: .post,parameters: params, encoding: JSONEncoding.default , headers: nil)//headers
         .responseJSON { response in
             switch response.result {
             case .success:

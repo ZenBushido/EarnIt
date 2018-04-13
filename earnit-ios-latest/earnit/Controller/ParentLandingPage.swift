@@ -316,9 +316,9 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
             optionView.sixthOption.setImage(EarnItImage.setEarnItCommentIcon(), for: .normal)
             optionView.btnAppsMonitorOption.setImage(EarnItImage.setEarnItAppShowTaskIcon(), for: .normal)
 
-            optionView.firstOption.setTitle("Add Task", for: .normal)
-            optionView.secondOption.setTitle("All Task", for: .normal)
-            optionView.thirdOption.setTitle("Approve Task", for: .normal)
+            optionView.firstOption.setTitle("Add Task(s)", for: .normal)
+            optionView.secondOption.setTitle("All Tasks", for: .normal)
+            optionView.thirdOption.setTitle("Approve Task(s)", for: .normal)
             optionView.forthOption.setTitle("Balances", for: .normal)
             optionView.fifthOption.setTitle("Goals", for: .normal)
             optionView.sixthOption.setTitle("Message", for: .normal)
