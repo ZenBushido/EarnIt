@@ -444,14 +444,9 @@ class VCAddDeleteGoal : UIViewController, UITextFieldDelegate, UITextViewDelegat
                 slideMenuController.automaticallyAdjustsScrollViewInsets = true
                 slideMenuController.delegate = parentDashBoardCheckin
                 self.present(slideMenuController, animated:false, completion:nil)
-                
-                
             }else {
-                
-                
                 self.view.makeToast("No task available")
             }
-   
         }
         
         optionView.doActionForFirstOption = {
@@ -463,7 +458,6 @@ class VCAddDeleteGoal : UIViewController, UITextFieldDelegate, UITextViewDelegat
             taskViewController.earnItChildUserId = self.earnItChildUser.childUserId
             taskViewController.earnItChildUsers = self.earnItChildUsers
             self.present(taskViewController, animated:false, completion:nil)
-            
         }
         
         optionView.doActionForFifthOption = {
@@ -471,38 +465,27 @@ class VCAddDeleteGoal : UIViewController, UITextFieldDelegate, UITextViewDelegat
         }
         
         optionView.doActionForFourthOption = {
-            
             self.removeActionView()
             self.goToBalanceScreen()
         }
         
         optionView.doActionForThirdOption = {
-            
             self.removeActionView()
-            
             var hasPendingTask = false
-            
             for pendingTask in self.earnItChildUser.earnItTasks {
-                
                 if pendingTask.status == TaskStatus.completed{
-                    
                     hasPendingTask = true
                     break
                     
                 }else {
-                    
                     continue
                 }
             }
-            
             if hasPendingTask == false {
-                
                 self.view.makeToast("There are no tasks for approval")
                 //            let alert = showAlert(title: "", message: "There are no tasks for approval")
                 //            self.present(alert, animated: true, completion: nil)
-                
             }else {
-    
                 let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
                 let pendingTasksScreen = storyBoard.instantiateViewController(withIdentifier: "PendingTasksScreen") as! PendingTasksScreen
                 pendingTasksScreen.prepareData(earnItChildUserForParent: self.earnItChildUser, earnItChildUsers: self.earnItChildUsers)
@@ -515,9 +498,7 @@ class VCAddDeleteGoal : UIViewController, UITextFieldDelegate, UITextViewDelegat
         }
         
         optionView.doActionForSixthOption = {
-            
             self.removeActionView()
-            
             let messageContainerView = UIView()
             messageContainerView.frame = CGRect(0 , 0, self.view.frame.width, self.view.frame.height)
             messageContainerView.backgroundColor = UIColor.clear
@@ -549,7 +530,6 @@ class VCAddDeleteGoal : UIViewController, UITextFieldDelegate, UITextViewDelegat
                     //                self.present(alert, animated: true, completion: nil)
                     
                 }else {
-                    
                     callUpdateApiForChild(firstName: self.earnItChildUser.firstName,childEmail: self.earnItChildUser.email,childPassword: self.earnItChildUser.password,childAvatar: self.earnItChildUser.childUserImageUrl!,createDate: self.earnItChildUser.createDate,childUserId: self.earnItChildUser.childUserId, childuserAccountId: self.earnItChildUser.childAccountId,phoneNumber: self.earnItChildUser.phoneNumber,fcmKey : self.earnItChildUser.fcmToken, message: self.messageView.messageText.text, success: {
                         
                         (childUdateInfo) ->() in

@@ -86,12 +86,12 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     @IBOutlet var lblSubtitle: UILabel!
     @IBOutlet var btnApprovalTick: UIButton!
     @IBOutlet var btnDelete: UIButton!
-    
+    var completedTask = EarnItTask()
+
     //keyboardOffset
     var currentKeyboardOffset : CGFloat = 0.0
     
     let datePickerHolder = DateTimePicker()
-    
     
     var isInEditingMode = false
     
@@ -112,6 +112,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.completedTask = self.earnItTaskToEdit
         self.lblRepeats.isHidden = true
         self.repeatsField.isHidden = true
         self.lblRepeats.isHidden = false
@@ -991,6 +992,43 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         self.present(loginController, animated: true, completion: nil)
     }
     
+    //MARK: API Update Task Methods
+    
+    func setStatusAndCallApiForUpdateTask(taskStatus: String){
+        self.showLoadingView()
+        if self.isInEditingMode != true{
+            return
+        }
+        self.completedTask.status = taskStatus
+        callApiForUpdateTask(earnItTaskChildId:self.earnItChildUser.childUserId ,earnItTask:self.completedTask, success: {_ in
+            
+            var updatedTaskList = [EarnItTask]()
+            for task in self.earnItChildUser.earnItTasks {
+                if task.taskId == self.completedTask.taskId{
+                    task.status = self.completedTask.status
+                }
+                updatedTaskList.append(task)
+            }
+            self.earnItChildUser.earnItTasks = updatedTaskList
+            self.hideLoadingView()
+            self.showNextApprovalTask()
+        }) { (error) -> () in
+            self.view.makeToast("Failed")
+            self.hideLoadingView()
+        }
+    }
+    
+    func showNextApprovalTask() {
+        /*for task in  self.earnItChildUser.earnItTasks {
+            if task.status == TaskStatus.completed {
+                self.completedTask = task
+                self.assignTaskDetails()
+                return
+            }
+        }*/
+        self.dismiss(animated: true, completion: nil)
+    }
+    
     //MARK: Action Methods
     
     @IBAction func showDatePicker(_ sender: Any) {
@@ -1058,7 +1096,9 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     
     func instaneApprovalForTask(_ sender: Any) {
         print("Instant Approval")
-        self.dismiss(animated: true, completion: nil)
+//        self.dismiss(animated: true, completion: nil)        
+        self.completedTask.status = TaskStatus.closed
+        self.setStatusAndCallApiForUpdateTask(taskStatus: TaskStatus.closed)
     }
     
     @IBAction func btnDelete_Tapped(_ sender: Any) {
@@ -1072,6 +1112,11 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     func deleteTask(_ sender: Any) {
         print("Delete Task")
         self.dismiss(animated: true, completion: nil)
+        
+        /*return
+        self.completedTask.status = TaskStatus.rejected
+        self.setStatusAndCallApiForUpdateTask(taskStatus: TaskStatus.rejected)
+         */
     }
     
     @IBAction func calendarImageTapped(_ sender: Any) {
@@ -1357,13 +1402,11 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     }
     
     //MARK: -Keypad Butoons
-    func addButtonsOnKeyboard()
-    {
+    func addButtonsOnKeyboard() {
         let toolBar = UIToolbar()
         toolBar.barStyle = .default
         toolBar.isTranslucent = true
         toolBar.sizeToFit()
-        
         let doneButton = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(nextButtonPressed))
         
         let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)

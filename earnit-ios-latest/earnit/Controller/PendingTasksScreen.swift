@@ -201,22 +201,16 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
                     taskCell.approveButton.isUserInteractionEnabled = true
                     taskCell.approveButton.setImage(EarnItImage.setEarnItAppShowTaskImage(), for: .normal)
                     taskCell.askToApproveTheCompletedTask = {
-                        
                         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                         let taskApprovalScreen  = storyBoard.instantiateViewController(withIdentifier: "TaskApprovalScreen") as! TaskApprovalScreen
                         taskApprovalScreen.completedTask =  self.overdueTasks[indexPath.row]
                         taskApprovalScreen.earnItChildUserForParent = self.earnItChildUserForParent
                         self.present(taskApprovalScreen, animated:true, completion:nil)
-                        
                     }
-                    
-                }else {
-                    
+                }else {                    
                     taskCell.approveButton.isHidden = true
                     taskCell.approveButton.isUserInteractionEnabled = false
                 }
-                
-                
             }else {
                 
                 taskCell.taskName.text = self.dayTasks[indexPath.section - 1].earnItTasks[indexPath.row].taskName
@@ -363,21 +357,13 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
                         }else {
                             
                             taskViewController.earnItTaskToEdit  = self.dayTasks[tapIndexPath.section - 1].earnItTasks[tapIndexPath.row]
-                            
                         }
-                        
                     }
-                        
                     else {
-                        
                         taskViewController.earnItTaskToEdit = self.dayTasks[tapIndexPath.section].earnItTasks[tapIndexPath.row]
-                        
                     }
-                    
                     print("TaskStatus \(taskViewController.earnItTaskToEdit.status)")
                     print("TaskStatus \(taskViewController.earnItTaskToEdit.taskName)")
-                    
-                    
                     if taskViewController.earnItTaskToEdit.status != TaskStatus.completed {
                         self.showLoadingView()
                         let optionViewControllerPLP = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
@@ -388,9 +374,7 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
                         slideMenuController.delegate = taskViewController
                         
                         self.present(slideMenuController, animated:false, completion:nil)
-                        
                     }
-                    
                     else if taskViewController.earnItTaskToEdit.status == TaskStatus.completed {
                         
                         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
@@ -398,18 +382,11 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
                         taskApprovalScreen.completedTask =  taskViewController.earnItTaskToEdit
                         taskApprovalScreen.earnItChildUserForParent = self.earnItChildUserForParent
                         self.present(taskApprovalScreen, animated:true, completion:nil)
-                        
                     }
-                    
                 }
             }
         }
     }
-    
-    
-    
-  
-    
     
     //ovrride
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

@@ -201,13 +201,10 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
                 taskCell.taskName.text = ""
                 
             }else  {
-                
                 taskCell.moreButton.isHidden = false
                 taskCell.taskName.isHidden = true
                 taskCell.showAllPendingTaskScreen = {
-                    
                     print("more button clicked")
-                    
                     self.selectedChildUser = self.earnItChildUsers[indexPath.section]
                     let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
                     let pendingTasksScreen = storyBoard.instantiateViewController(withIdentifier: "PendingTasksScreen") as! PendingTasksScreen
@@ -225,14 +222,11 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
             return taskCell
             
         }else{
-            
             for view in taskCell.subviews{
-                
                 if view.tag == 1 {
                 view.removeFromSuperview()
                 }
             }
-
             taskCell.taskName.isHidden = false
             taskCell.taskTime.isHidden = false
             taskCell.moreButton.isHidden = true
@@ -250,12 +244,10 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
     
     //ovrride
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
         let view  = Bundle.main.loadNibNamed("ChildUserHeaderView", owner: nil, options: nil)?.first as! ChildUserHeaderView
 
           view.childUserName.text = self.earnItChildUsers[section].firstName
           view.checkInImage.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUsers[section].childUserImageUrl!)
-        
           view.showActionButton = {
             
 //            let checkInButtonFrame = view.checkInButton.superview?.convert(view.checkInButton.frame, to: self.view)
@@ -293,7 +285,6 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
 //            self.view.addSubview(self.blurEffectView)
 //            self.blurEffectView.addSubview(self.actionView)
             
-            
             let optionView  = (Bundle.main.loadNibNamed("OptionView", owner: self, options: nil)?[0] as? OptionView)!
             optionView.center = self.view.center
             
@@ -302,7 +293,6 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
             optionView.frame.origin.x = (checkInImageFrame?.origin.x)! - 120
             
             let visibleRect = optionView.frame.intersection(self.view.bounds)
-            
             
              optionView.frame.origin.y = (checkInImageFrame?.origin.y)! - (optionView.frame.size.height - visibleRect.size.height)
             
@@ -329,17 +319,13 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
             self.view.addSubview(self.actionView)
             
             getGoalsForChild(childId : self.selectedChildUser.childUserId,success: {
-                
                 (earnItGoalList) ->() in
-                
                 for earnItGoal in  earnItGoalList {
-                    
                     self.selectedChildUser.earnItGoal = earnItGoal
                 }
             })
                 
             { (error) -> () in
-                
                 //self.view.makeToast("Get goal list failed")
             }
             
@@ -384,19 +370,16 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
     
     //override
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
         if indexPath.row == 0{
             return 40
         }else if indexPath.row ==  self.earnItChildUsers[indexPath.section].earnItTopThreePendingApprovalTask.count + 1 {
             return 55
         }else{
-            
             return 40
         }
     }
     
     func showLoadingView(){
-        
         self.view.alpha = 0.7
         self.view.isUserInteractionEnabled = false
         self.activityIndicator.startAnimating()
@@ -404,7 +387,6 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func hideLoadingView(){
-        
         self.view.alpha = 1
         self.view.isUserInteractionEnabled = true
         self.activityIndicator.stopAnimating()
@@ -412,7 +394,6 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
     
     // configure buttons
      func circleMenu(_ circleMenu: CircleMenu, willDisplay button: UIButton, atIndex: Int){
-    
         button.backgroundColor = UIColor.clear
         button.setImage(actionItems[atIndex].icon, for: .normal)
         button.imageView?.layer.cornerRadius = (button.imageView?.frame.width)! / 2
@@ -453,28 +434,20 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
             break
         default:
             break
-            
         }
-
         if atIndex == 1 || atIndex == 2 || atIndex == 3{
-            
             button.backgroundColor = UIColor.clear
             button.setImage(nil, for: .normal)
-            
         }
-
-       
     }
     
     // call before animation
      func circleMenu(_ circleMenu: CircleMenu, buttonWillSelected button: UIButton, atIndex: Int){
         
-        
     }
     
     // call after animation
      func circleMenu(_ circleMenu: CircleMenu, buttonDidSelected button: UIButton, atIndex: Int){
-        
         print("button did select")
     }
     
@@ -484,14 +457,10 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
     }
 
     func handleRegister(_ sender : UIButton){
-        
         self.removeActionView()
         switch sender.tag {
-            
         case 4 :
-            
             self.goToMessageScreen()
-
             break
         case 5 :
             self.goToAddGoalPage()
@@ -507,7 +476,6 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
             break
         default:
             break
-            
         }
         print("handle register")
         print("tapped\(sender.tag) for child ) ")
@@ -545,7 +513,6 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
         self.messageView.messageText.becomeFirstResponder()
         
         messageView.dissmissMe = {
-            
             self.messageView.removeFromSuperview()
             messageContainerView.removeFromSuperview()
             //self.enableBackgroundView()
@@ -555,12 +522,9 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
                 
                 self.view.endEditing(true)
                 self.view.makeToast("Please enter a message")
-                
                 //                let alert = showAlert(title: "", message: "Please enter a message")
                 //         e       self.present(alert, animated: true, completion: nil)
-                
             }else {
-                
                 self.showLoadingView()
                 self.messageView.activityIndicator.startAnimating()
                 callUpdateApiForChild(firstName: self.selectedChildUser.firstName,childEmail: self.selectedChildUser.email,childPassword: self.selectedChildUser.password,childAvatar: self.selectedChildUser.childUserImageUrl!,createDate: self.selectedChildUser.createDate,childUserId: self.selectedChildUser.childUserId, childuserAccountId: self.selectedChildUser.childAccountId,phoneNumber: self.selectedChildUser.phoneNumber,fcmKey : self.selectedChildUser.fcmToken, message: self.messageView.messageText.text, success: {
@@ -568,18 +532,15 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
                     (childUdateInfo) ->() in
                     createEarnItAppChildUser( success: {
                         (earnItChildUsers) -> () in
-                        
                         EarnItAccount.currentUser.earnItChildUsers = earnItChildUsers
                         self.hideLoadingView()
                         self.messageView.activityIndicator.stopAnimating()
                         self.messageView.removeFromSuperview()
                         messageContainerView.removeFromSuperview()
-                        
                     }) {  (error) -> () in
                         print("error")
                     }
                     //self.enableBackgroundView()
-                    
                 }) { (error) -> () in
                     self.hideLoadingView()
                     let alert = showAlert(title: "Error", message: "Update Child Failed")
@@ -588,7 +549,6 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
                 }
             }
         }
-        
         var dView:[String:UIView] = [:]
         dView["MessageView"] = messageView
         
@@ -601,14 +561,11 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
         constY = NSLayoutConstraint(item: messageView, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0)
         self.view.addConstraint(constY!)
         
-        
         constX = NSLayoutConstraint(item: messageView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0)
         self.view.addConstraint(constX!)
         
         UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 0.3, initialSpringVelocity: 0.50, options: UIViewAnimationOptions.layoutSubviews, animations: { () -> Void in
             self.messageView.alpha = 1
-            
-            
             self.view.layoutIfNeeded()
         }) { (value:Bool) -> Void in
             
@@ -624,31 +581,23 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
         print(" self.selectedChildUser.earnItGoal.tally! \( self.selectedChildUser.earnItGoal.tally!)")
         print("self.selectedChildUser.earnItGoal.ammount \( self.selectedChildUser.earnItGoal.ammount!)")
         if (self.selectedChildUser.earnItGoal.cash! + self.selectedChildUser.earnItGoal.tally!  + self.selectedChildUser.earnItGoal.ammount!) == 0 {
-            
             self.view.makeToast("No balance to display!!")
-            
         }else {
-            
             self.present(balanceScreen, animated:true, completion:nil)
         }
     }
     
     func goToAddGoalPage(){
-        
 //        let alert = showAlert(title: "", message: "Show add goal screen")
 //        self.present(alert, animated: true, completion: nil)
-        print("self.selectedChildUser");
-
-        print(self.selectedChildUser);
+        print("self.selectedChildUser")
+        print(self.selectedChildUser)
         getGoalsForChild(childId : self.selectedChildUser.childUserId,success: {
             (earnItGoalList) ->() in
-            
-            //print("GOAL", earnItGoalList.count);
-           // print(earnItGoalList);
-            
+            //print("GOAL", earnItGoalList.count)
+           // print(earnItGoalList)
             let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
             let addGoalVC = storyBoard.instantiateViewController(withIdentifier: "VCAddDeleteGoal") as! VCAddDeleteGoal
-
             print("earnItGoalList.count>0 \(earnItGoalList.count)")
             if(self.selectedChildUser.earnItGoal.name == "" || self.selectedChildUser.earnItGoal.name == nil){
                 addGoalVC.IS_ADD = true
@@ -662,13 +611,10 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
             self.present(addGoalVC, animated:true, completion:nil)
         })
         { (error) -> () in
-            
             let alert = showAlertWithOption(title: "Opps, Please try it again later.", message: "")
-            
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
-     
         /*let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
          let addGoalVC = storyBoard.instantiateViewController(withIdentifier: "VCAddDeleteGoal") as! VCAddDeleteGoal
         addGoalVC.earnItChildUser = self.selectedChildUser
@@ -678,12 +624,9 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
     func goToCheckInScreen(){
         self.showLoadingView()
         if self.selectedChildUser.earnItTasks.count == 0{
-            
             self.hideLoadingView()
             self.view.makeToast("No task available")
-            
         }else {
-            
             let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
             let parentDashBoardCheckin = storyBoard.instantiateViewController(withIdentifier: "parentDashBoard") as! ParentDashBoard
             parentDashBoardCheckin.prepareData(earnItChildUserForParent: self.selectedChildUser, earnItChildUsers: self.earnItChildUsers)
@@ -694,38 +637,26 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
             slideMenuController.automaticallyAdjustsScrollViewInsets = true
             slideMenuController.delegate = parentDashBoardCheckin
             self.present(slideMenuController, animated:false, completion:nil)
-            
         }
     }
  
     func goToPendingApprovalPage(){
-        
         //        let alert = showAlert(title: "", message: "Show pending approvel task screen")
         //        self.present(alert, animated: true, completion: nil)
-        
         var hasPendingTask = false
-        
         for pendingTask in self.selectedChildUser.earnItTasks {
-            
             if pendingTask.status == TaskStatus.completed{
-                
                 hasPendingTask = true
                 break
-                
             }else {
-                
                 continue
             }
         }
-        
         if hasPendingTask == false {
-            
             self.view.makeToast("There are no tasks for approval")
             //            let alert = showAlert(title: "", message: "There are no tasks for approval")
             //            self.present(alert, animated: true, completion: nil)
-            
         }else {
-            
             let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
             let pendingTasksScreen = storyBoard.instantiateViewController(withIdentifier: "PendingTasksScreen") as! PendingTasksScreen
             pendingTasksScreen.prepareData(earnItChildUserForParent: self.selectedChildUser, earnItChildUsers: self.earnItChildUsers)
