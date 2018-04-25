@@ -76,9 +76,7 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
         self.messageView.center = CGPoint(x: self.view.center.x,y :self.view.center.y-80)
         self.messageView.messageText.delegate = self
         
-        
         self.welcomText.text = self.earnItChildUserForParent.firstName.appending("'s Tasks")
-        
         self.childTableForTodayTask.register(UINib(nibName: "ChildTaskDetailApprovalCell", bundle: nil), forCellReuseIdentifier: "ChildTaskDetailApprovalCell")
        
         self.childTableForTodayTask.delegate = self
@@ -107,48 +105,28 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
         self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUserForParent.childUserImageUrl!)
         self.childTableForTodayTask.tableFooterView = UIView()
         self.taskApprovalView.removeFromSuperview()
-        
     }
 
     
     func loadRefreshedTasks()  {
-        
         var tasks = earnItChildUserForParent.earnItTasks
         for daytask in earnItChildUserForParent.earnItTasks{
-            
-            
             let currentDate = Date()
-            
             let formatter = DateFormatter()
             formatter.timeZone = TimeZone.ReferenceType.local
             formatter.dateFormat = "M/dd"
             let currentDay = formatter.string(from: currentDate as Date)
-            
-            
             if  currentDay != daytask.dateMonthString {
-                
                 if currentDate < daytask.dueDate {
-                    
                     tasks.remove(at: tasks.index(of: daytask)!)
-                    
                 }
-                
             }
-            
         }
-        
-        
         self.dayTasks = getDayTaskListForParentDashBoard(earnItTasks: tasks)
         self.overdueTasks = getOverDueTaskListForParentDashBoard(earnItTasks: earnItChildUserForParent.earnItTasks)
         self.pendingApprovalTasks = getPendingApprovalTasks(earnItTasks: earnItChildUserForParent.earnItTasks)
-        
-        
         //self.sendMessageButton.setTitle("Send a message to  " + self.earnItChildUserForParent.firstName, for: .normal)
-        
-        
         self.childTableForTodayTask.reloadData()
-
-        
     }
     
     
@@ -156,124 +134,77 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
         super.didReceiveMemoryWarning()
     }
     
-    
     func numberOfSections(in tableView: UITableView) -> Int {
-        
         var numberOfSectiontoReturn  = 0
-        
         self.readyForApproveLabel.isHidden = true
-        
         if self.pendingApprovalTasks.count > 0  {
-            
             self.readyForApproveLabel.isHidden = false
-            
             if self.overdueTasks.count > 0 {
-                
                 numberOfSectiontoReturn =  self.dayTasks.count + 2
-                
             }
-            else
-            {
+            else {
                 numberOfSectiontoReturn =  self.dayTasks.count + 1
-                
             }
-            
         }
-            
         else if self.overdueTasks.count > 0 {
-            
             numberOfSectiontoReturn =  self.dayTasks.count + 1
         }
-            
         else {
             numberOfSectiontoReturn =  self.dayTasks.count
         }
-        
         for i in 0...numberOfSectiontoReturn {
             var sectionDetail = TappedSectionDetails()
             sectionDetail.sectionNo = i
             sectionDetail.isCollapsed = false
-            
             SectionDetailsArray.append(sectionDetail)
         }
-        
         return numberOfSectiontoReturn
     }
-
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
-        
-        
-        
         var numberOfRows = 0
-        
         if self.pendingApprovalTasks.count > 0   {
             if self.overdueTasks.count > 0 {
-                
                 if (section == 0){
-                    
                     numberOfRows =  self.pendingApprovalTasks.count
                 }
                 else if (section == 1){
-                    
-                 numberOfRows =  self.overdueTasks.count
-                    
+                    numberOfRows =  self.overdueTasks.count
                 }
-                
-                else{
-                 numberOfRows =  self.dayTasks[section-2].earnItTasks.count
+                else {
+                    numberOfRows =  self.dayTasks[section-2].earnItTasks.count
                 }
-                
             }
             else {
-                
                 if (section == 0){
                     numberOfRows =  self.pendingApprovalTasks.count
                 }
                 else{
                     numberOfRows =  self.dayTasks[section-1].earnItTasks.count
-
                 }
-                
             }
-            
         }
         else if self.overdueTasks.count > 0 {
-            
             if (section == 0){
                 numberOfRows =  self.overdueTasks.count
             }
- 
             else{
-                
                 numberOfRows =  self.dayTasks[section-1].earnItTasks.count
             }
-            
         }
-        else
-        {
+        else {
             numberOfRows =  self.dayTasks[section].earnItTasks.count
-            
         }
-
         if SectionDetailsArray[section].isCollapsed {
             return 0
-
         }
-        
         else {
-            
             return numberOfRows
         }
-        
-
     }
     
-    
     func configureTableCell(taskCell:ChildTaskDetailApprovalCell, type:String, indexPath:NSIndexPath ) -> ChildTaskDetailApprovalCell {
-        
         if type == "PendingApproval" {
-            
             taskCell.taskName.text = self.pendingApprovalTasks[indexPath.row].taskName
             taskCell.taskDescription.text = self.pendingApprovalTasks[indexPath.row].dateMonthString + " @ " + self.pendingApprovalTasks[indexPath.row].dueTime
             taskCell.statusImage.backgroundColor = getColorStatusForTaskForParentDashBoard(earnItTask: self.pendingApprovalTasks[indexPath.row])
@@ -281,126 +212,80 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
             taskCell.approveButton.isHidden = false
             taskCell.approveButton.isUserInteractionEnabled = true
             taskCell.approveButton.setImage(EarnItImage.setEarnItAppShowTaskImage(), for: .normal)
-            
-            
             taskCell.askToApproveTheCompletedTask = {
-                
                 let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                 let taskApprovalScreen  = storyBoard.instantiateViewController(withIdentifier: "TaskApprovalScreen") as! TaskApprovalScreen
                 taskApprovalScreen.completedTask =  self.pendingApprovalTasks[indexPath.row]
                 taskApprovalScreen.earnItChildUserForParent = self.earnItChildUserForParent
                 self.present(taskApprovalScreen, animated:true, completion:nil)
             }
-            
         }
         else if type == "OverDue" {
             taskCell.taskName.text = self.overdueTasks[indexPath.row].taskName
             taskCell.taskDescription.text = self.self.overdueTasks[indexPath.row].dateMonthString + " @ " + self.overdueTasks[indexPath.row].dueTime
-            
             taskCell.statusImage.backgroundColor = getColorStatusForTaskForParentDashBoard(earnItTask: self.overdueTasks[indexPath.row])
-
+            
             taskCell.approveButton.isHidden = true
             taskCell.approveButton.isUserInteractionEnabled = false
-                
-
         }
         else if type == "DayTask" {
-            
             taskCell.taskName.text = self.dayTasks[indexPath.section].earnItTasks[indexPath.row].taskName
             taskCell.taskDescription.text = self.dayTasks[indexPath.section].earnItTasks[indexPath.row].dateMonthString + " @ " + self.dayTasks[indexPath.section].earnItTasks[indexPath.row].dueTime
-            
             taskCell.statusImage.backgroundColor = getColorStatusForTaskForParentDashBoard(earnItTask: self.dayTasks[indexPath.section].earnItTasks[indexPath.row])
             
             taskCell.approveButton.isHidden = true
             taskCell.approveButton.isUserInteractionEnabled = false
-
         }
-        
         return taskCell
     }
     
-    
-    
     //override
-        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
-            
-            
-            var taskCell = self.childTableForTodayTask.dequeueReusableCell(withIdentifier: "ChildTaskDetailApprovalCell", for: indexPath as IndexPath) as! ChildTaskDetailApprovalCell
-            
-            
-            
-            
-            if self.pendingApprovalTasks.count > 0   {
-                if self.overdueTasks.count > 0 {
-                    
-                    if (indexPath.section == 0){
-                        
-                       taskCell = self.configureTableCell(taskCell: taskCell, type: "PendingApproval", indexPath: indexPath as NSIndexPath)
-                        
-                    }
-                        
-                    else if (indexPath.section == 1){
-                        
-                       taskCell = self.configureTableCell(taskCell: taskCell, type: "OverDue", indexPath: indexPath as NSIndexPath)
-                        
-                    }
-                        
-                    else{
-                        
-                        var tempIndexPath = indexPath
-                        tempIndexPath.section = tempIndexPath.section - 2
-                        taskCell = self.configureTableCell(taskCell: taskCell, type: "DayTask", indexPath: tempIndexPath as NSIndexPath)
-
-                    }
-                    
-                }
-                else {
-                    
-                    if (indexPath.section == 0){
-                        taskCell = self.configureTableCell(taskCell: taskCell, type: "PendingApproval", indexPath: indexPath as NSIndexPath)
-
-                    }
-                    else{
-                        
-                        var tempIndexPath = indexPath
-                        tempIndexPath.section = tempIndexPath.section - 1
-
-                        taskCell = self.configureTableCell(taskCell: taskCell, type: "DayTask", indexPath: tempIndexPath as NSIndexPath)
-                    }
-                    
-                }
-                
-            }
-            else if self.overdueTasks.count > 0 {
-                
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
+        var taskCell = self.childTableForTodayTask.dequeueReusableCell(withIdentifier: "ChildTaskDetailApprovalCell", for: indexPath as IndexPath) as! ChildTaskDetailApprovalCell
+        if self.pendingApprovalTasks.count > 0   {
+            if self.overdueTasks.count > 0 {
                 if (indexPath.section == 0){
-                    taskCell = self.configureTableCell(taskCell: taskCell, type: "OverDue", indexPath: indexPath as NSIndexPath)
-
+                    taskCell = self.configureTableCell(taskCell: taskCell, type: "PendingApproval", indexPath: indexPath as NSIndexPath)
                 }
-                    
+                else if (indexPath.section == 1){
+                    taskCell = self.configureTableCell(taskCell: taskCell, type: "OverDue", indexPath: indexPath as NSIndexPath)
+                }
+                else{
+                    var tempIndexPath = indexPath
+                    tempIndexPath.section = tempIndexPath.section - 2
+                    taskCell = self.configureTableCell(taskCell: taskCell, type: "DayTask", indexPath: tempIndexPath as NSIndexPath)
+                }
+            }
+            else {
+                if (indexPath.section == 0){
+                    taskCell = self.configureTableCell(taskCell: taskCell, type: "PendingApproval", indexPath: indexPath as NSIndexPath)
+                }
                 else{
                     var tempIndexPath = indexPath
                     tempIndexPath.section = tempIndexPath.section - 1
+                    
                     taskCell = self.configureTableCell(taskCell: taskCell, type: "DayTask", indexPath: tempIndexPath as NSIndexPath)
                 }
-                
             }
-            else
-            {
-                taskCell = self.configureTableCell(taskCell: taskCell, type: "DayTask", indexPath: indexPath as NSIndexPath)
-
-            }
-            
-
-            
-            return taskCell
         }
-    
-  
-    
- 
+        else if self.overdueTasks.count > 0 {
+            if (indexPath.section == 0){
+                taskCell = self.configureTableCell(taskCell: taskCell, type: "OverDue", indexPath: indexPath as NSIndexPath)
+            }
+            else{
+                var tempIndexPath = indexPath
+                tempIndexPath.section = tempIndexPath.section - 1
+                taskCell = self.configureTableCell(taskCell: taskCell, type: "DayTask", indexPath: tempIndexPath as NSIndexPath)
+            }
+        }
+        else {
+            taskCell = self.configureTableCell(taskCell: taskCell, type: "DayTask", indexPath: indexPath as NSIndexPath)
+        }
+        return taskCell
+    }
+
     func taskDidTap(recognizer: UISwipeGestureRecognizer) {
-    
+        
         if recognizer.state == UIGestureRecognizerState.ended {
             let tapLocation = recognizer.location(in: self.childTableForTodayTask)
             if let tapIndexPath = self.childTableForTodayTask.indexPathForRow(at: tapLocation) {
@@ -411,215 +296,131 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
                     taskViewController.earnItChildUserId = self.earnItChildUserForParent.childUserId
                     taskViewController.earnItChildUsers = self.earnItChildUsers
                     taskViewController.isInEditingMode = true
-                    
-                    
-                    
                     if self.pendingApprovalTasks.count > 0{
                         if self.overdueTasks.count > 0 {
-                            
                             if (tapIndexPath.section == 0 ){
-                                
                                 taskViewController.earnItTaskToEdit = self.pendingApprovalTasks[tapIndexPath.row]
                                 
-                            }else if(tapIndexPath.section == 1 )  {
-                                
+                            }
+                            else if(tapIndexPath.section == 1 )  {
                                 taskViewController.earnItTaskToEdit = self.overdueTasks[tapIndexPath.row]
                             }
-                            else
-                            {
+                            else {
                                 taskViewController.earnItTaskToEdit  = self.dayTasks[tapIndexPath.section - 2].earnItTasks[tapIndexPath.row]
                             }
                         }
                         else {
-                            
-                            if (tapIndexPath.section == 0 ){
-                                
+                            if (tapIndexPath.section == 0 ) {
                                 taskViewController.earnItTaskToEdit = self.pendingApprovalTasks[tapIndexPath.row]
-                                
                             }
-                            else
-                            {
+                            else {
                                 taskViewController.earnItTaskToEdit  = self.dayTasks[tapIndexPath.section - 1].earnItTasks[tapIndexPath.row]
                             }
-                            
                         }
                     }
-                        
-                 else if self.overdueTasks.count > 0 {
-                        
+                    else if self.overdueTasks.count > 0 {
                         if (tapIndexPath.section == 0 ){
-                            
                             taskViewController.earnItTaskToEdit = self.overdueTasks[tapIndexPath.row]
-                            
                         }
                         else
                         {
                             taskViewController.earnItTaskToEdit  = self.dayTasks[tapIndexPath.section - 1].earnItTasks[tapIndexPath.row]
                         }
                     }
-                        
                     else {
-                        
                         taskViewController.earnItTaskToEdit = self.dayTasks[tapIndexPath.section].earnItTasks[tapIndexPath.row]
-                        
                     }
-                    
-
-                    
                     if taskViewController.earnItTaskToEdit.status != TaskStatus.completed {
-
-                    
-                    self.present(taskViewController, animated:true, completion:nil)
-  
+                        self.present(taskViewController, animated:true, completion:nil)
                     }
-                    else if taskViewController.earnItTaskToEdit.status == TaskStatus.completed
-                    {
-                        
+                    else if taskViewController.earnItTaskToEdit.status == TaskStatus.completed {
                         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                        
                         let taskApprovalScreen  = storyBoard.instantiateViewController(withIdentifier: "TaskApprovalScreen") as! TaskApprovalScreen
                         taskApprovalScreen.completedTask =  taskViewController.earnItTaskToEdit
                         taskApprovalScreen.earnItChildUserForParent = self.earnItChildUserForParent
                         self.present(taskApprovalScreen, animated:true, completion:nil)
-                        
-
                     }
-                    
                 }
             }
         }
     }
     
-        
-    
-
-    
     /*func tableView(_ tableView: UITableView, didSelectRowAt indexPath: NSIndexPath) {
-        
-        
         print("table selected.....")
-        
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
         let taskViewController = storyBoard.instantiateViewController(withIdentifier: "TaskView") as! TaskViewController
         taskViewController.earnItChildUserId = self.earnItChildUserForParent.childUserId
         taskViewController.earnItChildUsers = self.earnItChildUsers
         taskViewController.isInEditingMode = true
-        
         if self.overdueTasks.count > 0{
-            
-            if (indexPath.section == 0 ){
-                
-                
+            if (indexPath.section == 0 ) {
                 taskViewController.earnItTaskToEdit = self.overdueTasks[indexPath.section]
-                
             }else {
-                
                 taskViewController.earnItTaskToEdit  = self.dayTasks[indexPath.section - 1].earnItTasks[indexPath.row]
-                
             }
-            
-            
         }
-        
         else {
-            
             taskViewController.earnItTaskToEdit = self.dayTasks[indexPath.section].earnItTasks[indexPath.row]
-            
         }
-        
-        
-        
-        
         let optionViewControllerPLP = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
         
         let slideMenuController  = SlideMenuViewController(mainViewController: taskViewController, rightMenuViewController: optionViewControllerPLP)
         
         slideMenuController.automaticallyAdjustsScrollViewInsets = true
         slideMenuController.delegate = taskViewController
-        
         self.present(slideMenuController, animated:false, completion:nil)
-    
-        
     }*/
-    
-    
     
     //ovrride
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
         let view  = Bundle.main.loadNibNamed("DayHeader", owner: nil, options: nil)?.first as! DayHeader
         view.sectionNo = section
-       
         if self.pendingApprovalTasks.count > 0   {
             if self.overdueTasks.count > 0 {
-                
                 if (section == 0){
-                    
                     view.dayDetail.text = "Pending Approval"
                 }
                 else if (section == 1){
-                    
                     view.dayDetail.text = "Past Due"
                 }
                 else if isCurrentDate(earnItTaskDate: self.dayTasks[section - 2].date) {
-                    
-                    view.dayDetail.text =  "Today" + " " + self.dayTasks[section - 2].date                }
+                    view.dayDetail.text =  "Today" + " " + self.dayTasks[section - 2].date
+                }
                 else{
-                    
                     view.dayDetail.text =  self.dayTasks[section - 2].dayName + " " + self.dayTasks[section-2].date
                 }
-                
             }
             else {
-                
                 if (section == 0){
-                    
                     view.dayDetail.text = "Pending Approval"
                 }
-                    
                 else if isCurrentDate(earnItTaskDate: self.dayTasks[section - 1].date) {
-                    
                     view.dayDetail.text =  "Today" + " " + self.dayTasks[section - 1].date
                 }
                 else{
-                    
                     view.dayDetail.text =  self.dayTasks[section-1].dayName + " " + self.dayTasks[section-1].date
                 }
-                
             }
-            
         }
         else if self.overdueTasks.count > 0 {
-            
             if (section == 0){
-                
                 view.dayDetail.text = "Past Due"
             }
             else if isCurrentDate(earnItTaskDate: self.dayTasks[section - 1].date) {
-                
                 view.dayDetail.text =  "Today" + " " + self.dayTasks[section - 1].date
             }
             else{
-                
                 view.dayDetail.text =  self.dayTasks[section-1].dayName + " " + self.dayTasks[section-1].date
             }
-            
         }
         else {
-            
             if isCurrentDate(earnItTaskDate: self.dayTasks[section].date) {
-                
                 view.dayDetail.text =  "Today" + " " + self.dayTasks[section].date
-                
             }
             else{
-                
                 view.dayDetail.text =  self.dayTasks[section].dayName + " " + self.dayTasks[section].date
             }
-            
         }
-        
-        
         
         //          if self.overdueTasks.count > 0{
         //
@@ -654,8 +455,7 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
         
         if !SectionDetailsArray[section].isCollapsed {
             view.arrowLabel.transform = CGAffineTransform(rotationAngle: CGFloat.pi/2)
-                   }
-        
+        }
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(sectionDidTap))
         view.addGestureRecognizer(tapRecognizer)
         
@@ -663,19 +463,15 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
     }
     
     func sectionDidTap(recognizer: UISwipeGestureRecognizer) {
-        
         guard let Header = recognizer.view as? DayHeader else {
             return
         }
-        
-        
         if SectionDetailsArray[Header.sectionNo].isCollapsed {
             SectionDetailsArray[Header.sectionNo].isCollapsed = false
         }
         else {
             SectionDetailsArray[Header.sectionNo].isCollapsed = true
         }
-        
        // self.childTableForTodayTask.reloadData()
         self.childTableForTodayTask.reloadSections((NSIndexSet(index: Header.sectionNo) as IndexSet), with: .automatic)
     }
@@ -685,28 +481,19 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
         return 40
     }
     
-    
-    
     //override
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
-        
         return 80
-        
     }
-    
 
     @IBAction func showAddTaskClicked(_ sender: Any) {
-     
         self.view.endEditing(true)
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
         let taskViewController = storyBoard.instantiateViewController(withIdentifier: "TaskView") as! TaskViewController
         taskViewController.earnItChildUserId = self.earnItChildUserForParent.childUserId
         taskViewController.earnItChildUsers = self.earnItChildUsers
         self.present(taskViewController, animated:false, completion:nil)
-        
     }
-    
     
     @IBAction func showAllButtonClicked(_ sender: Any) {
         
@@ -717,44 +504,30 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
         self.overdueTasks = getOverDueTaskListForParentDashBoard(earnItTasks: self.earnItChildUserForParent.earnItTasks)
 
         self.childTableForTodayTask.reloadData()
-
     }
-    
   
     func showLoadingView(){
-        
         self.view.alpha = 0.7
         self.view.isUserInteractionEnabled = false
         self.activityIndicator.startAnimating()
         self.activityIndicator.isHidden = false
-        
     }
     
     func hideLoadingView(){
-        
         self.view.alpha = 1
         self.view.isUserInteractionEnabled = true
         self.activityIndicator.stopAnimating()
     }
-
-    
     
     func getGoalListForCurrentUser(){
-        
         getGoalsForChild(childId : self.earnItChildUserForParent.childUserId,success: {
-            
             (earnItGoalList) ->() in
             
             for earnItGoal in earnItGoalList{
-                
                 self.earnItChildUserForParent.earnItGoal = earnItGoal
                 //self.goalName.text = earnItGoal.name
                 //self.earnedForAGoal.text = "$\(earnItGoal.tally!) of $\(earnItGoal.ammount!) earned  \(earnItGoal.tallyPercent!)%"
-                
             }
-            
-            
-            
         })
             
         { (error) -> () in
@@ -766,67 +539,41 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
 //            
 //            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
 //            self.present(alert, animated: true, completion: nil)
-            
-            
         }
-        
-        
     }
     
-    
-    
-    
     func addTapGestureForTaskRow(){
-        
-        
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(taskDidTap))
         tapRecognizer.delegate = self
         self.childTableForTodayTask.addGestureRecognizer(tapRecognizer)
-        
     }
 
-    
-  
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-   
         self.showLoadingView()
         _ = Timer.scheduledTimer(timeInterval: 300.0, target: self, selector: #selector(self.fetchParentUserDetailFromBackground), userInfo: nil, repeats: true)
         
         _ = Timer.scheduledTimer(timeInterval: 300.0, target: self, selector: #selector(self.fetchChildUserDetailFromBackground), userInfo: nil, repeats: true)
 
-
         createEarnItAppChildUser( success: {
-         
-         (earnItChildUsers) -> () in
-         
-         self.earnItChildUsers = earnItChildUsers
-         
-         for earnItChildUser in self.earnItChildUsers {
-         
-         if earnItChildUser.childUserId == self.earnItChildUserForParent.childUserId{
-         
-         self.earnItChildUserForParent.earnItTasks = earnItChildUser.earnItTasks
-            
-         self.reloadChildUserTable()
-         self.getGoalListForCurrentUser()
-         self.addTapGestureForTaskRow()
-         self.hideLoadingView()
-         
-             }
-            
-           }
-        
-       }) {  (error) -> () in
-         
+            (earnItChildUsers) -> () in
+            self.earnItChildUsers = earnItChildUsers
+            for earnItChildUser in self.earnItChildUsers {
+                if earnItChildUser.childUserId == self.earnItChildUserForParent.childUserId{
+                    self.earnItChildUserForParent.earnItTasks = earnItChildUser.earnItTasks
+                    self.reloadChildUserTable()
+                    self.getGoalListForCurrentUser()
+                    self.addTapGestureForTaskRow()
+                    self.hideLoadingView()
+                }
+            }
+        }) {  (error) -> () in
          print("error")
          self.hideLoadingView()
        }
- 
     }
     
     @IBAction func openRight(_ sender: UIButton) {
-        
         print("Should Open Slide Menu in checkin")
         self.openLeft()
     }
@@ -846,14 +593,13 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
     }
 
     func reloadChildUserTable(){
-        
-            var tasks =  getTodayandFutureTask(earnItTasks: self.earnItChildUserForParent.earnItTasks)
-            self.dayTasks = getDayTaskListForParentDashBoard(earnItTasks: tasks)
-            self.overdueTasks = getOverDueTaskListForParentDashBoard(earnItTasks: self.earnItChildUserForParent.earnItTasks)
-            self.pendingApprovalTasks = getPendingApprovalTasks(earnItTasks: earnItChildUserForParent.earnItTasks)
-            self.childTableForTodayTask.reloadData()
+        return //Stop child table filter for todat tasks
+        var tasks =  getTodayandFutureTask(earnItTasks: self.earnItChildUserForParent.earnItTasks)
+        self.dayTasks = getDayTaskListForParentDashBoard(earnItTasks: tasks)
+        self.overdueTasks = getOverDueTaskListForParentDashBoard(earnItTasks: self.earnItChildUserForParent.earnItTasks)
+        self.pendingApprovalTasks = getPendingApprovalTasks(earnItTasks: earnItChildUserForParent.earnItTasks)
+        self.childTableForTodayTask.reloadData()
     }
-    
     
     // MARK: - NonSpecific User Functions
     
@@ -866,12 +612,9 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
      */
     
     private func requestObserver(){
-        
         NotificationCenter.default.addObserver(self, selector: #selector(ParentDashBoard.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ParentDashBoard.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardDidHide  , object: nil)
-        
     }
-    
     
     /**
      Responds to keyboard showing and adjusts the scrollview.
@@ -881,11 +624,8 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
      */
     
     func keyboardWillShow(_ notification:NSNotification){
-        
         let info = notification.userInfo!
         let keyboardHeight: CGFloat = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue.size.height
-        
-        
 //        if UIDevice().userInterfaceIdiom == .phone {
 //            
 //            switch UIScreen.main.nativeBounds.height {
@@ -953,7 +693,6 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
 //            }
 //            
 //        }
- 
     }
     
     
@@ -965,16 +704,11 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
      */
     
     func keyboardWillHide(_ notification:NSNotification){
-        
-        
 //        let keyboardOffset : CGFloat = rePostionView(currentOffset: self.currentKeyboardOffset)
 //        self.view.frame.origin.y = keyboardOffset
 //        self.currentKeyboardOffset = keyboardOffset
         
     }
-    
-    
-    
     
     func fetchParentUserDetailFromBackground(){
         
@@ -1072,30 +806,22 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
                         self.reloadChildUserTable()
                         self.getGoalListForCurrentUser()
                         self.addTapGestureForTaskRow()
-          
                     }
-                    
                   }
-                
                 }
             }
         }
-
     }
-    
     
     func messageContainerDidTap(_ sender: UITapGestureRecognizer) {
         self.view.endEditing(true)
     }
     
     @IBAction func viewDidTap(_ sender: Any) {
-        
         self.view.endEditing(true)
     }
 
     @IBAction func userImageViewGotTapped(_ sender: UITapGestureRecognizer) {
-        
-        
         let optionView  = (Bundle.main.loadNibNamed("OptionView", owner: self, options: nil)?[0] as? OptionView)!
         optionView.center = self.view.center
         optionView.userImageView.image = self.userImageView.image
@@ -1116,14 +842,10 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
         optionView.fifthOption.setTitle("Goals", for: .normal)
         optionView.sixthOption.setTitle("Message", for: .normal)
         
-        
         self.actionView.addSubview(optionView)
         self.actionView.backgroundColor = UIColor.clear
         self.view.addSubview(self.actionView)
-        
-        
         optionView.doActionForFirstOption = {
-            
             self.removeActionView()
             let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
             let taskViewController = storyBoard.instantiateViewController(withIdentifier: "TaskView") as! TaskViewController
@@ -1133,29 +855,17 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
         }
         
         optionView.doActionForSecondOption = {
-            
             self.removeActionView()
-            
-            
         }
-        
-        
-        
         optionView.doActionForThirdOption = {
-            
             self.removeActionView()
-            
             var hasPendingTask = false
-            
             for pendingTask in self.earnItChildUserForParent.earnItTasks {
-                
-                if pendingTask.status == TaskStatus.completed{
-                    
+                if pendingTask.status == TaskStatus.completed {
                     hasPendingTask = true
                     break
-                    
-                }else {
-                    
+                }
+                else {
                     continue
                 }
             }
@@ -1166,8 +876,8 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
                 //            let alert = showAlert(title: "", message: "There are no tasks for approval")
                 //            self.present(alert, animated: true, completion: nil)
                 
-            }else {
-                
+            }
+            else {
                 let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
                 let pendingTasksScreen = storyBoard.instantiateViewController(withIdentifier: "PendingTasksScreen") as! PendingTasksScreen
                 pendingTasksScreen.prepareData(earnItChildUserForParent: self.earnItChildUserForParent, earnItChildUsers: self.earnItChildUsers)
@@ -1176,37 +886,30 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
                 slideMenuController.automaticallyAdjustsScrollViewInsets = true
                 //slideMenuController.delegate = pendingTasksScreen
                 self.present(slideMenuController, animated:false, completion:nil)
-                
             }
-
-            
         }
-        
         optionView.doActionForFourthOption = {
             self.removeActionView()
             self.goToBalanceScreen()
         }
         
         optionView.doActionForFifthOption = {
-            
             self.removeActionView()
-            print("self.selectedChildUser");
-            
-            print(self.earnItChildUserForParent);
+            print("self.selectedChildUser")
+            print(self.earnItChildUserForParent)
             getGoalsForChild(childId : self.earnItChildUserForParent.childUserId,success: {
                 (earnItGoalList) ->() in
                 
-                //print("GOAL", earnItGoalList.count);
-                // print(earnItGoalList);
+                //print("GOAL", earnItGoalList.count)
+                // print(earnItGoalList)
                 
                 let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
                 let addGoalVC = storyBoard.instantiateViewController(withIdentifier: "VCAddDeleteGoal") as! VCAddDeleteGoal
                 
                 if(self.earnItChildUserForParent.earnItGoal.name == "" || self.earnItChildUserForParent.earnItGoal.name == nil){
-                    
                     addGoalVC.IS_ADD=true
-                }else {
-                    
+                }
+                else {
                     addGoalVC.IS_ADD=false
                 }
                 addGoalVC.IS_ADD = false
@@ -1214,24 +917,16 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
                 addGoalVC.earnItChildUsers = self.earnItChildUsers
                 addGoalVC.earnItChildGoalList = earnItGoalList
                 self.present(addGoalVC, animated:true, completion:nil)
-                
-                
             })
             { (error) -> () in
-                
                 let alert = showAlertWithOption(title: "Opps, Please try it again later.", message: "")
-                
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             }
-            
         }
-        
 
         optionView.doActionForSixthOption = {
-            
             self.removeActionView()
-            
             let messageContainerView = UIView()
             messageContainerView.frame = CGRect(0 , 0, self.view.frame.width, self.view.frame.height)
             messageContainerView.backgroundColor = UIColor.clear
@@ -1244,11 +939,9 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
             messageContainerView.addGestureRecognizer(tap)
             
             self.messageView.dissmissMe = {
-                
                 self.messageView.removeFromSuperview()
                 messageContainerView.removeFromSuperview()
                 //self.enableBackgroundView()
-                
             }
             
             self.messageView.callControllerForSendMessage = {
