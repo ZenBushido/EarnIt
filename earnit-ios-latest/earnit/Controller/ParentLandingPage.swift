@@ -306,13 +306,13 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
             optionView.sixthOption.setImage(EarnItImage.setEarnItCommentIcon(), for: .normal)
             optionView.btnAppsMonitorOption.setImage(EarnItImage.setEarnItAppShowTaskIcon(), for: .normal)
 
-            optionView.firstOption.setTitle("Add Task(s)", for: .normal)
-            optionView.secondOption.setTitle("All Tasks", for: .normal)
-            optionView.thirdOption.setTitle("Approve Task(s)", for: .normal)
-            optionView.forthOption.setTitle("Balances", for: .normal)
-            optionView.fifthOption.setTitle("Goals", for: .normal)
-            optionView.sixthOption.setTitle("Message", for: .normal)
-            optionView.btnAppsMonitorOption.setTitle("Apps Monitor", for: .normal)
+            optionView.firstOption.setTitle(MENU_ADD_TASKS, for: .normal)
+            optionView.secondOption.setTitle(MENU_ALL_TASKS, for: .normal)
+            optionView.thirdOption.setTitle(MENU_APPROVE_TASKS, for: .normal)
+            optionView.forthOption.setTitle(MENU_BALANCES, for: .normal)
+            optionView.fifthOption.setTitle(MENU_GOALS, for: .normal)
+            optionView.sixthOption.setTitle(MENU_MESSAGE, for: .normal)
+            optionView.btnAppsMonitorOption.setTitle(MENU_APPS_MONITOR, for: .normal)
             optionView.userImageView.image = view.checkInImage.image
             self.actionView.addSubview(optionView)
             self.actionView.backgroundColor = UIColor.clear
@@ -352,13 +352,11 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
             optionView.doActionForFifthOption = {
                 self.removeActionView()
                 self.goToAddGoalPage()
-            }
-            
+            }            
             optionView.doActionForSixthOption = {
                 self.removeActionView()
                 self.goToMessageScreen()
             }
-            
             optionView.doActionForButtonAppsMonitorOption = {
                 self.removeActionView()
                 self.goToAppsMonitorScreen()

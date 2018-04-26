@@ -834,14 +834,16 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
         optionView.forthOption.setImage(EarnItImage.setEarnItAppBalanceIcon(), for: .normal)
         optionView.fifthOption.setImage(EarnItImage.setEarnItGoalIcon(), for: .normal)
         optionView.sixthOption.setImage(EarnItImage.setEarnItCommentIcon(), for: .normal)
-        
-        optionView.firstOption.setTitle("Add Task", for: .normal)
-        optionView.secondOption.setTitle("All Task", for: .normal)
-        optionView.thirdOption.setTitle("Approve Task", for: .normal)
-        optionView.forthOption.setTitle("Balances", for: .normal)
-        optionView.fifthOption.setTitle("Goals", for: .normal)
-        optionView.sixthOption.setTitle("Message", for: .normal)
-        
+        optionView.btnAppsMonitorOption.setImage(EarnItImage.setEarnItAppShowTaskIcon(), for: .normal)
+
+        optionView.firstOption.setTitle(MENU_ADD_TASKS, for: .normal)
+        optionView.secondOption.setTitle(MENU_ALL_TASKS, for: .normal)
+        optionView.thirdOption.setTitle(MENU_APPROVE_TASKS, for: .normal)
+        optionView.forthOption.setTitle(MENU_BALANCES, for: .normal)
+        optionView.fifthOption.setTitle(MENU_GOALS, for: .normal)
+        optionView.sixthOption.setTitle(MENU_MESSAGE, for: .normal)
+        optionView.btnAppsMonitorOption.setTitle(MENU_APPS_MONITOR, for: .normal)
+
         self.actionView.addSubview(optionView)
         self.actionView.backgroundColor = UIColor.clear
         self.view.addSubview(self.actionView)
@@ -974,7 +976,7 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
                             self.messageView.removeFromSuperview()
                             messageContainerView.removeFromSuperview()
                             
-                        }) {  (error) -> () in                            
+                        }) {  (error) -> () in
                             print("error")
                         }
                         
@@ -1016,27 +1018,34 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
             }) { (value:Bool) -> Void in
                 
             }
-            
         }
-        
+        optionView.doActionForButtonAppsMonitorOption = {
+            self.removeActionView()
+            self.goToAppsMonitorScreen()
+        }
     }
     
     func actionViewDidTapped(_ sender: UITapGestureRecognizer){
         print("actionViewDidTapped..")
         self.removeActionView()
     }
-    
+
+    func goToAppsMonitorScreen(){
+        //Navigate to Monitoring
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
+        let appsmonitorController = storyBoard.instantiateViewController(withIdentifier: "VCAppsMonitor") as! VCAppsMonitor
+        appsmonitorController.earnItChildUsers = self.earnItChildUsers
+        self.present(appsmonitorController, animated:true, completion:nil)
+    }
     
     func removeActionView(){
         for view in self.actionView.subviews {
-            
             view.removeFromSuperview()
         }
         self.actionView.removeFromSuperview()
     }
     
     func goToBalanceScreen(){
-        
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
         let balanceScreen = storyBoard.instantiateViewController(withIdentifier: "BalanceScreen") as! BalanceScreeen
         balanceScreen.earnItChildUsers = self.earnItChildUsers

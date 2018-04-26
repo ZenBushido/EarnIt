@@ -83,7 +83,6 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
         self.userImageVieqw.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + EarnItChildUser.currentUser.childUserImageUrl!)
         self.childUserTable.reloadData()
         self.getGoalForCurrentUser()
-
     }
     
     @IBAction func childTableViewGotTapped(_ sender: UITapGestureRecognizer) {

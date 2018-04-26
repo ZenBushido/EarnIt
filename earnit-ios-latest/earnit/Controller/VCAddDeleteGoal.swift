@@ -18,6 +18,7 @@ class VCAddDeleteGoal : UIViewController, UITextFieldDelegate, UITextViewDelegat
     
     @IBOutlet var lblTitle: UILabel!
     @IBOutlet var headerView: UIView!
+    @IBOutlet var btnBack: UIButton!
     
     @IBOutlet var goalName: UITextField!
     @IBOutlet var userImageView: UIImageView!
@@ -38,11 +39,14 @@ class VCAddDeleteGoal : UIViewController, UITextFieldDelegate, UITextViewDelegat
     var idForDeleteGoal = Int()
     var earnItChildGoalList = [EarnItChildGoal]()
     var delegate: VCAddDeleteGoal?
+
     //MARK: View Cycle
-    
     
     override func viewDidLoad() {
         self.earnItChildGoalList = self.earnItChildGoalList.reversed()
+        if (self.earnItChildGoalList.count == 0 && self.IS_ADD == false) {
+            self.getGoalsListFromServer()
+        }
         self.tvGoals.allowsSelection = true
         self.tvGoals.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         self.tvGoals.tableFooterView = UIView()
@@ -91,6 +95,24 @@ class VCAddDeleteGoal : UIViewController, UITextFieldDelegate, UITextViewDelegat
         let leftPadding = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: textField.frame.size.height))
         textField.leftView = leftPadding
         textField.leftViewMode = UITextFieldViewMode.always
+    }
+    
+    //MARK: Get Goals From Server Method
+    
+    func getGoalsListFromServer(){
+        //print(self.earnItChildUser)
+        getGoalsForChild(childId : self.earnItChildUser.childUserId,success: {
+            (earnItGoalList) ->() in
+            print("earnItGoalList.count>0 i.e \(earnItGoalList.count)")
+            self.earnItChildGoalList = earnItGoalList
+            self.earnItChildGoalList = self.earnItChildGoalList.reversed()
+            self.tvGoals.reloadData()
+        })
+        { (error) -> () in
+            let alert = showAlertWithOption(title: "Opps, Please try it again later.", message: "")
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     //MARK: Action Methods
@@ -418,15 +440,16 @@ class VCAddDeleteGoal : UIViewController, UITextFieldDelegate, UITextViewDelegat
         optionView.forthOption.setImage(EarnItImage.setEarnItAppBalanceIcon(), for: .normal)
         optionView.fifthOption.setImage(EarnItImage.setEarnItGoalIcon(), for: .normal)
         optionView.sixthOption.setImage(EarnItImage.setEarnItCommentIcon(), for: .normal)
-        
-        optionView.firstOption.setTitle("Add Task", for: .normal)
-        optionView.secondOption.setTitle("All Task", for: .normal)
-        optionView.thirdOption.setTitle("Approve Task", for: .normal)
-        optionView.forthOption.setTitle("Balances", for: .normal)
-        optionView.fifthOption.setTitle("Goals", for: .normal)
-        optionView.sixthOption.setTitle("Message", for: .normal)
-        
-        
+        optionView.btnAppsMonitorOption.setImage(EarnItImage.setEarnItAppShowTaskIcon(), for: .normal)
+
+        optionView.firstOption.setTitle(MENU_ADD_TASKS, for: .normal)
+        optionView.secondOption.setTitle(MENU_ALL_TASKS, for: .normal)
+        optionView.thirdOption.setTitle(MENU_APPROVE_TASKS, for: .normal)
+        optionView.forthOption.setTitle(MENU_BALANCES, for: .normal)
+        optionView.fifthOption.setTitle(MENU_GOALS, for: .normal)
+        optionView.sixthOption.setTitle(MENU_MESSAGE, for: .normal)
+        optionView.btnAppsMonitorOption.setTitle(MENU_APPS_MONITOR, for: .normal)
+
         self.actionView.addSubview(optionView)
         self.actionView.backgroundColor = UIColor.clear
         self.view.addSubview(self.actionView)
@@ -586,9 +609,28 @@ class VCAddDeleteGoal : UIViewController, UITextFieldDelegate, UITextViewDelegat
                 
             }
         }
+        optionView.doActionForButtonAppsMonitorOption = {
+            self.removeActionView()
+            self.goToAppsMonitorScreen()
+        }
+    }
+    
+    //MARK: Action Methods
+    
+    @IBAction func backButtonTapped(_ sender: Any) {
+        self.view.endEditing(true)
+        self.dismiss(animated: false, completion: nil)
     }
     
     //MARK: Void Methods
+    
+    func goToAppsMonitorScreen(){
+        //Navigate to Monitoring
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
+        let appsmonitorController = storyBoard.instantiateViewController(withIdentifier: "VCAppsMonitor") as! VCAppsMonitor
+        appsmonitorController.earnItChildUsers = self.earnItChildUsers
+        self.present(appsmonitorController, animated:true, completion:nil)
+    }
     
     func actionViewDidTapped(_ sender: UITapGestureRecognizer){
         print("actionViewDidTapped..")
@@ -605,7 +647,6 @@ class VCAddDeleteGoal : UIViewController, UITextFieldDelegate, UITextViewDelegat
     func messageContainerDidTap(_ sender: UITapGestureRecognizer) {
         self.view.endEditing(true)
     }
-    
     
     func showLoadingView(){
         self.view.alpha = 0.7

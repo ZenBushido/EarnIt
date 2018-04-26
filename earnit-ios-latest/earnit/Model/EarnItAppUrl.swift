@@ -8,6 +8,14 @@
 
 import Foundation
 
+//MENU TEXT
+let MENU_ADD_TASKS = "Add Task(s)"
+let MENU_ALL_TASKS = "All Tasks"
+let MENU_APPROVE_TASKS = "Approve Task(s)"
+let MENU_BALANCES = "Balances"
+let MENU_GOALS = "Goals"
+let MENU_MESSAGE = "Message"
+let MENU_APPS_MONITOR = "Apps Monitor"
 
 //let EarnItApp_BASE_URL = "https://api.myearnitapp.com:8443/earnit-api"
 //let EarnItApp_AWS_BUCKET_NAME = "earnit-dev"

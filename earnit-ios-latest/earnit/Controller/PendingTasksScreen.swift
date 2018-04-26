@@ -1042,21 +1042,21 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
         optionView.forthOption.setImage(EarnItImage.setEarnItAppBalanceIcon(), for: .normal)
         optionView.fifthOption.setImage(EarnItImage.setEarnItGoalIcon(), for: .normal)
         optionView.sixthOption.setImage(EarnItImage.setEarnItCommentIcon(), for: .normal)
-        
-        optionView.firstOption.setTitle("Add Task", for: .normal)
-        optionView.secondOption.setTitle("All Task", for: .normal)
-        optionView.thirdOption.setTitle("Approve Task", for: .normal)
-        optionView.forthOption.setTitle("Balances", for: .normal)
-        optionView.fifthOption.setTitle("Goals", for: .normal)
-        optionView.sixthOption.setTitle("Message", for: .normal)
-        
+        optionView.btnAppsMonitorOption.setImage(EarnItImage.setEarnItAppShowTaskIcon(), for: .normal)
+
+        optionView.firstOption.setTitle(MENU_ADD_TASKS, for: .normal)
+        optionView.secondOption.setTitle(MENU_ALL_TASKS, for: .normal)
+        optionView.thirdOption.setTitle(MENU_APPROVE_TASKS, for: .normal)
+        optionView.forthOption.setTitle(MENU_BALANCES, for: .normal)
+        optionView.fifthOption.setTitle(MENU_GOALS, for: .normal)
+        optionView.sixthOption.setTitle(MENU_MESSAGE, for: .normal)
+        optionView.btnAppsMonitorOption.setTitle(MENU_APPS_MONITOR, for: .normal)
+
         self.actionView.addSubview(optionView)
         self.actionView.backgroundColor = UIColor.clear
         self.view.addSubview(self.actionView)
-        
 
         optionView.doActionForSecondOption = {
-            
             self.removeActionView()
             let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
             let parentDashBoardCheckin = storyBoard.instantiateViewController(withIdentifier: "parentDashBoard") as! ParentDashBoard
@@ -1068,13 +1068,8 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
             slideMenuController.automaticallyAdjustsScrollViewInsets = true
             slideMenuController.delegate = parentDashBoardCheckin
             self.present(slideMenuController, animated:false, completion:nil)
-            
-            
         }
-        
         optionView.doActionForFirstOption = {
-            
-            
             self.removeActionView()
             let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
             let taskViewController = storyBoard.instantiateViewController(withIdentifier: "TaskView") as! TaskViewController
@@ -1117,26 +1112,19 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             }
-            
         }
         
         optionView.doActionForFourthOption = {
-            
             self.removeActionView()
             self.goToBalanceScreen()
-            
         }
         
         optionView.doActionForThirdOption = {
-            
             self.removeActionView()
-            
         }
         
         optionView.doActionForSixthOption = {
-            
             self.removeActionView()
-            
             let messageContainerView = UIView()
             messageContainerView.frame = CGRect(0 , 0, self.view.frame.width, self.view.frame.height)
             messageContainerView.backgroundColor = UIColor.clear
@@ -1147,17 +1135,13 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
             let tap = UITapGestureRecognizer(target: self, action: #selector(self.messageContainerDidTap(_:)))
             tap.delegate = self
             messageContainerView.addGestureRecognizer(tap)
-            
             self.messageView.dissmissMe = {
-                
                 self.messageView.removeFromSuperview()
                 messageContainerView.removeFromSuperview()
                 //self.enableBackgroundView()
-                
             }
             
             self.messageView.callControllerForSendMessage = {
-                
                 self.showLoadingView()
                 self.messageView.activityIndicator.startAnimating()
                 if self.messageView.messageText.text.characters.count == 0 || self.messageView.messageText.text.isEmptyField == true{
@@ -1168,10 +1152,8 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
                     self.messageView.activityIndicator.stopAnimating()
                     //                let alert = showAlert(title: "", message: "Please enter a message")
                     //                self.present(alert, animated: true, completion: nil)
-                    
-                }else {
-                    
-                    
+                }
+                else {
                     callUpdateApiForChild(firstName: self.earnItChildUserForParent.firstName,childEmail: self.earnItChildUserForParent.email,childPassword: self.earnItChildUserForParent.password,childAvatar: self.earnItChildUserForParent.childUserImageUrl!,createDate: self.earnItChildUserForParent.createDate,childUserId: self.earnItChildUserForParent.childUserId, childuserAccountId: self.earnItChildUserForParent.childAccountId,phoneNumber: self.earnItChildUserForParent.phoneNumber,fcmKey : self.earnItChildUserForParent.fcmToken, message: self.messageView.messageText.text, success: {
                         
                         (childUdateInfo) ->() in
@@ -1187,24 +1169,17 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
                             messageContainerView.removeFromSuperview()
                             
                         }) {  (error) -> () in
-                            
                             print("error")
-                            
                         }
-                        
                     }) { (error) -> () in
                         self.hideLoadingView()
                         self.messageView.activityIndicator.stopAnimating()
                         self.view.makeToast("Send Message Failed")
-                        
-                        
                         //                let alert = showAlert(title: "Error", message: "Update Child Failed")
                         //                self.present(alert, animated: true, completion: nil)
                         print(" Set status completed failed")
                     }
-                    
                 }
-                
             }
             
             var dView:[String:UIView] = [:]
@@ -1218,8 +1193,6 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
             
             self.constY = NSLayoutConstraint(item: self.messageView, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0)
             self.view.addConstraint(self.constY!)
-            
-            
             self.constX = NSLayoutConstraint(item: self.messageView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0)
             self.view.addConstraint(self.constX!)
             
@@ -1230,31 +1203,34 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
             }) { (value:Bool) -> Void in
                 
             }
-            
         }
-        
+        optionView.doActionForButtonAppsMonitorOption = {
+            self.removeActionView()
+            self.goToAppsMonitorScreen()
+        }
     }
     
     func actionViewDidTapped(_ sender: UITapGestureRecognizer){
         print("actionViewDidTapped..")
         self.removeActionView()
-        
+    }
+
+    func goToAppsMonitorScreen(){
+        //Navigate to Monitoring
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
+        let appsmonitorController = storyBoard.instantiateViewController(withIdentifier: "VCAppsMonitor") as! VCAppsMonitor
+        appsmonitorController.earnItChildUsers = self.earnItChildUsers
+        self.present(appsmonitorController, animated:true, completion:nil)
     }
     
-    
     func removeActionView(){
-        
         for view in self.actionView.subviews {
-            
             view.removeFromSuperview()
         }
         self.actionView.removeFromSuperview()
-        
-        
     }
 
     func goToBalanceScreen(){
-        
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
         let balanceScreen = storyBoard.instantiateViewController(withIdentifier: "BalanceScreen") as! BalanceScreeen
         balanceScreen.earnItChildUsers = self.earnItChildUsers
@@ -1263,15 +1239,11 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
         if self.earnItChildUserForParent.earnItGoal.cash! + self.earnItChildUserForParent.earnItGoal.tally! + self.earnItChildUserForParent.earnItGoal.ammount! == 0 {
             
             self.view.makeToast("No balance to display!!")
-            
-        }else {
-            
+        }
+        else {
             self.present(balanceScreen, animated:true, completion:nil)
         }
     }
-
-    
-    
 }
 
 
