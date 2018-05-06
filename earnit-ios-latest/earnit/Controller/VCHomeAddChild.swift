@@ -670,9 +670,7 @@ class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextF
             
             self.setCountryCode()
         }
-        
     }
-    
     
     func getPhoneNumber() -> String {
         

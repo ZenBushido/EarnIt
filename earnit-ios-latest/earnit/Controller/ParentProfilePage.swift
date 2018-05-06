@@ -65,7 +65,6 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
     //MARK: View Cycle
     
     override func viewDidLoad() {
-        
         self.setImagePicker()
         self.isImageChanged = false
         self.childUserTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -89,16 +88,12 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
 //        self.countryCodeLabel.text = selectedCountryDetails["dial_code"]
     }
     
-    
     override func viewDidAppear(_ animated: Bool) {
-        
         print("Inside viewDidAppear")
-       
         _ = Timer.scheduledTimer(timeInterval: 300.0, target: self, selector: #selector(self.fetchParentUserDetailFromBackground), userInfo: nil, repeats: true)
         
         //self.bottomView.frame.origin.y =  self.childUserTable.frame.origin.y
         if self.didShownImagePicker == false{
-            
             self.isImageChanged = false
             self.earnItChildUsers = EarnItAccount.currentUser.earnItChildUsers
             self.prepareView()
@@ -114,19 +109,16 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
      */
 
     func creatLeftPadding(textField:UITextField) {
-        
         let leftPadding = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: textField.frame.size.height))
         textField.leftView = leftPadding
         textField.leftViewMode = UITextFieldViewMode.always
     }
     
     func prepareView(){
-    
         print("Inside prepareView")
         self.newPassword = (keychain.get("password")!)
         self.userImageUrl = EarnItAccount.currentUser.avatar?.replacingOccurrences(of: "\"", with:  " ")
         if EarnItAccount.currentUser.firstName == " "{
-            
             EarnItAccount.currentUser.firstName = ""
         }
         self.firstName.text = EarnItAccount.currentUser.firstName
@@ -143,10 +135,8 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
         self.childTableHeightConstraint.constant = self.childUserTable.contentSize.height
         //self.welcomeLabel.text = "Welcome" + EarnItAccount.currentUser.firstName
     }
-    
 
     func getPhoneNumber() -> String {
-        
         let phoneNo = EarnItAccount.currentUser.phoneNumber as! String
         let last10 = String(describing: phoneNo.suffix(10) )
         return last10
@@ -162,7 +152,6 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
             let countryCode = String(describing: truncated)
             return countryCode
         }
-        
         return countryList![0]["dial_code"]!
     }
     

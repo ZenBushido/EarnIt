@@ -10,7 +10,6 @@ import UIKit
 import SlideMenuControllerSwift
 
 class SlideMenuViewController: SlideMenuController {
-    
     override func track(_ trackAction: TrackAction) {
         switch trackAction {
         case .leftTapOpen:
@@ -31,5 +30,4 @@ class SlideMenuViewController: SlideMenuController {
             print("TrackAction: right flick close.")
         }
     }
-
 }

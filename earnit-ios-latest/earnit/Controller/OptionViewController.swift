@@ -33,7 +33,6 @@ class OptionViewController: UIViewController, OptionMenuProtocol {
     }
   
     func changeViewController(_ option: OptionMenu) {
-        
         switch option {
         case .home:
             print("home")
@@ -45,7 +44,6 @@ class OptionViewController: UIViewController, OptionMenuProtocol {
             print("logtout")
         case .version:
             print("version")
-            
         }
     }
     

@@ -86,13 +86,7 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
             self.hideLoadingView()
             //Check for parent has child or not
             if (EarnItAccount.currentUser.earnItChildUsers.count == 0) {
-                let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                let parentLandingPage  = storyBoard.instantiateViewController(withIdentifier: "VCHomeAddChild") as! VCHomeAddChild
-                let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
-                let slideMenuController  = SlideMenuViewController(mainViewController: parentLandingPage, leftMenuViewController: optionViewController)
-                slideMenuController.automaticallyAdjustsScrollViewInsets = true
-                //            slideMenuController.delegate = parentLandingPage
-                self.present(slideMenuController, animated:false, completion:nil)
+                self.navigateToHomeHomeAddChildView()
             }
         }) {  (error) -> () in
             print("error")
@@ -107,8 +101,18 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
         _ = Timer.scheduledTimer(timeInterval: 300.0, target: self, selector: #selector(self.fetchParentUserDetailFromBackground), userInfo: nil, repeats: true)
         
         _ = Timer.scheduledTimer(timeInterval: 300.0, target: self, selector: #selector(self.fetchChildUserDetailFromBackground), userInfo: nil, repeats: true)
+        super.viewDidAppear(animated)
     }
 
+    func navigateToHomeHomeAddChildView(){
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let parentLandingPage  = storyBoard.instantiateViewController(withIdentifier: "VCHomeAddChild") as! VCHomeAddChild
+        let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
+        let slideMenuController  = SlideMenuViewController(mainViewController: parentLandingPage, leftMenuViewController: optionViewController)
+        slideMenuController.automaticallyAdjustsScrollViewInsets = true
+        //            slideMenuController.delegate = parentLandingPage
+        self.present(slideMenuController, animated:false, completion:nil)
+    }
     func getEarntitUserData() {
         createEarnItAppChildUser( success: {
             (earnItChildUsers) -> () in
@@ -245,8 +249,9 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
     //ovrride
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view  = Bundle.main.loadNibNamed("ChildUserHeaderView", owner: nil, options: nil)?.first as! ChildUserHeaderView
-
           view.childUserName.text = self.earnItChildUsers[section].firstName
+        //print(self.earnItChildUsers[section])
+        //print(self.earnItChildUsers[section].childUserImageUrl!)
           view.checkInImage.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUsers[section].childUserImageUrl!)
           view.showActionButton = {
             
