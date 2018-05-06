@@ -1088,7 +1088,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
 
     @IBAction func btnApprovalTask_Tapped(_ sender: Any) {
         self.view.endEditing(true)
-        let alert = showAlertWithOption(title: "Are you sure, you want to approve this task? Any credit towards this task will be applied.", message: "")
+        let alert = showAlertWithOption(title: "Are you sure you want to approve this task? Any credit towards this task will be applied.", message: "")
         alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.default, handler: nil))
         alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: self.instaneApprovalForTask))
         self.present(alert, animated: true, completion: nil)
@@ -1103,7 +1103,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     
     @IBAction func btnDelete_Tapped(_ sender: Any) {
         self.view.endEditing(true)
-        let alert = showAlertWithOption(title: "Are you sure, you want to delete this task?", message: "")
+        let alert = showAlertWithOption(title: "Are you sure you want to delete this task?", message: "")
         alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.default, handler: nil))
         alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: self.deleteTask))
         self.present(alert, animated: true, completion: nil)
