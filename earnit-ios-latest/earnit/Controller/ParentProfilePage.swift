@@ -549,69 +549,45 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
     
 
     @IBAction func UpdateButtonClicked(_ sender: Any) {
- 
         if (self.firstName.text?.characters.count == 0 && self.contactNumber.text?.characters.count == 0 && self.lastName.text?.characters.count == 0){
-            
             self.view.makeToast("Please complete all fields")
-            
         }
-        
-        
         if (self.firstName.text?.characters.count == 0 || self.contactNumber.text?.characters.count == 0 || self.lastName.text?.characters.count == 0){
-            
             var errorFields = "\(self.firstName.text?.characters.count == 0 ? "First name and":"")\(self.lastName.text?.characters.count == 0 ? " Last name and":"")\(self.contactNumber.text?.characters.count == 0 ? " Phone":"")"
             
             let last3 = errorFields.substring(from:errorFields.index(errorFields.endIndex, offsetBy: -3))
-            
-            
             if last3 == "and" {
                 errorFields = errorFields.substring(to: errorFields.index(errorFields.endIndex, offsetBy: -3))
             }
-            
             self.view.makeToast("Please complete \(errorFields) field")
-            
         }
-            
         else if  (self.contactNumber.text?.characters.count)! < 10 {
             
             self.view.makeToast("Please enter valid phone number")
         }
-            
-            
         else {
-        
-          
             var contactNumber = String()
             if (self.contactNumber.text?.characters.count)! > 0{
-                
-                 contactNumber = "\(self.countryCodeLabel.text!)\(self.contactNumber.text!)"
-              }else {
-       
+                contactNumber = "\(self.countryCodeLabel.text!)\(self.contactNumber.text!)"
+            }
+            else {
                 contactNumber = ""
             }
-                
             if self.isImageChanged == true {
-       
-             print("User has picked Image from device")
-                
-                 DispatchQueue.global().async {
-     
-                        self.prepareUserImageForUpload()
-    
-                         DispatchQueue.main.async {
-            
-                           print("Done with image Upload and updated to backend!")
-                         }
+                print("User has picked Image from device")
+                DispatchQueue.global().async {
+                    self.prepareUserImageForUpload()
+                    DispatchQueue.main.async {
+                        print("Done with image Upload and updated to backend!")
                     }
-                
+                }
             }
-        
             self.showLoadingView()
             let keychain = KeychainSwift()
             let fcmToken : String? = keychain.get("token")
             callUpdateProfileApiForParentt(firstName: self.firstName.text!, lastName: self.lastName.text!, phoneNumber: contactNumber, updatedPassword: EarnItAccount.currentUser.password,imageUrl: self.userImageUrl!, fcmKey: fcmToken,success: {
-            
-            (earnItTask) ->() in
+                
+                (earnItTask) ->() in
                 
                 let keychain = KeychainSwift()
                 guard  let _ = keychain.get("email") else  {
@@ -627,14 +603,14 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
                     
                     self.view.makeToast("Update successful")
                     self.dismissScreen()
-//                    let alert = showAlertWithOption(title: "", message: "Update successful")
-//                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: self.dismissScreen))
-//                    self.present(alert, animated: true, completion: nil)
-          
-                        EarnItAccount.currentUser.setAttribute(json: responseJSON)
-                        keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
-                        self.hideLoadingView()
-                        // success(true)
+                    //                    let alert = showAlertWithOption(title: "", message: "Update successful")
+                    //                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: self.dismissScreen))
+                    //                    self.present(alert, animated: true, completion: nil)
+                    
+                    EarnItAccount.currentUser.setAttribute(json: responseJSON)
+                    keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
+                    self.hideLoadingView()
+                    // success(true)
                     
                     
                 }) { (error) -> () in
@@ -642,30 +618,26 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
                     
                     self.dismissScreenToLogin()
                     
-//                    let alert = showAlertWithOption(title: "Authentication failed", message: "please login again")
-//                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: self.dismissScreenToLogin))
-//                    self.present(alert, animated: true, completion: nil)
+                    //                    let alert = showAlertWithOption(title: "Authentication failed", message: "please login again")
+                    //                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: self.dismissScreenToLogin))
+                    //                    self.present(alert, animated: true, completion: nil)
                     
                 }
-
+                
+                
+            }) { (error) -> () in
+                
+                self.view.makeToast("Update Profile Failed")
+                //            let alert = showAlert(title: "Error", message: "Update Profile Failed")
+                //            self.present(alert, animated: true, completion: nil)
+                //            print(" Set status completed failed")
+            }
             
-        }) { (error) -> () in
-            
-            self.view.makeToast("Update Profile Failed")
-//            let alert = showAlert(title: "Error", message: "Update Profile Failed")
-//            self.present(alert, animated: true, completion: nil)
-//            print(" Set status completed failed")
-          }
-            
-          }
-        
-
+        }
     }
-    
     
     //ovrride
     func dismissScreen(){
-        
         //self.dismiss(animated: true, completion: nil)
         self.view.endEditing(true)
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
@@ -680,8 +652,8 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
         
         self.present(slideMenuController, animated:false, completion:nil)
     }
+    
     @IBAction func viewDidTapped(_ sender: Any) {
-        
         self.view.endEditing(true)
     }
     
@@ -962,20 +934,16 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
             transferManager.upload(uploadRequest).continue({ (task) -> AnyObject! in
             
             if task.error != nil {
-                
                 print("Image Uploading to AWS server failed..")
+                print(task.error!.localizedDescription)
                 if(task.error!._code == -1009){
-                    
                     print("error in uploading with error code\(task.error!._code)")
-                    
                     self.view.makeToast("You seem to be offline")
 //                    let alert = showAlert(title: "Opps", message: "You seem to be offline")
 //                    
 //                    self.present(alert, animated: true, completion: nil)
-                    
-                    
-                    
-                }else if(task.error!._code == -1004){
+                }
+                else if(task.error!._code == -1004){
                     
                     print("error in uploading with error code\(task.error!._code)")
                     
@@ -983,50 +951,36 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
 //                    let alert = showAlert(title: "Opps", message: "Couldn't connect to server")
 //                    
 //                    self.present(alert, animated: true, completion: nil)
-                    
-                    
-                    
-                }else if(task.error!._code == -1001){
-                    
-                    
+                }
+                else if(task.error!._code == -1001){
                     print("error in uploading with error code\(task.error!._code)")
                     
                     self.view.makeToast("Request timed out")
 //                    let alert = showAlert(title: "Opps", message: "Request timed out")
 //                    self.present(alert, animated: true, completion: nil)
                     
-                }else{
-                    
+                }
+                else{
                     print("error in uploading with error code\(task.error!._code)")
                     self.view.makeToast("Something went wrong")
 //                    let alert = showAlert(title: "Opps", message: "Something went wrong")
 //                    
 //                    self.present(alert, animated: true, completion: nil)
-                    
                 }
-                
-                
             }
             if task.exception != nil {
-                
                  self.view.makeToast("Failed to Upload Image")
 //                let alert = showAlert(title: "Opps", message: "Failed to Upload Image")
 //                self.present(alert, animated: true, completion: nil)
-                
             }
             if task.result != nil {
-                
-                
                 self.userImageUrl = String("\(AWS_URL)\(s3BucketName)/\(uploadRequest.key!)")
-                
-                print("ImageUrl for earnITuser \(self.userImageUrl)")
-               
+                print("ImageUrl for earnITuser \(self.userImageUrl)")               
                 var contactNumber = String()
                 if (self.contactNumber.text?.characters.count)! > 0{
-                    
                     contactNumber = "\(self.countryCodeLabel.text!)\(self.contactNumber.text!)"
-                }else {
-                    
+                }
+                else {
                     contactNumber = ""
                 }
                 callUpdateProfileImageApiForParent(firstName: self.firstName.text!, lastName: self.lastName.text!, phoneNumber: contactNumber, updatedPassword: EarnItAccount.currentUser.password,userAvatar: self.userImageUrl!, success: {
@@ -1044,23 +998,14 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
                     checkUserAuthentication(email: email, password: password, success: {
                         
                         (responseJSON) ->() in
-                        
-                        
                         EarnItAccount.currentUser.setAttribute(json: responseJSON)
                         keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
-              
-                        
-                        
                     }) { (error) -> () in
-                        
                         self.dismissScreenToLogin()
-                        
 //                        let alert = showAlertWithOption(title: "Authentication failed", message: "please login again")
 //                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: self.dismissScreenToLogin))
 //                        self.present(alert, animated: true, completion: nil)
-//                        
                     }
-                    
                 }) { (error) -> () in
                     
                     self.view.makeToast("Update Profile Failed")
@@ -1072,23 +1017,15 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
             }
                 
             else {
-                
-                
                 self.view.makeToast("Update Profile Failed")
 //                let alert = showAlert(title: "Opps", message: "Failed to Upload Image")
 //                self.present(alert, animated: true, completion: nil)
                 
                 return nil
-                
             }
-            
             return nil
-            
         })
-        
     }
-    
-    
     
     //Change passwordToHexcode method
     

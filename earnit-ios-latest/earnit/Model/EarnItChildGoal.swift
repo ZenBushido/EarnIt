@@ -37,13 +37,9 @@ class EarnItChildGoal : NSObject {
     
     //Adjustments
     var arrAdjustments : [AnyObject] = [AnyObject]()  //[Dictionary<String,String>]() //= [String: Any]()
-
-    
     override init(){
-        
         super.init()
     }
-    
     
     init(id: Int, createdDate: String, updateDate: String, name : String, ammount: Int, cash: Int){ //, arrAdjustments:
         

@@ -62,8 +62,6 @@ class EarnItAccount: NSObject {
         super.init()
     }
     
-    
-    
     // MARK: - Instances
     
     /**
@@ -78,8 +76,6 @@ class EarnItAccount: NSObject {
     static func resetCurrentUser() {
         earnItUser = EarnItAccount()
     }
-    
-    
     
     /**
      User initializer with specific attribute value
@@ -170,11 +166,7 @@ class EarnItAccount: NSObject {
 //            self.parentImage = EarnItImage.defaultUserImage()
 //            
 //        }
-
-        
     }
-    
-    
 }
  
 

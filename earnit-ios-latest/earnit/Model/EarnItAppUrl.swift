@@ -28,14 +28,16 @@ let AWS_SECRET_KEY = "MNbVWaeVhsAtR+X/85g+edL84CoU6EuLU2BSzLy8"
 let EarnItApp_LocalHost_BASE_URL = "http://localhost:9191"
 
 #if DEVELOPMENT
-let EarnItApp_BASE_URL = "http://35.162.48.144:8080/earnit-api"
+let EarnItApp_BASE_URL = "http://159.65.68.220:8080/earnit-api" //"http://35.162.48.144:8080/earnit-api"
 let EarnItApp_AWS_BUCKET_NAME = "earnitapp-dev"
-let EarnItApp_Image_BASE_URL_PREFIX = "https://s3-us-west-2.amazonaws.com/earnitapp-dev/new/"
-
+//let EarnItApp_Image_BASE_URL_PREFIX = "https://s3-us-west-2.amazonaws.com/earnitapp-dev/new/"
+let EarnItApp_Image_BASE_URL_PREFIX = "https://s3-us-west-2.amazonaws.com/earnitapp-dev"//"https://s3-us-west-2.amazonaws.com/earnitapp"
+    
 #else
     
 let EarnItApp_BASE_URL = "https://api.myearnitapp.com:8443/earnit-api"
 let EarnItApp_AWS_BUCKET_NAME = "earnitapp"
-let EarnItApp_Image_BASE_URL_PREFIX = ""
+let EarnItApp_Image_BASE_URL_PREFIX = "https://s3-us-west-2.amazonaws.com/earnitapp"//"https://s3-us-west-2.amazonaws.com/earnitapp/new/"
 
 #endif
+

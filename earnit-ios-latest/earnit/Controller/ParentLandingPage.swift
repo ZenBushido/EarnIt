@@ -249,46 +249,47 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
     //ovrride
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view  = Bundle.main.loadNibNamed("ChildUserHeaderView", owner: nil, options: nil)?.first as! ChildUserHeaderView
-          view.childUserName.text = self.earnItChildUsers[section].firstName
+        view.childUserName.text = self.earnItChildUsers[section].firstName
         //print(self.earnItChildUsers[section])
-        //print(self.earnItChildUsers[section].childUserImageUrl!)
-          view.checkInImage.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUsers[section].childUserImageUrl!)
-          view.showActionButton = {
+        print(self.earnItChildUsers[section].childUserImageUrl!)
+        print(EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUsers[section].childUserImageUrl!)
+        view.checkInImage.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUsers[section].childUserImageUrl!)
+        view.showActionButton = {
             
-//            let checkInButtonFrame = view.checkInButton.superview?.convert(view.checkInButton.frame, to: self.view)
-//            let actionButton = CircleMenu(
-//                frame: CGRect(x: (checkInButtonFrame?.origin.x)! - 10, y: (checkInButtonFrame?.origin.y)! , width: 94, height: 50),
-//                normalIcon:"icon_menu",
-//                selectedIcon:"icon_close",
-//                buttonsCount: 8,
-//                duration: 0.5,
-//                distance: 120)
-//            
-//            let checkInImageFrame = view.checkInImage.superview?.convert(view.checkInImage.frame, to: self.view)
-//            let actionImage = UIImageView()
-//            actionImage.frame  = CGRect(x: (checkInImageFrame?.origin.x)!, y: (checkInImageFrame?.origin.y)! , width: 60, height: 60)
-//            actionImage.clipsToBounds = true
-//            actionImage.layer.cornerRadius = 30
-//            actionImage.layer.borderColor = UIColor.white.cgColor
-//            actionImage.layer.borderWidth = 2
-//            actionImage.contentMode = .scaleAspectFill
-//            actionImage.backgroundColor = UIColor.white
-//            actionImage.image = view.checkInImage.image
-//            self.actionView.addSubview(actionImage)
-//            actionButton.delegate = self
-//            actionButton.layer.cornerRadius = actionButton.frame.size.width / 2.0
-//            actionButton.setImage(nil, for: .normal)
-//            self.selectedChildUser = self.earnItChildUsers[section]
-//            actionButton.isUserInteractionEnabled = false
-//            self.actionView.addSubview(actionButton)
-//            self.actionView.backgroundColor = UIColor.clear
-//            actionButton.sendActions(for: .touchUpInside)
-//            let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
-//            self.blurEffectView = UIVisualEffectView(effect: blurEffect)
-//            self.blurEffectView.frame = self.view.bounds
-//            self.blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-//            self.view.addSubview(self.blurEffectView)
-//            self.blurEffectView.addSubview(self.actionView)
+            //            let checkInButtonFrame = view.checkInButton.superview?.convert(view.checkInButton.frame, to: self.view)
+            //            let actionButton = CircleMenu(
+            //                frame: CGRect(x: (checkInButtonFrame?.origin.x)! - 10, y: (checkInButtonFrame?.origin.y)! , width: 94, height: 50),
+            //                normalIcon:"icon_menu",
+            //                selectedIcon:"icon_close",
+            //                buttonsCount: 8,
+            //                duration: 0.5,
+            //                distance: 120)
+            //
+            //            let checkInImageFrame = view.checkInImage.superview?.convert(view.checkInImage.frame, to: self.view)
+            //            let actionImage = UIImageView()
+            //            actionImage.frame  = CGRect(x: (checkInImageFrame?.origin.x)!, y: (checkInImageFrame?.origin.y)! , width: 60, height: 60)
+            //            actionImage.clipsToBounds = true
+            //            actionImage.layer.cornerRadius = 30
+            //            actionImage.layer.borderColor = UIColor.white.cgColor
+            //            actionImage.layer.borderWidth = 2
+            //            actionImage.contentMode = .scaleAspectFill
+            //            actionImage.backgroundColor = UIColor.white
+            //            actionImage.image = view.checkInImage.image
+            //            self.actionView.addSubview(actionImage)
+            //            actionButton.delegate = self
+            //            actionButton.layer.cornerRadius = actionButton.frame.size.width / 2.0
+            //            actionButton.setImage(nil, for: .normal)
+            //            self.selectedChildUser = self.earnItChildUsers[section]
+            //            actionButton.isUserInteractionEnabled = false
+            //            self.actionView.addSubview(actionButton)
+            //            self.actionView.backgroundColor = UIColor.clear
+            //            actionButton.sendActions(for: .touchUpInside)
+            //            let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
+            //            self.blurEffectView = UIVisualEffectView(effect: blurEffect)
+            //            self.blurEffectView.frame = self.view.bounds
+            //            self.blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            //            self.view.addSubview(self.blurEffectView)
+            //            self.blurEffectView.addSubview(self.actionView)
             
             let optionView  = (Bundle.main.loadNibNamed("OptionView", owner: self, options: nil)?[0] as? OptionView)!
             optionView.center = self.view.center
@@ -299,7 +300,7 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
             
             let visibleRect = optionView.frame.intersection(self.view.bounds)
             
-             optionView.frame.origin.y = (checkInImageFrame?.origin.y)! - (optionView.frame.size.height - visibleRect.size.height)
+            optionView.frame.origin.y = (checkInImageFrame?.origin.y)! - (optionView.frame.size.height - visibleRect.size.height)
             
             self.selectedChildUser = self.earnItChildUsers[section]
             
@@ -310,7 +311,7 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
             optionView.fifthOption.setImage(EarnItImage.setEarnItGoalIcon(), for: .normal)
             optionView.sixthOption.setImage(EarnItImage.setEarnItCommentIcon(), for: .normal)
             optionView.btnAppsMonitorOption.setImage(EarnItImage.setEarnItAppShowTaskIcon(), for: .normal)
-
+            
             optionView.firstOption.setTitle(MENU_ADD_TASKS, for: .normal)
             optionView.secondOption.setTitle(MENU_ALL_TASKS, for: .normal)
             optionView.thirdOption.setTitle(MENU_APPROVE_TASKS, for: .normal)
@@ -345,8 +346,8 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
             }
             
             optionView.doActionForThirdOption = {
-              self.removeActionView()
-              self.goToPendingApprovalPage()
+                self.removeActionView()
+                self.goToPendingApprovalPage()
             }
             
             optionView.doActionForFourthOption = {
@@ -357,7 +358,7 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
             optionView.doActionForFifthOption = {
                 self.removeActionView()
                 self.goToAddGoalPage()
-            }            
+            }
             optionView.doActionForSixthOption = {
                 self.removeActionView()
                 self.goToMessageScreen()

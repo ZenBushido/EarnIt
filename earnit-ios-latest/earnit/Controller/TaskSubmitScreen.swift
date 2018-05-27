@@ -460,35 +460,23 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
     
     //ovrride
     func callControllerForDoneTask() {
-        
         //self.completedTask.status = TaskStatus.completed
-        
         self.showLoadingView()
-        
         var taskComment = TaskComment()
-        
         if self.taskComments.text.characters.count  > 0 {
-            
             taskComment.comment = self.taskComments.text
-            
         }
-        else
-        {
+        else {
             taskComment.comment = ""
         }
-        
         taskComment.createdDate = Date().millisecondsSince1970
         taskComment.taskImageUrl = self.taskImageUrl
         taskComment.readStatus = 0
         self.earnItTask.status = TaskStatus.completed
         self.earnItTask.taskComments.append(taskComment)
-        
-        
         //self.earnItTask.taskComments.append(self.taskComments.text)
         callApiForUpdateTask(earnItTaskChildId: EarnItChildUser.currentUser.childUserId,earnItTask: self.earnItTask, success: {
-            
-            (earnItTask) ->() in
-            
+            (earnItTask) ->() in            
             let keychain = KeychainSwift()
             //let _ : Int = Int(keychain.get("userId")!)!
             guard  let _ = keychain.get("email") else  {
@@ -497,14 +485,10 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
             }
             let email : String = (keychain.get("email")!)
             let password : String = (keychain.get("password")!)
-            
-            
             checkUserAuthentication(email: email, password: password, success: {
-                
                 (responseJSON) ->() in
                 
                 if (responseJSON["userType"].stringValue == "CHILD"){
-                    
                     EarnItChildUser.currentUser.setAttribute(json: responseJSON)
                     self.hideLoadingView()
                     
@@ -513,23 +497,12 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
 //                    let alert = showAlertWithOption(title: "", message: "Task submitted")
 //                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: self.dismissscreen))
 //                    self.present(alert, animated: true, completion: nil)
-                    
-                    
-                }else {
-                    
-       
                 }
-                
+                else {
+                }
             }) { (error) -> () in
-                
-                
-                
             }
-            
-
-            
         }) { (error) -> () in
-            
             self.hideLoadingView()
             self.view.makeToast("Task submission failed")
 //            let alert = showAlert(title: "Error", message: "Failed")
@@ -537,12 +510,9 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
 //            print(" Set status completed failed")
             self.hideLoadingView()
         }
-        
     }
     
-    
     func dismissscreen(){
-        
         self.dismiss(animated: true, completion: nil)
     }
     

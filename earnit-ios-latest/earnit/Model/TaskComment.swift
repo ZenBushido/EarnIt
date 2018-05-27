@@ -34,9 +34,6 @@ class TaskComment : NSObject{
         super.init()
     }
     
-    
-    
-    
     /**
      User initializer with specific attribute value
      
@@ -69,15 +66,12 @@ class TaskComment : NSObject{
      */
     
     init(json: JSON){
-        
         super.init()
-        
         self.comment = json["comment"].stringValue
         self.createdDate = json["createDate"].int64Value
         self.updateDate = json["updateDate"].int64Value
         self.readStatus  = json["readStatus"].intValue
         self.taskImageUrl  = json["pictureUrl"].stringValue
-        
         
 //        var taskImageUrlString = self.taskImageUrl
 //        taskImageUrlString = taskImageUrlString?.replacingOccurrences(of: "\"", with:  " ")
@@ -97,9 +91,6 @@ class TaskComment : NSObject{
 //            //self.taskImage = nil
 //            
 //        }
-
-        
-        
     }
     
      func setAttribute(json: JSON){

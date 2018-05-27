@@ -12,80 +12,74 @@ import SwiftyJSON
 private let earnItChildUser = EarnItChildUser()
 
 class EarnItChildUser: NSObject {
-    
-    
- //child account id
-    
+    //child account id
     var childAccountId : Int = 0
     
- //child id
+    //child id
     var childUserId : Int = 0
     
- //phone no
+    //phone no
     var phoneNumber : String?
     
- //firstName
+    //firstName
     var firstName : String!
     
- //lastName
+    //lastName
     var lastName : String!
- 
- //updateDate
+    
+    //updateDate
     var updateDate : Int = 0
     
- //email
+    //email
     var email : String!
     
- //password
+    //password
     var password : String!
-  
- //childAvatar
+    
+    //childAvatar
     var childUserImageUrl : String?
     
- //earnItTaskList
+    //earnItTaskList
     var earnItTasks = [EarnItTask]()
     
- //earnItTopThreePendingApprovalTask
+    //earnItTopThreePendingApprovalTask
     var earnItTopThreePendingApprovalTask = [EarnItTask]()
     
-  //pendingApprovalTask
+    //pendingApprovalTask
     var earnItPendingApprovalTasks = [EarnItTask]()
     
- //sortedEarnitTask based on due
+    //sortedEarnitTask based on due
     var sortedEarnItTasks = [EarnItTask]()
- 
- //DayTask 
-  var dayTasks = [DayTask]()
     
-  var childImage = UIImage()
- 
-  //OverDueTaskList
-  var overDueTaskList = [EarnItTask]()
+    //DayTask
+    var dayTasks = [DayTask]()
     
- //EarnItGoal
-  var earnItGoal = EarnItChildGoal()
+    var childImage = UIImage()
     
- //createDate
-  var createDate : Int = 0
+    //OverDueTaskList
+    var overDueTaskList = [EarnItTask]()
     
-  //message
-  
-  var childMessage : String?
+    //EarnItGoal
+    var earnItGoal = EarnItChildGoal()
     
+    //createDate
+    var createDate : Int = 0
     
-  var fcmToken : String?
-
+    //message
+    
+    var childMessage : String?
+    
+    var fcmToken : String?
+    
     //Mark Initializer
     
-  /**
-  A standard initializer for an object
-  */
+    /**
+     A standard initializer for an object
+     */
     
     override init() {
         super.init()
     }
- 
- 
     
     // MARK: - Instances
     
@@ -96,20 +90,18 @@ class EarnItChildUser: NSObject {
         
         return earnItChildUser
     }
-  
     
-    
-  /** 
-   User initializer with specific attribute value
-   
-  - Parameters:
-  - firstName - child user firstName
-  - updateDate- child user updatedate
-  - childAvatar- child user avatar
-  - phonenumber- child user phone number
-  - id         - child user id
- 
-  **/
+    /**
+     User initializer with specific attribute value
+     
+     - Parameters:
+     - firstName - child user firstName
+     - updateDate- child user updatedate
+     - childAvatar- child user avatar
+     - phonenumber- child user phone number
+     - id         - child user id
+     
+     **/
     
     init(childUserId : Int, firstName: String, updateDate: Int, childUserAvatar: String, phoneNumber: String ){
         
@@ -119,18 +111,17 @@ class EarnItChildUser: NSObject {
         self.phoneNumber = phoneNumber
         self.childUserImageUrl = childUserAvatar
     }
- 
     
-    /** 
- 
-   User initializer with a json object
- 
-   -Parameter
-   - json - The child user attributes
-   */
+    
+    /**
+     
+     User initializer with a json object
+     
+     -Parameter
+     - json - The child user attributes
+     */
     
     init(json: JSON){
-        
         super.init()
         self.childUserId = json["id"].intValue
         self.firstName = json["firstName"].stringValue
@@ -139,13 +130,13 @@ class EarnItChildUser: NSObject {
         self.updateDate = json["updateDate"].intValue
     }
     
-
+    
     /**
-    User initializer with json object
- 
-   - Parameters
-   - json: The user's attributes  in a json object
-    */
+     User initializer with json object
+     
+     - Parameters
+     - json: The user's attributes  in a json object
+     */
     
     func setAttribute(json: JSON){
         
@@ -170,35 +161,33 @@ class EarnItChildUser: NSObject {
         
         var userAvatarUrlString = self.childUserImageUrl
         userAvatarUrlString = userAvatarUrlString?.replacingOccurrences(of: "\"", with:  " ")
-//        let url = URL(string: userAvatarUrlString!)
-//        var userImage = UIImage()
-//        if url != nil{
-//        
-//        let data = try? Data(contentsOf: url!)
-//        
-//             if let imageData = data {
-//        
-//                self.childImage = UIImage(data: data!)!
-//            }
-//        
-//        }else{
-//        
-//        self.childImage = EarnItImage.defaultUserImage()
-//        
-//        }
-
+        //        let url = URL(string: userAvatarUrlString!)
+        //        var userImage = UIImage()
+        //        if url != nil{
+        //
+        //        let data = try? Data(contentsOf: url!)
+        //
+        //             if let imageData = data {
+        //
+        //                self.childImage = UIImage(data: data!)!
+        //            }
+        //
+        //        }else{
+        //
+        //        self.childImage = EarnItImage.defaultUserImage()
+        //
+        //        }
+        
         
         var earnItTasks = [EarnItTask]()
-      
-//        let formatter = DateFormatter()
-//        formatter.timeZone = TimeZone.ReferenceType.local
-//        formatter.dateFormat = "h:mm a"
-//        formatter.amSymbol = "AM"
-//        formatter.pmSymbol = "PM"
+        
+        //        let formatter = DateFormatter()
+        //        formatter.timeZone = TimeZone.ReferenceType.local
+        //        formatter.dateFormat = "h:mm a"
+        //        formatter.amSymbol = "AM"
+        //        formatter.pmSymbol = "PM"
         
         for (_,json) in json["tasks"]{
-            
-            
             let earnItTask = EarnItTask()
             print("START earnItTask creation \(json["name"].stringValue)")
             print(Date().millisecondsSince1970)
@@ -223,55 +212,35 @@ class EarnItChildUser: NSObject {
             earnItTask.dueTime = dueTime
             earnItTask.createdDateTime = createdDateTime
             
-        
             earnItTasks.append(earnItTask)
-            
         }
-        
-        
-        
         self.earnItTasks = earnItTasks
         self.overDueTaskList = getOverDueTaskListForChild(earnItTasks: self.earnItTasks)
         //self.earnItTopThreeTask = Array(self.earnItTasks.prefix(3))
         var earnItTopThreePendingApprovalTask = [EarnItTask]()
         var earnItPendingApprovalTasks = [EarnItTask]()
-    
+        
         for task in self.earnItTasks {
-            
             if earnItTopThreePendingApprovalTask.count > 2{
-                
-              break
+                break
             }
             if task.status == TaskStatus.completed{
-                
                 earnItTopThreePendingApprovalTask.append(task)
-  
             }
-            
         }
-        
         for task in self.earnItTasks {
-            
-                if task.status == TaskStatus.completed{
-                
+            if task.status == TaskStatus.completed {
                 earnItPendingApprovalTasks.append(task)
-                
             }
-            
         }
-        
         self.earnItTopThreePendingApprovalTask = earnItTopThreePendingApprovalTask
         self.earnItPendingApprovalTasks = earnItPendingApprovalTasks
     }
     
-    
-    func earnGetWeekDayName(weekdayValue : Int) -> String{
-        
-        
+    func earnGetWeekDayName(weekdayValue : Int) -> String {
         switch weekdayValue {
-            
         case 1:
-           return "Sunday"
+            return "Sunday"
         case 2:
             return "Monday"
         case 3:
@@ -287,9 +256,7 @@ class EarnItChildUser: NSObject {
         default:
             return "Saturday"
         }
-        
     }
-    
 }
 
 extension Int {
@@ -322,13 +289,10 @@ extension Date {
     var millisecondsSince1970:Int64 {
         return Int64((self.timeIntervalSince1970 * 1000.0).rounded())
     }
-    
     init(milliseconds:Int64) {
         self = Date(timeIntervalSince1970: TimeInterval(milliseconds / 1000))
     }
 }
-
-
 
 extension Array where Element : Equatable {
     var unique: [Element] {
@@ -342,12 +306,10 @@ extension Array where Element : Equatable {
     }
 }
 
-
 extension NSDate {
     var millisecondsSince1970:Int64 {
         return Int64((self.timeIntervalSince1970 * 1000.0).rounded())
     }
-    
 }
 
 

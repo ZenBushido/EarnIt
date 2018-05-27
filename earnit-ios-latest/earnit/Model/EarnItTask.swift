@@ -19,9 +19,6 @@ struct TaskStatus {
     static let rejected = "Rejected"
 }
 
-
-
-
 class EarnItTask : NSObject {
     
     //taskId
@@ -78,48 +75,24 @@ class EarnItTask : NSObject {
     var repeatScheduleDic : [String: AnyObject]?
     var taskImage = UIImage()
     
-    
-    
     override init(){
-        
         super.init()
     }
-    
-    
     init(taskId: Int, taskName: String, allowance: Double, dueTime: String, isPictureRequired: Int,createdDateTimeStamp: Int64, dueDateTimeStamp: Int64,updateDateTimeStamp: Int64, status: String, taskComments: [String] ){
-      
-     super.init()
-     self.taskId = taskId
-     self.taskName = taskName
-     self.dueTime = dueTime
-     self.isPictureRequired = isPictureRequired
-     self.createdDateTimeStamp = createdDateTimeStamp
-     self.dueDateTimeStamp = dueDateTimeStamp
-     self.updateDateTimeStamp = updateDateTimeStamp
-     self.status = status
-     //self.taskComments = ["",""]
-        
+        super.init()
+        self.taskId = taskId
+        self.taskName = taskName
+        self.dueTime = dueTime
+        self.isPictureRequired = isPictureRequired
+        self.createdDateTimeStamp = createdDateTimeStamp
+        self.dueDateTimeStamp = dueDateTimeStamp
+        self.updateDateTimeStamp = updateDateTimeStamp
+        self.status = status
+        //self.taskComments = ["",""]
     }
     
     init(json: JSON){
-    
-    super.init()
-    self.taskId = json["id"].intValue
-    self.taskName = json["name"].stringValue
-    self.dueTime = json["dueDate"].stringValue
-    self.isPictureRequired = json["pictureRequired"].intValue
-    self.dueDateTimeStamp = json["dueDate"].int64Value
-    self.createdDateTimeStamp = json["createDate"].int64Value
-    self.updateDateTimeStamp = json["updateDate"].int64Value
-    self.status = json["status"].stringValue
-    self.allowance = json["allowance"].doubleValue
-    //self.taskComments = json["taskComments"].arrayObject as! [String]
-        
-    }
-    
-    
-    func setAttribute(json: JSON){
-        
+        super.init()
         self.taskId = json["id"].intValue
         self.taskName = json["name"].stringValue
         self.dueTime = json["dueDate"].stringValue
@@ -130,26 +103,43 @@ class EarnItTask : NSObject {
         self.status = json["status"].stringValue
         self.allowance = json["allowance"].doubleValue
         //self.taskComments = json["taskComments"].arrayObject as! [String]
+    }
+    
+    func setAttribute(json: JSON){
+        self.taskId = json["id"].intValue
+        self.taskName = json["name"].stringValue
+        self.dueTime = json["dueDate"].stringValue
+        self.isPictureRequired = json["pictureRequired"].intValue
+        //ggg
+//        self.dueDateTimeStamp = json["dueDate"].int64Value
+//        self.createdDateTimeStamp = json["createDate"].int64Value
+//        self.updateDateTimeStamp = json["updateDate"].int64Value
+        let formatter = DateFormatter()
+        formatter.timeZone = TimeZone.ReferenceType.local
+        formatter.dateFormat = "MMM dd, yyyy HH:mm:ss a" //"M/dd"
+        let date1 = formatter.date(from: json["dueDate"].stringValue)
+        print(date1 ?? "") //Convert String
+        self.dueDateTimeStamp = date1?.millisecondsSince1970
+        let date2 = formatter.date(from: json["createDate"].stringValue)
+        self.createdDateTimeStamp = date2?.millisecondsSince1970
+        let date3 = formatter.date(from: json["updateDate"].stringValue)
+        self.updateDateTimeStamp = date3?.millisecondsSince1970
+        
+        self.status = json["status"].stringValue
+        self.allowance = json["allowance"].doubleValue
+        //self.taskComments = json["taskComments"].arrayObject as! [String]
         self.taskDescription = json["description"].stringValue
         
-        
         for (_,json) in json["taskComments"]{
-            
-            
             let earnItTaskComment = TaskComment()
             earnItTaskComment.setAttribute(json: json)
             self.taskComments.append(earnItTaskComment)
-            
         }
-        
         if json["goal"]["id"] != nil {
-            
             let earnItGoal = EarnItChildGoal()
             earnItGoal.setAttribute(json: json["goal"])
             self.goal = earnItGoal
-            
         }
-        
         if json["repititionSchedule"] != .null {
             
             let repeatDic = json["repititionSchedule"]

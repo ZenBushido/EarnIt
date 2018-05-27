@@ -522,8 +522,6 @@ func createEarnItAppChildUser(success: @escaping([EarnItChildUser])-> (),failure
             formatter.amSymbol = "AM"
             formatter.pmSymbol = "PM"
             
-            
-     
             for (_,childUserObject) in responseJSON {
                 
                 let earnItChildUser = EarnItChildUser()

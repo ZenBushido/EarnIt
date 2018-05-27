@@ -680,20 +680,14 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
                     }
                     
     }
-    
-        func dismissScreenToLogin(){
-            
-                let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
-                let loginController = storyBoard.instantiateViewController(withIdentifier: "LoginController") as! LoginPageController
-                   self.present(loginController, animated: true, completion: nil)
-           
+
+    func dismissScreenToLogin(){
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
+        let loginController = storyBoard.instantiateViewController(withIdentifier: "LoginController") as! LoginPageController
+        self.present(loginController, animated: true, completion: nil)
     }
     
-    
-    
-    
     func setUpEditViewForChild(){
-        
         if self.isInEditingMode == true{
             
             self.welcomeLabel.text = "Edit" + " " + self.earnItChildUser.firstName

@@ -649,19 +649,15 @@ class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextF
     
     
     
-    func setUpEditViewForChild(){
-        
+    func setUpEditViewForChild(){        
         if self.isInEditingMode == true{
-            
             self.welcomeLabel.text = "Edit" + " " + self.earnItChildUser.firstName
             self.firstName.text = self.earnItChildUser.firstName
             self.email.text = self.earnItChildUser.email
             self.password.text = self.earnItChildUser.password
             self.confirmPassword.text = self.earnItChildUser.password
             
-           
-                
-          self.phone.text = self.getPhoneNumber()
+            self.phone.text = self.getPhoneNumber()
             self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUser.childUserImageUrl!)
             self.saveButton.setTitle("Update", for: .normal)
             self.childImageUrl = self.earnItChildUser.childUserImageUrl?.replacingOccurrences(of: "\"", with:  " ")

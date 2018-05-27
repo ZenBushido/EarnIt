@@ -136,15 +136,9 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
         
     }
     
-    
-    
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    
-    
-    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         
@@ -159,23 +153,15 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
             }else {
                 
                 numberOfRows = self.dayTasks[section-1].earnItTasks.count
-                
             }
-            
         }else {
-            
             print("number of rows \(numberOfRows)")
             numberOfRows = self.dayTasks[section].earnItTasks.count
-            
         }
-        
         if SectionDetailsArray[section].isCollapsed {
             return 0
-            
         }
-            
         else {
-            
             return numberOfRows
         }
     }

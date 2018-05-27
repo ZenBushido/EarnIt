@@ -16,14 +16,11 @@ class DayTask : NSObject {
     
     //date
     var date: String!
-    
-    
+
     var earnItTasks : [EarnItTask]!
     
     //duedate
-    
     var dueDate : Date!
-    
     
     /**
      User initializer with specific attribute value
