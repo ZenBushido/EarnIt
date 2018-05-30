@@ -621,6 +621,7 @@
 				4792841D1F0B32DC00EDAC6D /* Frameworks */,
 				4792841E1F0B32DC00EDAC6D /* Resources */,
 				7AABF7A0C3707D39C4795FBA /* [CP] Embed Pods Frameworks */,
+				F4D0BD5E20BF061B007648AD /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -676,6 +677,7 @@
 				ED89A57D1F96F5EE008BC2FD /* Frameworks */,
 				ED89A57F1F96F5EE008BC2FD /* Resources */,
 				03B3660ED603C1C03127DC99 /* [CP] Embed Pods Frameworks */,
+				F4D0BD5F20BF063F007648AD /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -960,6 +962,32 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-earnit/Pods-earnit-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		F4D0BD5E20BF061B007648AD /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" c3e5650f51470bf66bc04e193f3c0e0445303228 fc0ab6d627a94296e3dc2851ed0c2ab168ae7fe1699522986c889ac359c88b1d";
+		};
+		F4D0BD5F20BF063F007648AD /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" c3e5650f51470bf66bc04e193f3c0e0445303228 fc0ab6d627a94296e3dc2851ed0c2ab168ae7fe1699522986c889ac359c88b1d";
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -22,6 +22,8 @@ def earnIt_PodFiles
     pod 'Firebase/Messaging'
     pod 'ALCameraViewController', '~> 2.0.3'
     pod 'KDCircularProgress'
+    pod 'Fabric'
+    pod 'Crashlytics'
     
 end
 

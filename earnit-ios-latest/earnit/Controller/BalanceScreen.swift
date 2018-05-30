@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 import KeychainSwift
+import Crashlytics
+import Fabric
 
 class BalanceScreeen : UIViewController,UITextViewDelegate,UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource {
     
@@ -63,6 +65,7 @@ class BalanceScreeen : UIViewController,UITextViewDelegate,UIGestureRecognizerDe
         self.tvGoals.tableFooterView = UIView()
         self.tvGoals.reloadData()
         self.getGoalListForCurrentUser()
+        Crashlytics.sharedInstance().setObjectValue("For Username: \(EarnItAccount.currentUser.firstName)", forKey: "Balances")
     }
     
     //MARK: Get Goal List

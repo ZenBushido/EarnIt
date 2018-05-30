@@ -41,7 +41,6 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
     var overdueTasks = [EarnItTask]()
     var actionView = UIView()
     
-    
     //keyboardOffset
     var currentKeyboardOffset : CGFloat = 0.0
     
@@ -77,7 +76,6 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
         self.messageView.center = self.view.center
         self.messageView.messageText.delegate = self
         
-        
         self.welcomText.text = self.earnItChildUserForParent.firstName.appending("'s Tasks")
         
         self.childTableForTodayTask.register(UINib(nibName: "ChildTaskDetailApprovalCell", bundle: nil), forCellReuseIdentifier: "ChildTaskDetailApprovalCell")
@@ -92,39 +90,24 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
             formatter.timeZone = TimeZone.ReferenceType.local
             formatter.dateFormat = "M/dd"
             let currentDay = formatter.string(from: currentDate as Date)
-            
-            
             if  currentDay != daytask.dateMonthString  {
-                
                 if currentDate < daytask.dueDate {
-                    
                     tasks.remove(at: tasks.index(of: daytask)!)
-                    
                 }
-                
             }
-            
         }
-        
         var taskForDaysTask = [EarnItTask]()
         var taskForOverdueTasks = [EarnItTask]()
-        
         for task in tasks {
-            
             if task.status  == TaskStatus.completed {
-                
                 taskForDaysTask.append(task)
             }
         }
-        
         for task in earnItChildUserForParent.earnItTasks {
-            
             if task.status == TaskStatus.completed {
-                
                 taskForOverdueTasks.append(task)
             }
         }
-     
         self.dayTasks = getDayTaskListForParent(earnItTasks: taskForDaysTask)
         self.overdueTasks = getOverDueTaskListForParent(earnItTasks: taskForOverdueTasks)
         //self.sendMessageButton.setTitle("Send a message to  " + self.earnItChildUserForParent.firstName, for: .normal)
@@ -133,7 +116,6 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
         self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUserForParent.childUserImageUrl!)
         self.childTableForTodayTask.tableFooterView = UIView()
         self.taskApprovalView.removeFromSuperview()
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -141,20 +123,16 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
-        
         var numberOfRows = 1
-        
         if self.overdueTasks.count > 0{
-            
             if section == 0{
-                
                 numberOfRows = self.overdueTasks.count
-                
-            }else {
-                
+            }
+            else {
                 numberOfRows = self.dayTasks[section-1].earnItTasks.count
             }
-        }else {
+        }
+        else {
             print("number of rows \(numberOfRows)")
             numberOfRows = self.dayTasks[section].earnItTasks.count
         }
@@ -166,23 +144,17 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
-    
     //override
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
-        
         let taskCell = self.childTableForTodayTask.dequeueReusableCell(withIdentifier: "ChildTaskDetailApprovalCell", for: indexPath as IndexPath) as! ChildTaskDetailApprovalCell
-        
         if self.overdueTasks.count > 0{
-            
             if (indexPath.section == 0 ){
-                
                 taskCell.taskName.text = self.overdueTasks[indexPath.row].taskName
                 taskCell.taskDescription.text = self.self.overdueTasks[indexPath.row].dateMonthString + " @ " + self.overdueTasks[indexPath.row].dueTime
                 
                 taskCell.statusImage.backgroundColor = getColorStatusForTaskForParentDashBoard(earnItTask: self.overdueTasks[indexPath.row])
                 
                 if (self.overdueTasks[indexPath.row].status == TaskStatus.completed){
-                    
                     taskCell.approveButton.isHidden = false
                     taskCell.approveButton.isUserInteractionEnabled = true
                     taskCell.approveButton.setImage(EarnItImage.setEarnItAppShowTaskImage(), for: .normal)
@@ -193,12 +165,13 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
                         taskApprovalScreen.earnItChildUserForParent = self.earnItChildUserForParent
                         self.present(taskApprovalScreen, animated:true, completion:nil)
                     }
-                }else {                    
+                }
+                else {
                     taskCell.approveButton.isHidden = true
                     taskCell.approveButton.isUserInteractionEnabled = false
                 }
-            }else {
-                
+            }
+            else {
                 taskCell.taskName.text = self.dayTasks[indexPath.section - 1].earnItTasks[indexPath.row].taskName
                 taskCell.taskDescription.text = self.dayTasks[indexPath.section - 1].earnItTasks[indexPath.row].dateMonthString + " @ " + self.dayTasks[indexPath.section - 1].earnItTasks[indexPath.row].dueTime
                 taskCell.statusImage.backgroundColor = getColorStatusForTaskForParentDashBoard(earnItTask: self.dayTasks[indexPath.section - 1].earnItTasks[indexPath.row])
@@ -216,20 +189,15 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
                         taskApprovalScreen.completedTask =  self.dayTasks[indexPath.section - 1].earnItTasks[indexPath.row]
                         taskApprovalScreen.earnItChildUserForParent = self.earnItChildUserForParent
                         self.present(taskApprovalScreen, animated:true, completion:nil)
-                        
                     }
-                    
-                }else {
-                    
+                }
+                else {
                     taskCell.approveButton.isHidden = true
                     taskCell.approveButton.isUserInteractionEnabled = false
-                    
                 }
-                
             }
-            
-        }else {
-            
+        }
+        else {
             taskCell.taskName.text = self.dayTasks[indexPath.section].earnItTasks[indexPath.row].taskName
             taskCell.taskDescription.text = self.dayTasks[indexPath.section].earnItTasks[indexPath.row].dateMonthString + " @ " + self.dayTasks[indexPath.section].earnItTasks[indexPath.row].dueTime
             
@@ -240,74 +208,49 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
                 taskCell.approveButton.isHidden = false
                 taskCell.approveButton.isUserInteractionEnabled = true
                 taskCell.approveButton.setImage(EarnItImage.setEarnItAppShowTaskImage(), for: .normal)
-                
                 taskCell.askToApproveTheCompletedTask = {
-                    
                     let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                     let taskApprovalScreen  = storyBoard.instantiateViewController(withIdentifier: "TaskApprovalScreen") as! TaskApprovalScreen
                     taskApprovalScreen.completedTask =  self.dayTasks[indexPath.section].earnItTasks[indexPath.row]
                     taskApprovalScreen.earnItChildUserForParent = self.earnItChildUserForParent
                     self.present(taskApprovalScreen, animated:true, completion:nil)
-                    
                 }
-                
-            }else {
-                
+            }
+            else {
                 taskCell.approveButton.isHidden = true
                 taskCell.approveButton.isUserInteractionEnabled = false
-                
             }
-            
         }
-        
         return taskCell
     }
     
-    
-    
     //override
     func numberOfSections(in tableView: UITableView) -> Int {
-        
         var numberOfSectiontoReturn  = 0
-        
         if showAll == false{
-            
             if self.overdueTasks.count > 0 || self.dayTasks.count > 0 {
-                
                 numberOfSectiontoReturn = 1
-                
             }
-            
-        }else {
-            
+        }
+        else {
             var totalCompletedTaskCount = 0
-            
             for task in self.earnItChildUserForParent.earnItTasks {
-                
                 if task.status == TaskStatus.completed {
-                    
                     totalCompletedTaskCount = totalCompletedTaskCount + 1
                 }
             }
-            
-            
             if (self.overdueTasks.count + self.dayTasks.count  ==
                 totalCompletedTaskCount) && showAllClicked {
                 showAllClicked = false
                 print("no more task available")
                 self.view.makeToast("No more task available")
             }
-            
             if self.overdueTasks.count > 0 {
-                
                 numberOfSectiontoReturn =  self.dayTasks.count + 1
-                
-            }else {
-                
+            }
+            else {
                 numberOfSectiontoReturn =  self.dayTasks.count
             }
-            
-            
         }
         for i in 0...numberOfSectiontoReturn {
             var sectionDetail = TappedSectionDetails()
@@ -316,13 +259,10 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
             
             SectionDetailsArray.append(sectionDetail)
         }
-
-        
         return numberOfSectiontoReturn
     }
     
     func taskDidTap(recognizer: UISwipeGestureRecognizer) {
-        
         if recognizer.state == UIGestureRecognizerState.ended {
             let tapLocation = recognizer.location(in: self.childTableForTodayTask)
             if let tapIndexPath = self.childTableForTodayTask.indexPathForRow(at: tapLocation) {
@@ -335,13 +275,10 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
                     taskViewController.isInEditingMode = true
                     
                     if self.overdueTasks.count > 0{
-                        
                         if (tapIndexPath.section == 0 ){
-                            
                             taskViewController.earnItTaskToEdit = self.overdueTasks[tapIndexPath.row]
-                            
-                        }else {
-                            
+                        }
+                        else {
                             taskViewController.earnItTaskToEdit  = self.dayTasks[tapIndexPath.section - 1].earnItTasks[tapIndexPath.row]
                         }
                     }
@@ -376,97 +313,70 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
     
     //ovrride
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
         let view  = Bundle.main.loadNibNamed("DayHeader", owner: nil, options: nil)?.first as! DayHeader
         view.sectionNo = section
 
         if self.overdueTasks.count > 0{
-            
             if (section == 0){
-                
                 view.dayDetail.text = "Past Due"
-                
-            }else if isCurrentDate(earnItTaskDate: self.dayTasks[section - 1].date) {
-                
+            }
+            else if isCurrentDate(earnItTaskDate: self.dayTasks[section - 1].date) {
                 view.dayDetail.text =  "Today" + " " + self.dayTasks[section - 1].date
-                
-            }else{
-                
+            }
+            else {
                 view.dayDetail.text =  self.dayTasks[section - 1].dayName + " " + self.dayTasks[section - 1].date
             }
-        }else {
-            
+        }
+        else {
             if isCurrentDate(earnItTaskDate: self.dayTasks[section].date) {
-                
                 view.dayDetail.text =  "Today" + " " + self.dayTasks[section].date
-                
-            }else{
-                
+            }
+            else{
                 view.dayDetail.text =  self.dayTasks[section].dayName + " " + self.dayTasks[section].date
             }
-            
         }
-        
         if !SectionDetailsArray[section].isCollapsed {
             view.arrowLabel.transform = CGAffineTransform(rotationAngle: CGFloat.pi/2)
         }
-        
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(sectionDidTap))
         view.addGestureRecognizer(tapRecognizer)
         return view
-        
     }
     
     func sectionDidTap(recognizer: UISwipeGestureRecognizer) {
-        
         guard let Header = recognizer.view as? DayHeader else {
             return
         }
-        
-        
         if SectionDetailsArray[Header.sectionNo].isCollapsed {
             SectionDetailsArray[Header.sectionNo].isCollapsed = false
         }
         else {
             SectionDetailsArray[Header.sectionNo].isCollapsed = true
         }
-        
         // self.childTableForTodayTask.reloadData()
         self.childTableForTodayTask.reloadSections((NSIndexSet(index: Header.sectionNo) as IndexSet), with: .automatic)
     }
-
-    
     
     //override
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 40
     }
     
-    
-    
     //override
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
-        
         return 80
-        
     }
     
-    
     @IBAction func showAddTaskClicked(_ sender: Any) {
-        
         self.view.endEditing(true)
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
         let taskViewController = storyBoard.instantiateViewController(withIdentifier: "TaskView") as! TaskViewController
         taskViewController.earnItChildUserId = self.earnItChildUserForParent.childUserId
         taskViewController.earnItChildUsers = self.earnItChildUsers
         self.present(taskViewController, animated:false, completion:nil)
-        
     }
     
-    
     @IBAction func showAllButtonClicked(_ sender: Any) {
-        
         showAll = true
         showAllClicked = true
         var tasks =  getTodayandFutureTask(earnItTasks: earnItChildUserForParent.earnItTasks)
@@ -474,184 +384,118 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
         var taskForOverdueTasks = [EarnItTask]()
         
         for task in tasks {
-            
             if task.status  == TaskStatus.completed {
-                
                 taskForDaysTask.append(task)
             }
         }
         
         for task in earnItChildUserForParent.earnItTasks {
-            
             if task.status == TaskStatus.completed {
-                
                 taskForOverdueTasks.append(task)
             }
         }
-        
         self.dayTasks = getDayTaskListForParent(earnItTasks: taskForDaysTask)
         self.overdueTasks = getOverDueTaskListForParent(earnItTasks: taskForOverdueTasks)
         self.childTableForTodayTask.reloadData()
-        
     }
     
-    
     func showLoadingView(){
-        
         self.view.alpha = 0.7
         self.view.isUserInteractionEnabled = false
         self.activityIndicator.startAnimating()
         self.activityIndicator.isHidden = false
-        
     }
     
     func hideLoadingView(){
-        
         self.view.alpha = 1
         self.view.isUserInteractionEnabled = true
         self.activityIndicator.stopAnimating()
     }
     
-    
-    
     func getGoalListForCurrentUser(){
-        
         getGoalsForChild(childId : self.earnItChildUserForParent.childUserId,success: {
-            
             (earnItGoalList) ->() in
-            
             for earnItGoal in earnItGoalList{
-                
                 self.earnItChildUserForParent.earnItGoal = earnItGoal
                 //self.goalName.text = earnItGoal.name
                 //self.earnedForAGoal.text = "$\(earnItGoal.tally!) of $\(earnItGoal.ammount!) earned  \(earnItGoal.tallyPercent!)%"
-                
             }
-            
-            
         })
-            
         { (error) -> () in
-            
             self.view.makeToast("Get goal list failed ")
 //            let alert = showAlertWithOption(title: "Get goal list failed ", message: "")
 //            
 //            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
 //            self.present(alert, animated: true, completion: nil)
-//            
-            
         }
-        
-        
     }
     
-    
-    
     func addTapGestureForTaskRow(){
-        
-        
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(taskDidTap))
         tapRecognizer.delegate = self
         self.childTableForTodayTask.addGestureRecognizer(tapRecognizer)
-        
     }
-    
-    
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         self.showLoadingView()
         _ = Timer.scheduledTimer(timeInterval: 300.0, target: self, selector: #selector(self.fetchParentUserDetailFromBackground), userInfo: nil, repeats: true)
-        
         _ = Timer.scheduledTimer(timeInterval: 300.0, target: self, selector: #selector(self.fetchChildUserDetailFromBackground), userInfo: nil, repeats: true)
         
-        
         createEarnItAppChildUser( success: {
-            
             (earnItChildUsers) -> () in
-            
             self.earnItChildUsers = earnItChildUsers
-            
             for earnItChildUser in self.earnItChildUsers {
-                
-                if earnItChildUser.childUserId == self.earnItChildUserForParent.childUserId{
-                    
+                if earnItChildUser.childUserId == self.earnItChildUserForParent.childUserId {
                     self.earnItChildUserForParent.earnItTasks = earnItChildUser.earnItTasks
-                    
                     self.reloadChildUserTable()
                     self.getGoalListForCurrentUser()
                     self.addTapGestureForTaskRow()
                     self.hideLoadingView()
-                    
                 }
-                
             }
             
         }) {  (error) -> () in
-            
             print("error")
             self.hideLoadingView()
         }
-        
     }
     
-    
-    
     @IBAction func openRight(_ sender: UIButton) {
-        
         print("Should Open Slide Menu in checkin")
         self.openLeft()
     }
     
-    
-    
-    
     func  enableBackgroundView(){
-        
         //self.sendMessageButton.isUserInteractionEnabled = true
         self.showAddTask.isUserInteractionEnabled = true
         self.showSideMenuButton.isUserInteractionEnabled = true
         self.childTableForTodayTask.isUserInteractionEnabled = true
     }
     
-    func  disableBackgroundView(){
-        
+    func  disableBackgroundView() {
         //self.sendMessageButton.isUserInteractionEnabled = false
         self.showAddTask.isUserInteractionEnabled = false
         self.showSideMenuButton.isUserInteractionEnabled = false
         self.childTableForTodayTask.isUserInteractionEnabled = false
-        
     }
- 
-    
     
     func reloadChildUserTable(){
-        
-        
         var tasks =  getTodayandFutureTask(earnItTasks: self.earnItChildUserForParent.earnItTasks)
 
         var taskForDaysTask = [EarnItTask]()
         var taskForOverdueTasks = [EarnItTask]()
-        
         for task in tasks {
-            
             if task.status  == TaskStatus.completed {
-                
                 taskForDaysTask.append(task)
             }
         }
-        
         for task in earnItChildUserForParent.earnItTasks {
-            
             if task.status == TaskStatus.completed {
-                
                 taskForOverdueTasks.append(task)
             }
         }
-        
         if (taskForOverdueTasks.count == 0 && taskForOverdueTasks.count == 0){
-            
             let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
             let parentDashBoardCheckin = storyBoard.instantiateViewController(withIdentifier: "parentDashBoard") as! ParentDashBoard
             parentDashBoardCheckin.prepareData(earnItChildUserForParent: self.earnItChildUserForParent, earnItChildUsers: self.earnItChildUsers)
@@ -666,9 +510,7 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
         self.dayTasks = getDayTaskListForParent(earnItTasks: taskForDaysTask)
         self.overdueTasks = getOverDueTaskListForParent(earnItTasks: taskForOverdueTasks)
         self.childTableForTodayTask.reloadData()
-        
     }
-    
     
     // MARK: - NonSpecific User Functions
     
@@ -681,12 +523,9 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
      */
     
     private func requestObserver(){
-        
         NotificationCenter.default.addObserver(self, selector: #selector(ParentDashBoard.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ParentDashBoard.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardDidHide  , object: nil)
-        
     }
-    
     
     /**
      Responds to keyboard showing and adjusts the scrollview.
@@ -696,80 +535,42 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
      */
     
     func keyboardWillShow(_ notification:NSNotification){
-        
         let info = notification.userInfo!
         let keyboardHeight: CGFloat = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue.size.height
-        
-        
         if UIDevice().userInterfaceIdiom == .phone {
-            
             switch UIScreen.main.nativeBounds.height {
-                
             case 2208:
-                
                 let keyboardYValue = self.view.frame.height - keyboardHeight
-                
-                
                 if self.messageView.messageText.isFirstResponder {
-                    
                     let commentYValue = self.messageView.messageText.frame.size.height + self.taskApprovalView.comments.frame.origin.y
-                    
                     if self.currentKeyboardOffset == 0.0 {
-                        
                         if (commentYValue ) > keyboardYValue - 20.0 {
-                            
                             self.currentKeyboardOffset = (keyboardYValue + 50.0) - commentYValue + 100
                             UIView.animate(withDuration: 0.5, animations: { () -> Void in
                                 self.view.frame.origin.y -= self.currentKeyboardOffset
-                                
                             }, completion: { (completed) -> Void in
-                                
-                                
                             })
-                            
                         }
-                        
                     }
-                    
-                    
                 }
                 
             default:
-                
-                
                 let keyboardYValue = self.view.frame.height - keyboardHeight
-                
-                
                 if self.messageView.messageText.isFirstResponder {
-                    
                     let commentYValue = self.messageView.messageText.frame.size.height + self.taskApprovalView.comments.frame.origin.y
-                    
                     if self.currentKeyboardOffset == 0.0 {
-                        
                         if (commentYValue ) > keyboardYValue + 10.0 {
-                            
                             self.currentKeyboardOffset = (keyboardYValue + 50.0) - commentYValue + 160
                             UIView.animate(withDuration: 0.5, animations: { () -> Void in
                                 self.view.frame.origin.y -= self.currentKeyboardOffset
-                                
                             }, completion: { (completed) -> Void in
-                                
-                                
                             })
-                            
                         }
-                        
                     }
-                    
-                    
                 }
-                
             }
-            
         }
-        
     }
-    
     
     /**
      Responds to keyboard hiding and adjusts the scrollview.
@@ -779,21 +580,13 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
      */
     
     func keyboardWillHide(_ notification:NSNotification){
-        
-        
         let keyboardOffset : CGFloat = rePostionView(currentOffset: self.currentKeyboardOffset)
         self.view.frame.origin.y = keyboardOffset
         self.currentKeyboardOffset = keyboardOffset
-        
     }
     
-    
-    
-    
     func fetchParentUserDetailFromBackground(){
-        
         DispatchQueue.global().async {
-            
             let keychain = KeychainSwift()
             //let _ : Int = Int(keychain.get("userId")!)!
             guard  let _ = keychain.get("email") else  {
@@ -802,109 +595,68 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
             }
             let email : String = (keychain.get("email")!)
             let password : String = (keychain.get("password")!)
-            
             checkUserAuthentication(email: email, password: password, success: {
-                
                 (responseJSON) ->() in
-                
                 if (responseJSON["userType"].stringValue == "CHILD"){
-                    
                     EarnItChildUser.currentUser.setAttribute(json: responseJSON)
                     //success(true)
-                    
-                }else {
-                    
+                }
+                else {
                     let keychain = KeychainSwift()
                     if responseJSON["token"].stringValue != keychain.get("token") || responseJSON["token"] == nil{
-                        
                     }
                     EarnItAccount.currentUser.setAttribute(json: responseJSON)
                     keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
                     // success(true)
                 }
-                
             }) { (error) -> () in
-         
-                
                 self.dismissScreenToLogin()
 //                let alert = showAlertWithOption(title: "", message: "Login failed")
 //                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: self.dismissScreenToLogin))
 //                self.present(alert, animated: true, completion: nil)
 //                
             }
-            
             DispatchQueue.main.async {
-                
                 print("done calling background fetch....")
-                
             }
-            
         }
     }
     
-    
     func dismissScreenToLogin(){
-        
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
         let loginController = storyBoard.instantiateViewController(withIdentifier: "LoginController") as! LoginPageController
         self.present(loginController, animated: true, completion: nil)
-        
-        
     }
     
-    
     func fetchChildUserDetailFromBackground(){
-        
         DispatchQueue.global().async {
-            
             createEarnItAppChildUser( success: {
-                
                 (earnItChildUsers) -> () in
-                
                 self.earnItChildUsers = earnItChildUsers
-                
-                
             }) {  (error) -> () in
-                
                 print("error")
-                
             }
             DispatchQueue.main.async {
-                
                 print("done background processing for checking screen")
-                
                 if self.earnItChildUsers.count > 0 {
-                    
-                    
                     for earnItChildUser in self.earnItChildUsers {
-                        
                         if earnItChildUser.childUserId == self.earnItChildUserForParent.childUserId{
-                            
                             self.earnItChildUserForParent.earnItTasks = earnItChildUser.earnItTasks
-                            
                             self.reloadChildUserTable()
                             self.getGoalListForCurrentUser()
                             self.addTapGestureForTaskRow()
-                            
                         }
-                        
                     }
-                    
                 }
-       
             }
         }
-        
     }
-    
     
     func messageContainerDidTap(_ sender: UITapGestureRecognizer) {
         self.view.endEditing(true)
     }
     
-    
     @IBAction func showMessageView(_ sender: Any) {
-        
         let messageContainerView = UIView()
         messageContainerView.frame = CGRect(0 , 0, self.view.frame.width, self.view.frame.height)
         messageContainerView.backgroundColor = UIColor.clear
@@ -917,15 +669,11 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
         messageContainerView.addGestureRecognizer(tap)
         
         messageView.dissmissMe = {
-            
             self.messageView.removeFromSuperview()
             messageContainerView.removeFromSuperview()
             //self.enableBackgroundView()
-            
         }
-        
         messageView.callControllerForSendMessage = {
-            
             self.showLoadingView()
             self.messageView.activityIndicator.startAnimating()
             if self.messageView.messageText.text.characters.count == 0 || self.messageView.messageText.text.isEmptyField == true{
@@ -934,31 +682,21 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
                 self.view.makeToast("Please enter a message")
 //                let alert = showAlert(title: "", message: "Please enter a message")
 //                self.present(alert, animated: true, completion: nil)
-                
-            }else {
-                
-                
+            }
+            else {
                 callUpdateApiForChild(firstName: self.earnItChildUserForParent.firstName,childEmail: self.earnItChildUserForParent.email,childPassword: self.earnItChildUserForParent.password,childAvatar: self.earnItChildUserForParent.childUserImageUrl!,createDate: self.earnItChildUserForParent.createDate,childUserId: self.earnItChildUserForParent.childUserId, childuserAccountId: self.earnItChildUserForParent.childAccountId,phoneNumber: self.earnItChildUserForParent.phoneNumber,fcmKey : self.earnItChildUserForParent.fcmToken, message: self.messageView.messageText.text, success: {
                     
                     (childUdateInfo) ->() in
-                    
-                    
-                    
                     createEarnItAppChildUser( success: {
-                        
                         (earnItChildUsers) -> () in
-                        
                         EarnItAccount.currentUser.earnItChildUsers = earnItChildUsers
                         self.hideLoadingView()
                         self.messageView.activityIndicator.stopAnimating()
                         self.messageView.removeFromSuperview()
                         messageContainerView.removeFromSuperview()
                         self.view.makeToast("Message sent")
-                        
                     }) {  (error) -> () in
-                        
                         print("error")
-                        
                     }
                     
                 }) { (error) -> () in
@@ -968,11 +706,8 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
 //                    self.present(alert, animated: true, completion: nil)
 //                    print(" Set status completed failed")
                 }
-                
             }
-            
         }
-        
         var dView:[String:UIView] = [:]
         dView["MessageView"] = messageView
         
@@ -984,36 +719,27 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
         
         constY = NSLayoutConstraint(item: messageView, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0)
         self.view.addConstraint(constY!)
-        
-        
         constX = NSLayoutConstraint(item: messageView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0)
         self.view.addConstraint(constX!)
         
         UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 0.3, initialSpringVelocity: 0.50, options: UIViewAnimationOptions.layoutSubviews, animations: { () -> Void in
             self.messageView.alpha = 1
-            
-            
             self.view.layoutIfNeeded()
         }) { (value:Bool) -> Void in
             
         }
-        
     }
+    
     @IBAction func viewDidTap(_ sender: Any) {
-        
         self.view.endEditing(true)
     }
     
     @IBAction func userImageViewGotTapped(_ sender: UITapGestureRecognizer) {
-    
-        
         let optionView  = (Bundle.main.loadNibNamed("OptionView", owner: self, options: nil)?[0] as? OptionView)!
         optionView.center = self.view.center
         optionView.userImageView.image = self.userImageView.image
         optionView.frame.origin.y = self.userImageView.frame.origin.y
         optionView.frame.origin.x = self.view.frame.origin.x + 39
-        
-        
         
 //        optionView.addTaskButton.setImage(EarnItImage.setEarnItAddIcon(), for: .normal)
 //        optionView.showAllTaskButton.setImage(EarnItImage.setEarnItPageIcon(), for: .normal)
@@ -1065,14 +791,11 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
         }
         
         optionView.doActionForFifthOption = {
-            
             self.removeActionView()
-            print("self.selectedChildUser");
-            
-            print(self.earnItChildUserForParent);
+            print("self.selectedChildUser")
+            print(self.earnItChildUserForParent)
             getGoalsForChild(childId : self.earnItChildUserForParent.childUserId,success: {
                 (earnItGoalList) ->() in
-                
                 //print("GOAL", earnItGoalList.count);
                 // print(earnItGoalList);
                 
@@ -1080,10 +803,9 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
                 let addGoalVC = storyBoard.instantiateViewController(withIdentifier: "VCAddDeleteGoal") as! VCAddDeleteGoal
 
                 if(self.earnItChildUserForParent.earnItGoal.name == "" || self.earnItChildUserForParent.earnItGoal.name == nil){
-                    
                     addGoalVC.IS_ADD=true
-                }else {
-                    
+                }
+                else {
                     addGoalVC.IS_ADD=false
                 }
                 addGoalVC.IS_ADD = false
@@ -1092,9 +814,7 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
                 self.present(addGoalVC, animated:true, completion:nil)
             })
             { (error) -> () in
-                
                 let alert = showAlertWithOption(title: "Opps, Please try it again later.", message: "")
-                
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             }
@@ -1130,8 +850,7 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
             self.messageView.callControllerForSendMessage = {
                 self.showLoadingView()
                 self.messageView.activityIndicator.startAnimating()
-                if self.messageView.messageText.text.characters.count == 0 || self.messageView.messageText.text.isEmptyField == true{
-                    
+                if self.messageView.messageText.text.characters.count == 0 || self.messageView.messageText.text.isEmptyField == true {
                     self.view.endEditing(true)
                     self.view.makeToast("Please enter a message")
                     self.hideLoadingView()
@@ -1141,13 +860,9 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
                 }
                 else {
                     callUpdateApiForChild(firstName: self.earnItChildUserForParent.firstName,childEmail: self.earnItChildUserForParent.email,childPassword: self.earnItChildUserForParent.password,childAvatar: self.earnItChildUserForParent.childUserImageUrl!,createDate: self.earnItChildUserForParent.createDate,childUserId: self.earnItChildUserForParent.childUserId, childuserAccountId: self.earnItChildUserForParent.childAccountId,phoneNumber: self.earnItChildUserForParent.phoneNumber,fcmKey : self.earnItChildUserForParent.fcmToken, message: self.messageView.messageText.text, success: {
-                        
                         (childUdateInfo) ->() in
-                        
                         createEarnItAppChildUser( success: {
-                            
                             (earnItChildUsers) -> () in
-                            
                             EarnItAccount.currentUser.earnItChildUsers = earnItChildUsers
                             self.hideLoadingView()
                             self.messageView.activityIndicator.stopAnimating()
@@ -1221,9 +936,7 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
         let balanceScreen = storyBoard.instantiateViewController(withIdentifier: "BalanceScreen") as! BalanceScreeen
         balanceScreen.earnItChildUsers = self.earnItChildUsers
         balanceScreen.earnItChildUser = self.earnItChildUserForParent
-        
         if self.earnItChildUserForParent.earnItGoal.cash! + self.earnItChildUserForParent.earnItGoal.tally! + self.earnItChildUserForParent.earnItGoal.ammount! == 0 {
-            
             self.view.makeToast("No balance to display!!")
         }
         else {

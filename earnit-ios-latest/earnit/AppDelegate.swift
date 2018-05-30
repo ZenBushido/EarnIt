@@ -15,7 +15,8 @@ import Firebase
 import FirebaseMessaging
 import UserNotifications
 import KeychainSwift
-
+import Crashlytics
+import Fabric
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate , SlideMenuControllerDelegate{
@@ -26,6 +27,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate , SlideMenuControllerDeleg
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         // Override point for customization after application launch.
+        //must load our payment observer before Fabric, to ensure Fabric doesn't steal our callbacks
+        Fabric.with([Crashlytics.self])
         UIApplication.shared.statusBarStyle = .lightContent
         self.configureAWSForImageUpload()
         

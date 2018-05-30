@@ -5,6 +5,9 @@ PODS:
   - AWSS3 (2.4.16):
     - AWSCore (= 2.4.16)
   - CircleMenu (2.0.5)
+  - Crashlytics (3.10.1):
+    - Fabric (~> 1.7.5)
+  - Fabric (1.7.6)
   - Firebase/Core (4.11.0):
     - FirebaseAnalytics (= 4.1.0)
     - FirebaseCore (= 4.0.18)
@@ -55,6 +58,8 @@ DEPENDENCIES:
   - AWSCore (~> 2.4.15)
   - AWSS3
   - CircleMenu (~> 2.0.1)
+  - Crashlytics
+  - Fabric
   - Firebase/Core
   - Firebase/Messaging
   - FontAwesome.swift (< 1.2.0)
@@ -74,6 +79,8 @@ SPEC REPOS:
     - AWSCore
     - AWSS3
     - CircleMenu
+    - Crashlytics
+    - Fabric
     - Firebase
     - FirebaseAnalytics
     - FirebaseCore
@@ -98,6 +105,8 @@ SPEC CHECKSUMS:
   AWSCore: 7c3c129991e6387bcbad7132bc3661e7135754db
   AWSS3: fef6aa8f8f625df8f67f1b6574fe761f3a4ddc99
   CircleMenu: 7cef16b4401de5b545e5f06d720cb202ec64800d
+  Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
+  Fabric: f8d42c893bb187326a7968b62abe55c36a987a46
   Firebase: cc13dfab1038c8b45d7903e01fc690451d6d0b24
   FirebaseAnalytics: 3dfae28d4a5e06f86c4fae830efc2ad3fadb19bc
   FirebaseCore: b981f47e5254cbcfdeb483355300d743f6fcab2c
@@ -116,6 +125,6 @@ SPEC CHECKSUMS:
   SnapKit: 1ca44df72cfa543218d177cb8aab029d10d86ea7
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: 9915175a987b7254291b979b4fdc74ddb27a4a8b
+PODFILE CHECKSUM: 03dd2151ded2db849413b7d5b3a53711c9478657
 
 COCOAPODS: 1.5.0
