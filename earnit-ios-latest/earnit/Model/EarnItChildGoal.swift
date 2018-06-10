@@ -63,7 +63,6 @@ class EarnItChildGoal : NSObject {
         self.arrAdjustments = json["adjustments"].arrayObject! as [AnyObject] //arrayObject as! [Dictionary<String, String>]
     }
     
-    
     func setAttribute(json: JSON){
         self.id = json["id"].intValue
         self.createdDate = json["createdDate"].stringValue

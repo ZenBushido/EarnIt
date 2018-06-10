@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "earnit/Controller/ParentProfilePage.swift"
-            timestampString = "547874054.455811"
+            timestampString = "549477210.0154409"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "977"
@@ -26,7 +26,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "earnit/Controller/ParentProfilePage.swift"
-            timestampString = "547874054.456478"
+            timestampString = "549477210.016096"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "938"
@@ -42,7 +42,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "earnit/Controller/ParentProfilePage.swift"
-            timestampString = "547874054.456996"
+            timestampString = "549477210.016534"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "971"
@@ -58,13 +58,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "earnit/Controller/ParentDashboard.swift"
-            timestampString = "549026784.666419"
+            timestampString = "549474593.694124"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "209"
             endingLineNumber = "209"
-            landmarkName = "configureTableCell(taskCell:type:indexPath:)"
-            landmarkType = "7">
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -74,13 +74,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "earnit/Controller/ParentDashboard.swift"
-            timestampString = "549026784.666999"
+            timestampString = "549474593.694379"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "127"
             endingLineNumber = "127"
-            landmarkName = "loadRefreshedTasks()"
-            landmarkType = "7">
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -138,7 +138,7 @@
                   moduleName = "earnit-Dev"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/gaurav/Documents/my_projects_own/Earnit_Apps_Main/earnit-ios-latest/earnit/Controller/TaskViewController.swift"
-                  timestampString = "549035253.562211"
+                  timestampString = "550281032.2730089"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "852"
@@ -153,7 +153,7 @@
                   moduleName = "earnit-Dev"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/gaurav/Documents/my_projects_own/Earnit_Apps_Main/earnit-ios-latest/earnit/Controller/TaskViewController.swift"
-                  timestampString = "549035253.5645241"
+                  timestampString = "550281032.276837"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "852"
@@ -170,13 +170,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "earnit/Controller/ParentDashboard.swift"
-            timestampString = "549026784.6674761"
+            timestampString = "549474593.694567"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "118"
             endingLineNumber = "118"
-            landmarkName = "loadRefreshedTasks()"
-            landmarkType = "7">
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

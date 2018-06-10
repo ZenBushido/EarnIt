@@ -24,6 +24,7 @@ def earnIt_PodFiles
     pod 'KDCircularProgress'
     pod 'Fabric'
     pod 'Crashlytics'
+    #pod 'RNCryptor', '~> 5.0'
     
 end
 

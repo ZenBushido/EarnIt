@@ -1,4 +1,4 @@
-//
+
 //  LoginPageController.swift
 //  earnit
 //
@@ -75,6 +75,9 @@ class LoginPageController : UIViewController , UITextFieldDelegate , UIGestureRe
         self.signUpButton.alpha = 1
         
         //self.getAppsUsedMemory()
+//        emailTextField.text = "Tracyliv@gmail.com" // "bbb@bbb.com" //"tracyy@tracy.com"//"fessn14@gmail.com"
+//        passwordTextField.text = "test123" // "qqq123" //"test@123"//"dingo1987"
+        
     }
 
     //MARK: Get Apps Usage
