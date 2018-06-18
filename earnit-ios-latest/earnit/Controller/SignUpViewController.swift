@@ -128,7 +128,8 @@ class SignUpViewController : UIViewController {
                     let keychain = KeychainSwift()
                     
                     keychain.set(responseJSON["email"].stringValue, forKey: "email")
-                    keychain.set(responseJSON["password"].stringValue, forKey: "password")
+//                    keychain.set(responseJSON["password"].stringValue, forKey: "password")
+                    keychain.set(self.password.text!, forKey: "password")
                     keychain.set(true, forKey: "isActiveUser")
                     keychain.set(false, forKey: "isProfileUpdated")
 

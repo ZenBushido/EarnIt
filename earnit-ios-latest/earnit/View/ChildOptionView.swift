@@ -16,33 +16,31 @@ class ChildOptionView : UIView {
     @IBOutlet var userImageView: UIImageView!
     @IBOutlet var secondOption: UIButton!
     @IBOutlet var thirdOption: UIButton!
+    @IBOutlet var fourthOption: UIButton!
 
     
     var doActionForFirstOption: (() -> Void)?
     var doActionForSecondOption: (() -> Void)?
     var doActionForThirdOption: (() -> Void)?
-    
+    var doActionForFourthOption: (() -> Void)?
+
     class func instanceFromNib() -> UIView {
-        
         return UINib(nibName: "ChildOptionView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! UIView
     }
     
-    
     @IBAction func firstOptionClicked(_ sender: Any) {
-        
         self.doActionForFirstOption!()
     }
     
     @IBAction func secondOptionClicked(_ sender: Any) {
-        
         self.doActionForSecondOption!()
     }
     
     @IBAction func thirdOptionClicked(_ sender: Any) {
-        
         self.doActionForThirdOption!()
-        
     }
     
-    
+    @IBAction func fourthOptionClicked(_ sender: Any) {
+        self.doActionForFourthOption!()
+    }
 }

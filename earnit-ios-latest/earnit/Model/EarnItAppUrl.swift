@@ -31,7 +31,7 @@ let EarnItApp_LocalHost_BASE_URL = "http://localhost:9191"
 let EarnItApp_BASE_URL = "http://159.65.68.220:8080/earnit-api" //"http://35.162.48.144:8080/earnit-api"
 let EarnItApp_AWS_BUCKET_NAME = "earnitapp-dev"
 //let EarnItApp_Image_BASE_URL_PREFIX = "https://s3-us-west-2.amazonaws.com/earnitapp-dev/new/"
-let EarnItApp_Image_BASE_URL_PREFIX = "https://s3-us-west-2.amazonaws.com/earnitapp-dev/new"//"https://s3-us-west-2.amazonaws.com/earnitapp"
+let EarnItApp_Image_BASE_URL_PREFIX = "" //"https://s3-us-west-2.amazonaws.com/earnitapp-dev/new"//"https://s3-us-west-2.amazonaws.com/earnitapp"
     
 #else
     

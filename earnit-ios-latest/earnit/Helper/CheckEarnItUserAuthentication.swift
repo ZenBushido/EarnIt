@@ -19,15 +19,20 @@ import KeychainSwift
 //}
 
  func checkUserAuthentication(email: String!, password: String!, success: @escaping(JSON) -> (), failure: @escaping(NSError) -> ()){
-    
     let loginString = String(format:"%@:%@", email, password)
-    let loginData = loginString.data(using: String.Encoding.utf8)!
-    let base64LoginString = loginData.base64EncodedString()
-    print(base64LoginString)
+    let base64LoginString = loginString.base64Encoded()
+    
+    /*let loginData = loginString.data(using: String.Encoding.utf8)!
+    let base64LoginString1 = loginData.base64EncodedString()
+    if let base64Str = "mah@gmail.com:123456".base64Encoded() {
+        if let trs = base64Str.base64Decoded() {
+        }
+    }*/
+    print(String(describing: base64LoginString!))
     let headers: HTTPHeaders = [
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Authorization": "Basic \(base64LoginString)"
+        "Authorization": "Basic \(String(describing: base64LoginString!))"
     ]
 //    let param = ["email": email, "password": password] as [String: String]
     print("login url is \(EarnItApp_BASE_URL)/login")
@@ -39,7 +44,14 @@ import KeychainSwift
                 let  responseJSON = JSON(response.result.value!)
                      print("response.result.value for user login \(response.result.value)")
                      success(responseJSON)
-         
+//                UserDefaults.standard.set("\(base64LoginString)", forKey: "user_auth") //setUserAuth
+//                UserDefaults.standard.synchronize()
+                let keychain = KeychainSwift()
+                keychain.set(password, forKey: "password")
+                keychain.set("\(String(describing: base64LoginString!))", forKey: "user_auth")
+                print(keychain.get("user_auth")!)
+                print(keychain.get("password")!)
+
             case .failure(_):
                 print("response.result.error Login--- \(response.result.error)")
                 failure(response.result.error as! NSError)
@@ -56,11 +68,10 @@ func callApiToSendToken(token: String!,success: @escaping(JSON) ->(),failure: @e
     }
     let email = keychain.get("email")
     let password = keychain.get("password")
-    
     let headers: HTTPHeaders = [
-        
         "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": "Basic \(keychain.get("user_auth")!)"
     ]
     
     Alamofire.request("\(EarnItApp_BASE_URL)/token",method: .post, parameters: nil, encoding: JSONEncoding.default, headers: headers)
@@ -76,10 +87,24 @@ func callApiToSendToken(token: String!,success: @escaping(JSON) ->(),failure: @e
                 
                 print("repsone.result.error token sending \(response.result.error)")
                 failure(response.result.error as! NSError)
-                
             }
-   
       }
+}
+
+extension String {
+    //: ### Base64 encoding a string
+    func base64Encoded() -> String? {
+        if let data = self.data(using: .utf8) {
+            return data.base64EncodedString()
+        }
+        return nil
+    }
     
-    
+    //: ### Base64 decoding a string
+    func base64Decoded() -> String? {
+        if let data = Data(base64Encoded: self, options: .ignoreUnknownCharacters) {
+            return String(data: data, encoding: .utf8)
+        }
+        return nil
+    }
 }

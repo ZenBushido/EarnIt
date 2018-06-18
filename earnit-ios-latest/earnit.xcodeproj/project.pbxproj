@@ -205,6 +205,10 @@
 		F4B02EF020776F8900304865 /* VCAppsMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B02EEE20776F8900304865 /* VCAppsMonitor.swift */; };
 		F4C8939E2032E6BF0049F6A4 /* VCHomeAddChild.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C8939D2032E6BE0049F6A4 /* VCHomeAddChild.swift */; };
 		F4C8939F2032E6BF0049F6A4 /* VCHomeAddChild.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C8939D2032E6BE0049F6A4 /* VCHomeAddChild.swift */; };
+		F4F05CBD20D60A03009AD64E /* VCChildCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F05CBC20D60A03009AD64E /* VCChildCalendar.swift */; };
+		F4F05CBE20D60A03009AD64E /* VCChildCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F05CBC20D60A03009AD64E /* VCChildCalendar.swift */; };
+		F4F1578620D73D2500A2AB5C /* VCChildTasksList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F1578520D73D2400A2AB5C /* VCChildTasksList.swift */; };
+		F4F1578720D73D2500A2AB5C /* VCChildTasksList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F1578520D73D2400A2AB5C /* VCChildTasksList.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -340,6 +344,8 @@
 		F478135A2062837100E65E44 /* VCCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCCalendar.swift; sourceTree = "<group>"; };
 		F4B02EEE20776F8900304865 /* VCAppsMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCAppsMonitor.swift; sourceTree = "<group>"; };
 		F4C8939D2032E6BE0049F6A4 /* VCHomeAddChild.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCHomeAddChild.swift; sourceTree = "<group>"; };
+		F4F05CBC20D60A03009AD64E /* VCChildCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCChildCalendar.swift; sourceTree = "<group>"; };
+		F4F1578520D73D2400A2AB5C /* VCChildTasksList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCChildTasksList.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -403,6 +409,8 @@
 				F4C8939D2032E6BE0049F6A4 /* VCHomeAddChild.swift */,
 				F478135A2062837100E65E44 /* VCCalendar.swift */,
 				F4B02EEE20776F8900304865 /* VCAppsMonitor.swift */,
+				F4F05CBC20D60A03009AD64E /* VCChildCalendar.swift */,
+				F4F1578520D73D2400A2AB5C /* VCChildTasksList.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -999,6 +1007,7 @@
 				095D44EA1F2AF6CF000907D5 /* UIApplication.swift in Sources */,
 				095D44DC1F2AF6CF000907D5 /* ParentDashboard.swift in Sources */,
 				F44E1AB4204B09BC002B4A2A /* VCAdjustBalance.swift in Sources */,
+				F4F1578620D73D2500A2AB5C /* VCChildTasksList.swift in Sources */,
 				472C0C2F1F4D6C040057AFB8 /* TaskComment.swift in Sources */,
 				095D45011F2AF6CF000907D5 /* DateTimePicker.swift in Sources */,
 				095D44E11F2AF6CF000907D5 /* ChildUserHeaderView.swift in Sources */,
@@ -1009,6 +1018,7 @@
 				F40AA0642043DFB900301232 /* VCAddDeleteGoal.swift in Sources */,
 				095D44D91F2AF6CF000907D5 /* LoginPageController.swift in Sources */,
 				095D44F11F2AF6CF000907D5 /* FontHelper.swift in Sources */,
+				F4F05CBD20D60A03009AD64E /* VCChildCalendar.swift in Sources */,
 				095D44F61F2AF6CF000907D5 /* EarnItAppUrl.swift in Sources */,
 				095D44E21F2AF6CF000907D5 /* EarnItAppButton.swift in Sources */,
 				47BADF931F849682008E7A38 /* BalanceScreen.swift in Sources */,
@@ -1096,6 +1106,7 @@
 				ED89A53A1F96F5EE008BC2FD /* UIApplication.swift in Sources */,
 				ED89A53B1F96F5EE008BC2FD /* ParentDashboard.swift in Sources */,
 				F44E1AB5204B09BC002B4A2A /* VCAdjustBalance.swift in Sources */,
+				F4F1578720D73D2500A2AB5C /* VCChildTasksList.swift in Sources */,
 				ED89A53C1F96F5EE008BC2FD /* TaskComment.swift in Sources */,
 				ED89A53D1F96F5EE008BC2FD /* DateTimePicker.swift in Sources */,
 				ED89A53E1F96F5EE008BC2FD /* ChildUserHeaderView.swift in Sources */,
@@ -1106,6 +1117,7 @@
 				F40AA0652043DFB900301232 /* VCAddDeleteGoal.swift in Sources */,
 				ED89A5421F96F5EE008BC2FD /* LoginPageController.swift in Sources */,
 				ED89A5431F96F5EE008BC2FD /* FontHelper.swift in Sources */,
+				F4F05CBE20D60A03009AD64E /* VCChildCalendar.swift in Sources */,
 				ED89A5441F96F5EE008BC2FD /* EarnItAppUrl.swift in Sources */,
 				ED89A5451F96F5EE008BC2FD /* EarnItAppButton.swift in Sources */,
 				ED89A5461F96F5EE008BC2FD /* BalanceScreen.swift in Sources */,

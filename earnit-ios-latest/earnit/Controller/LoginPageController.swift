@@ -75,9 +75,8 @@ class LoginPageController : UIViewController , UITextFieldDelegate , UIGestureRe
         self.signUpButton.alpha = 1
         
         //self.getAppsUsedMemory()
-//        emailTextField.text = "Tracyliv@gmail.com" // "bbb@bbb.com" //"tracyy@tracy.com"//"fessn14@gmail.com"
-//        passwordTextField.text = "test123" // "qqq123" //"test@123"//"dingo1987"
-        
+//        emailTextField.text = "cheryl@cheryl.com"//"zzz@zzz.com"//"ccv@ccv@gmail.com" //"ssgappz@gmail.com"//"fessn14@gmail.com"//"Tracyliv@gmail.com"//"tracyy@tracy.com"//"dadch4@gmail.com"//"mah@gmail.com "//"bbb@bbb.com"
+//        passwordTextField.text = "test123"//"dingo1987"//"qqq123"//"test123" //"dingo1987" //"test123"//"123456"//"qqq123"//"test123"
     }
 
     //MARK: Get Apps Usage
@@ -98,7 +97,6 @@ class LoginPageController : UIViewController , UITextFieldDelegate , UIGestureRe
             print("Error with task_info(): " +
                 (String(cString: mach_error_string(kerr), encoding: String.Encoding.ascii) ?? "unknown error"))
         }
-        
     }
     
     @IBAction func emailDidEndEditing(_ sender: Any){
@@ -390,13 +388,27 @@ class LoginPageController : UIViewController , UITextFieldDelegate , UIGestureRe
         checkUserAuthentication(email: self.emailTextField.text!, password: self.passwordTextField.text!, success: {
             
             (responseJSON) ->() in
-            
             print("Reponse json after login - \(responseJSON)")
+
+            if (responseJSON["email"].string == nil || responseJSON["email"].stringValue == "") {
+                self.hideLoadingView()
+                self.view.makeToast("Login Failed")
+                //            let alert = showAlert(title: "Error", message: "Login Failed")
+                //            self.present(alert, animated: true, completion: nil)
+                //            print("failed")
+                self.passwordTextField.text = ""
+                return
+            }
             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let keychain = KeychainSwift()
             
+            print(responseJSON["email"])
+            print(responseJSON["email"].stringValue)
+            print(responseJSON["password"].stringValue)
+            
             keychain.set(responseJSON["email"].stringValue, forKey: "email")
-            keychain.set(responseJSON["password"].stringValue, forKey: "password")
+            //keychain.set(responseJSON["password"].stringValue, forKey: "password")
+            keychain.set(self.passwordTextField.text!, forKey: "password")
             keychain.set(true, forKey: "isActiveUser")
             keychain.set(true, forKey: "isProfileUpdated")
 

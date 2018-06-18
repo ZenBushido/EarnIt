@@ -6,27 +6,11 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "earnit/Controller/ParentProfilePage.swift"
-            timestampString = "549477210.0154409"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "977"
-            endingLineNumber = "977"
-            landmarkName = "prepareUserImageForUpload()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "earnit/Controller/ParentProfilePage.swift"
-            timestampString = "549477210.016096"
+            timestampString = "550581322.590417"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "938"
@@ -38,49 +22,33 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "earnit/Controller/ParentProfilePage.swift"
-            timestampString = "549477210.016534"
+            filePath = "earnit/Controller/ParentDashboard.swift"
+            timestampString = "550548532.971553"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "971"
-            endingLineNumber = "971"
-            landmarkName = "prepareUserImageForUpload()"
+            startingLineNumber = "209"
+            endingLineNumber = "209"
+            landmarkName = "configureTableCell(taskCell:type:indexPath:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "earnit/Controller/ParentDashboard.swift"
-            timestampString = "549474593.694124"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "209"
-            endingLineNumber = "209"
-            landmarkName = "unknown"
-            landmarkType = "0">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "earnit/Controller/ParentDashboard.swift"
-            timestampString = "549474593.694379"
+            timestampString = "550548532.971615"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "127"
             endingLineNumber = "127"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "loadRefreshedTasks()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -90,7 +58,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "earnit/Controller/TaskViewController.swift"
-            timestampString = "549021337.168462"
+            timestampString = "550932608.8121001"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "834"
@@ -106,7 +74,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "earnit/Controller/TaskViewController.swift"
-            timestampString = "549021337.169253"
+            timestampString = "550932608.812166"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "824"
@@ -122,7 +90,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "earnit/Controller/TaskViewController.swift"
-            timestampString = "549021337.169861"
+            timestampString = "550932608.8122129"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "852"
@@ -138,7 +106,7 @@
                   moduleName = "earnit-Dev"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/gaurav/Documents/my_projects_own/Earnit_Apps_Main/earnit-ios-latest/earnit/Controller/TaskViewController.swift"
-                  timestampString = "550281032.2730089"
+                  timestampString = "550982267.057411"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "852"
@@ -153,7 +121,7 @@
                   moduleName = "earnit-Dev"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/gaurav/Documents/my_projects_own/Earnit_Apps_Main/earnit-ios-latest/earnit/Controller/TaskViewController.swift"
-                  timestampString = "550281032.276837"
+                  timestampString = "550982267.060907"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "852"
@@ -170,13 +138,109 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "earnit/Controller/ParentDashboard.swift"
-            timestampString = "549474593.694567"
+            timestampString = "550548532.971702"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "118"
             endingLineNumber = "118"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "loadRefreshedTasks()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "earnit/AppDelegate.swift"
+            timestampString = "550951258.5604841"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
+            landmarkName = "application(_:didFinishLaunchingWithOptions:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "earnit/Helper/CheckEarnItUserAuthentication.swift"
+            timestampString = "550951258.5605969"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "50"
+            endingLineNumber = "50"
+            landmarkName = "checkUserAuthentication(email:password:success:failure:)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "earnit/Controller/ParentProfilePage.swift"
+            timestampString = "550581322.590739"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "978"
+            endingLineNumber = "978"
+            landmarkName = "prepareUserImageForUpload()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "earnit/Helper/CheckEarnItUserAuthentication.swift"
+            timestampString = "550951258.560708"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "53"
+            endingLineNumber = "53"
+            landmarkName = "checkUserAuthentication(email:password:success:failure:)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any&gt;) -&gt; () in earnit_Dev.checkUserAuthentication(email: Swift.ImplicitlyUnwrappedOptional&lt;Swift.String&gt;, password: Swift.ImplicitlyUnwrappedOptional&lt;Swift.String&gt;, success: (SwiftyJSON.JSON) -&gt; (), failure: (__ObjC.NSError) -&gt; ()) -&gt; ()"
+                  moduleName = "earnit-Dev"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/gaurav/Documents/my_projects_own/Earnit_Apps_Main/earnit-ios-latest/earnit/Helper/CheckEarnItUserAuthentication.swift"
+                  timestampString = "550897402.397275"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "53"
+                  endingLineNumber = "53"
+                  offsetFromSymbolStart = "3672">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any&gt;) -&gt; () in earnit_Dev.checkUserAuthentication(email: Swift.ImplicitlyUnwrappedOptional&lt;Swift.String&gt;, password: Swift.ImplicitlyUnwrappedOptional&lt;Swift.String&gt;, success: (SwiftyJSON.JSON) -&gt; (), failure: (__ObjC.NSError) -&gt; ()) -&gt; ()"
+                  moduleName = "earnit-Dev"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/gaurav/Documents/my_projects_own/Earnit_Apps_Main/earnit-ios-latest/earnit/Helper/CheckEarnItUserAuthentication.swift"
+                  timestampString = "550897402.399804"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "53"
+                  endingLineNumber = "53"
+                  offsetFromSymbolStart = "4134">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

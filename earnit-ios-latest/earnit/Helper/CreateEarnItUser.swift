@@ -35,10 +35,10 @@ func callUpdateProfileApiForParentt(firstName: String, lastName: String, phoneNu
         
         headers = [
             "Accept": "application/json",
-            "Authorization": authorizationHeader.value,
-            "Content-Type": "application/json"
-        ]
-        
+//            "Authorization": authorizationHeader.value,
+            "Content-Type": "application/json",
+            "Authorization": "Basic \(keychain.get("user_auth")!)"
+        ]        
     }
 //    
 //    var token : String!
@@ -77,7 +77,8 @@ func callUpdateProfileApiForParentt(firstName: String, lastName: String, phoneNu
             let responseJSON = JSON(response.result.value)
             EarnItAccount.currentUser.setAttribute(json: responseJSON)
             keychain.set(responseJSON["email"].stringValue, forKey: "email")
-            keychain.set(responseJSON["password"].stringValue, forKey: "password")
+//            keychain.set(responseJSON["password"].stringValue, forKey: "password")
+//            keychain.set(updatedPassword, forKey: "password")
             print("response.result.value EarnIt Parent User,\(responseJSON)")
             success(true)
         case .failure(_):
@@ -102,15 +103,13 @@ func callUpdateProfileImageApiForParent(firstName: String, lastName: String, pho
         
         headers = [
             "Accept": "application/json",
-            "Authorization": authorizationHeader.value,
-            "Content-Type": "application/json"
+//            "Authorization": authorizationHeader.value,
+            "Content-Type": "application/json",
+            "Authorization": "Basic \(keychain.get("user_auth")!)"
         ]
-        
     }
     
     let params = [
-        
-       
         "id": EarnItAccount.currentUser.id,
         "email": email,
         "firstName": firstName,
@@ -139,43 +138,29 @@ func callUpdateProfileImageApiForParent(firstName: String, lastName: String, pho
             print(response.result.error)
             
         }
-        
     }
-    
 }
-
-
 
 func callSignUpApiForParent(email: String, password: String,success: @escaping(JSON,String)-> (),failure: @escaping(Bool)-> ()){
     
-    
     let params = [
-        
         "email": email,
         "password": password
     ]
-
-    
     Alamofire.request("\(EarnItApp_BASE_URL)/signup/parent",method: .post,parameters: params, encoding: JSONEncoding.default,headers: nil).responseJSON{ response in
         
-        
         switch(response.result){
-            
         case .success:
             
             let responseJSON = JSON(response.result.value)
-            
             
             print("response.result.value EarnIt Parent User,\(responseJSON)")
             success(responseJSON,responseJSON["code"].stringValue)
         case .failure(_):
             
             print(response.result.error)
-            
         }
-        
     }
-    
 }
 
 
@@ -208,15 +193,11 @@ func callSignUpApiForChild(firstName: String,email: String, password: String,chi
             "avatar" : childAvatar
             
             ] as [String : Any]
-        
     }
     
     print("params before add child \(params)")
     Alamofire.request("\(EarnItApp_BASE_URL)/signup/child",method: .post,parameters: params, encoding: JSONEncoding.default,headers: nil).responseJSON{ response in
-        
-        
         switch(response.result){
-            
         case .success:
             
             let responseJSON = JSON(response.result.value)
@@ -247,8 +228,9 @@ func callForDeleteGoal(goal_id: Int, success: @escaping(String)-> (),failure: @e
     if let authorizationHeader = Request.authorizationHeader(user: user, password: password){
         headers = [
             "Accept": "application/json",
-            "Authorization": authorizationHeader.value,
-            "Content-Type": "application/json"
+//            "Authorization": authorizationHeader.value,
+            "Content-Type": "application/json",
+            "Authorization": "Basic \(keychain.get("user_auth")!)"
         ]
     }
     //    http://localhost:9191/childrens/{CHILDREN_ID}
@@ -284,11 +266,11 @@ func callForDeleteChild(children_id: Int, success: @escaping(String)-> (),failur
     if let authorizationHeader = Request.authorizationHeader(user: user, password: password){
         headers = [
             "Accept": "application/json",
-            "Authorization": authorizationHeader.value,
-            "Content-Type": "application/json"
+//            "Authorization": authorizationHeader.value,
+            "Content-Type": "application/json",
+            "Authorization": "Basic \(keychain.get("user_auth")!)"
         ]
     }
-    
     Alamofire.request("\(EarnItApp_BASE_URL)/childrens/\(children_id)", method: .delete, encoding: JSONEncoding.default, headers: headers).responseJSON{ response in
         
         switch(response.result){
@@ -355,8 +337,9 @@ func callAdjustBalanceApiForUser(amount: Int, strReason: String!, strOperation: 
     if let authorizationHeader = Request.authorizationHeader(user: userEmail, password: password){
         headers = [
             "Accept": "application/json",
-            "Authorization": authorizationHeader.value,
-            "Content-Type": "application/json"
+//            "Authorization": authorizationHeader.value,
+            "Content-Type": "application/json",
+            "Authorization": "Basic \(keychain.get("user_auth")!)"
         ]
     }
     var params = [String:Any]()
@@ -385,7 +368,6 @@ func callAdjustBalanceApiForUser(amount: Int, strReason: String!, strOperation: 
 
 func callUpdateApiForChild(firstName: String,childEmail: String, childPassword: String,childAvatar: String,createDate: Int,childUserId: Int,childuserAccountId: Int,phoneNumber: String?,fcmKey: String?,message: String?, success: @escaping(Bool)-> (),failure: @escaping(Bool)-> ()){
     
-    
     let keychain = KeychainSwift()
     guard  let _ = keychain.get("email") else  {
         print(" /n Unable to fetch user credentials from keychain \n")
@@ -395,18 +377,14 @@ func callUpdateApiForChild(firstName: String,childEmail: String, childPassword: 
     let password : String = keychain.get("password") as! String
     
     var headers : HTTPHeaders = [:]
-    
     if let authorizationHeader = Request.authorizationHeader(user: email, password: password){
-        
         headers = [
             "Accept": "application/json",
-            "Authorization": authorizationHeader.value,
-            "Content-Type": "application/json"
+//            "Authorization": authorizationHeader.value,
+            "Content-Type": "application/json",
+            "Authorization": "Basic \(keychain.get("user_auth")!)"
         ]
-        
     }
-    
-    
     var params = [String:Any]()
 //    
 //    var token : String!
@@ -424,7 +402,6 @@ func callUpdateApiForChild(firstName: String,childEmail: String, childPassword: 
     if phoneNumber != nil || phoneNumber != ""{
         
         params = [
-            
             "account": ["id": childuserAccountId],
             "id" : childUserId,
             "email": childEmail,
@@ -441,7 +418,6 @@ func callUpdateApiForChild(firstName: String,childEmail: String, childPassword: 
     }else {
         
         params = [
-            
             "account": ["id":childuserAccountId],
             "id" : childUserId,
             "email": email,
@@ -453,13 +429,10 @@ func callUpdateApiForChild(firstName: String,childEmail: String, childPassword: 
             "message": message,
             
             ] as [String : Any]
-        
     }
 
     print("params before update \(params)")
     Alamofire.request("\(EarnItApp_BASE_URL)/children",method: .put,parameters: params, encoding: JSONEncoding.default,headers: headers).responseJSON{ response in
-        
-        
         switch(response.result){
             
         case .success:
@@ -470,14 +443,9 @@ func callUpdateApiForChild(firstName: String,childEmail: String, childPassword: 
         case .failure(_):
             
             print(response.result.error)
-            
         }
-        
     }
-    
 }
-
-
 
 func createEarnItAppChildUser(success: @escaping([EarnItChildUser])-> (),failure: @escaping(Bool)-> ()){
     
@@ -497,13 +465,11 @@ func createEarnItAppChildUser(success: @escaping([EarnItChildUser])-> (),failure
         
         headers = [
             "Accept": "application/json",
-            "Authorization": authorizationHeader.value,
-            "Content-Type": "application/json"
+//            "Authorization": authorizationHeader.value,
+            "Content-Type": "application/json",
+            "Authorization": "Basic \(keychain.get("user_auth")!)"
         ]
-        
-        
     }
-    
     print("header value \(headers)")
     print("API URL :- \(EarnItApp_BASE_URL)")
     
@@ -534,22 +500,15 @@ func createEarnItAppChildUser(success: @escaping([EarnItChildUser])-> (),failure
             }
 
             print("EarnItChildUser for parent in response\(response.result.value)")
-            
-                       
             success(earnItChildUsers)
             print("response.result.value EarnIt Child User,\(responseJSON)")
             
         case .failure(_):
             
             print(response.result.error)
-            
         }
-        
     }
-    
 }
-
-
 
 func addTaskForChild(childId: Int, earnItTask: EarnItTask,earnItSelectedGoal: EarnItChildGoal,success: @escaping(Bool)-> (),failure: @escaping(Bool)-> ()){
     
@@ -561,22 +520,16 @@ func addTaskForChild(childId: Int, earnItTask: EarnItTask,earnItSelectedGoal: Ea
     }
     let user : String = keychain.get("email") as! String
     let password : String = keychain.get("password") as! String
-    
-    
     var headers : HTTPHeaders = [:]
-    
     if let authorizationHeader = Request.authorizationHeader(user: user, password: password){
         
         headers = [
             "Accept": "application/json",
-            "Authorization": authorizationHeader.value,
-            "Content-Type": "application/json"
+//            "Authorization": authorizationHeader.value,
+            "Content-Type": "application/json",
+            "Authorization": "Basic \(keychain.get("user_auth")!)"
         ]
-        
-        
     }
-    
-    
     var param = [String: Any]()
     if earnItSelectedGoal.name != "None"{
       
@@ -594,16 +547,11 @@ func addTaskForChild(childId: Int, earnItTask: EarnItTask,earnItSelectedGoal: Ea
             "taskComments": [],
             "description" : earnItTask.taskDescription!,
             "goal" : ["id": earnItSelectedGoal.id!]
-            
-  
-            
-        
             ]
         
     }else {
     
         param = [
-            
             "children": ["id": childId],
             "allowance": earnItTask.allowance,
             "createDate": earnItTask.createdDateTimeStamp,
@@ -614,29 +562,16 @@ func addTaskForChild(childId: Int, earnItTask: EarnItTask,earnItSelectedGoal: Ea
             "updateDate": earnItTask.updateDateTimeStamp,
             "taskComments": [],
             "description" : earnItTask.taskDescription!
-       
         ]
-        
-        
-        
     }
-    
-    
     if  earnItTask.repeatMode != .None {
         
         let repeatModeDic = ["repeat" : earnItTask.repeatMode.rawValue]
         param.updateValue(repeatModeDic, forKey: "repititionSchedule")
-        
     }
-    
-    
     print("params before add task \(param)")
-    
     Alamofire.request("\(EarnItApp_BASE_URL)/tasks",method: .post,parameters: param, encoding: JSONEncoding.default,  headers: headers).responseJSON{ response in
-        
-        
         switch(response.result){
-            
         case .success:
             
             success(true)
@@ -645,11 +580,8 @@ func addTaskForChild(childId: Int, earnItTask: EarnItTask,earnItSelectedGoal: Ea
         case .failure(_):
             
             print(response.result.error)
-            
         }
-        
     }
-    
 }
 
 func getGoalsForChild(childId : Int,success: @escaping([EarnItChildGoal])-> (),failure: @escaping(Bool)-> ()){
@@ -662,16 +594,13 @@ func getGoalsForChild(childId : Int,success: @escaping([EarnItChildGoal])-> (),f
     }
     let user : String = keychain.get("email") as! String
     let password : String = keychain.get("password") as! String
-    
-    
     var headers : HTTPHeaders = [:]
-    
     if let authorizationHeader = Request.authorizationHeader(user: user, password: password){
-        
         headers = [
             "Accept": "application/json",
-            "Authorization": authorizationHeader.value,
-            "Content-Type": "application/json"
+            //            "Authorization": authorizationHeader.value,
+            "Content-Type": "application/json",
+            "Authorization": "Basic \(keychain.get("user_auth")!)"
         ]
     }
     Alamofire.request("\(EarnItApp_BASE_URL)/goals/\(childId)",method: .get,parameters: nil, encoding: JSONEncoding.default,  headers: headers).responseJSON{ response in
@@ -689,17 +618,55 @@ func getGoalsForChild(childId : Int,success: @escaping([EarnItChildGoal])-> (),f
                 earnItGoal.setAttribute(json: value)
                 earnItChildGoalList.append(earnItGoal)
             }
-            
             success(earnItChildGoalList)
             
         case .failure(_):
             
             print(response.result.error)
-            
         }
-        
     }
+}
 
+func getAllTasksForChild(childId : Int,success: @escaping([(EarnItTask)])-> (),failure: @escaping(Bool)-> ()){
+    
+    let keychain = KeychainSwift()
+    
+    guard  let _ = keychain.get("email") else  {
+        print(" /n Unable to fetch user credentials from keychain \n")
+        return
+    }
+    let user : String = keychain.get("email") as! String
+    let password : String = keychain.get("password") as! String
+    var headers : HTTPHeaders = [:]
+    if let authorizationHeader = Request.authorizationHeader(user: user, password: password){
+        headers = [
+            "Accept": "application/json",
+//            "Authorization": authorizationHeader.value,
+            "Content-Type": "application/json",
+            "Authorization": "Basic \(keychain.get("user_auth")!)"
+        ]
+    }
+    Alamofire.request("\(EarnItApp_BASE_URL)/tasks/\(childId)",method: .get,parameters: nil, encoding: JSONEncoding.default,  headers: headers).responseJSON{ response in
+        switch(response.result){
+        case .success:
+            print("response.result.value  getGoals,\(response.result.value)")
+            let responseJSON = JSON(response.result.value)
+            
+            var earnItChildTaskList = [EarnItTask]()
+            
+            for (_,value) in responseJSON {
+                
+                let earnItTask = (EarnItTask)()
+                print("value \(value["name"])")
+                earnItTask.setAttribute(json: value)
+                earnItChildTaskList.append(earnItTask)
+            }
+            success(earnItChildTaskList)
+            
+        case .failure(_):
+            print(response.result.error)
+        }
+    }
 }
 
 
@@ -714,21 +681,15 @@ func addGoalForChild(childId: Int, amount: Int,createdDate: Int64,goalName: Stri
     let user : String = keychain.get("email") as! String
     let password : String = keychain.get("password") as! String
     
-    
     var headers : HTTPHeaders = [:]
-    
     if let authorizationHeader = Request.authorizationHeader(user: user, password: password){
-        
         headers = [
             "Accept": "application/json",
-            "Authorization": authorizationHeader.value,
-            "Content-Type": "application/json"
+//            "Authorization": authorizationHeader.value,
+            "Content-Type": "application/json",
+            "Authorization": "Basic \(keychain.get("user_auth")!)"
         ]
-        
-        
     }
-    
-    
     var param = [String: Any]()
 
     param = [
@@ -738,13 +699,8 @@ func addGoalForChild(childId: Int, amount: Int,createdDate: Int64,goalName: Stri
       "createDate": createdDate,
       "name": goalName
     ]
-    
-    
     Alamofire.request("\(EarnItApp_BASE_URL)/goals",method: .post,parameters: param, encoding: JSONEncoding.default,  headers: headers).responseJSON{ response in
-        
-        
         switch(response.result){
-            
         case .success:
             
             success(true)
@@ -753,11 +709,8 @@ func addGoalForChild(childId: Int, amount: Int,createdDate: Int64,goalName: Stri
         case .failure(_):
             
             print(response.result.error)
-            
         }
-        
     }
-    
 }
 
 func editGoalForChild(id:Int, childId: Int, amount: Int,createdDate: Int64,goalName: String,success: @escaping(Bool)-> (),failure: @escaping(Bool)-> ()){
@@ -769,22 +722,16 @@ func editGoalForChild(id:Int, childId: Int, amount: Int,createdDate: Int64,goalN
     }
     let user : String = keychain.get("email") as! String
     let password : String = keychain.get("password") as! String
-    
-    
     var headers : HTTPHeaders = [:]
-    
     if let authorizationHeader = Request.authorizationHeader(user: user, password: password){
         
         headers = [
             "Accept": "application/json",
-            "Authorization": authorizationHeader.value,
-            "Content-Type": "application/json"
+//            "Authorization": authorizationHeader.value,
+            "Content-Type": "application/json",
+            "Authorization": "Basic \(keychain.get("user_auth")!)"
         ]
-        
-        
     }
-    
-    
     var param = [String: Any]()
     
     param = [
@@ -794,13 +741,8 @@ func editGoalForChild(id:Int, childId: Int, amount: Int,createdDate: Int64,goalN
         "createDate": createdDate,
         "name": goalName
     ]
-    
-    
     Alamofire.request("\(EarnItApp_BASE_URL)/goals",method: .put,parameters: param, encoding: JSONEncoding.default,  headers: headers).responseJSON{ response in
-        
-        
         switch(response.result){
-            
         case .success:
             
             success(true)
@@ -809,11 +751,8 @@ func editGoalForChild(id:Int, childId: Int, amount: Int,createdDate: Int64,goalN
         case .failure(_):
             
             print(response.result.error)
-            
         }
-        
     }
-    
 }
 
 

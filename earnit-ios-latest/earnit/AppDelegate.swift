@@ -68,7 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate , SlideMenuControllerDeleg
                     
                     let keychain = KeychainSwift()
                     keychain.set(responseJSON["email"].stringValue, forKey: "email")
-                    keychain.set(responseJSON["password"].stringValue, forKey: "password")
+                    //keychain.set(responseJSON["password"].stringValue, forKey: "password")
                     
                     if (responseJSON["userType"].stringValue == "CHILD"){
                         

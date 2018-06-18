@@ -1,5 +1,5 @@
 //
-//  ChildDashBoard.swift
+//  VCChildTasksList.swift
 //  earnit
 //
 //  Created by Lovelini Rawat on 7/11/17.
@@ -11,8 +11,7 @@ import UIKit
 import KeychainSwift
 
 
-class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
-
+class VCChildTasksList : UIViewController ,UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
     
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     @IBOutlet var childUserTable: UITableView!
@@ -23,6 +22,7 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
     var detailView = DetailView()
     var overDueTasks = [EarnItTask]()
     var pendingApprovalTasks = [EarnItTask]()
+    var tasksForTheDay = [EarnItTask]()
     var timerTest : Timer?
     
     //layout contraint for the detailView box
@@ -38,9 +38,7 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
         var isCollapsed = false
         
     }
-    
     var SectionDetailsArray = [TappedSectionDetails]()
-
 
     //override
     override func viewDidLoad() {
@@ -56,29 +54,25 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
         
         //_ = Timer.scheduledTimer(timeInterval: 300, target: self, selector: #selector(self.fetchUserDetailFromBackground), userInfo: nil, repeats: true)
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(ChildDashBoard.userImageDidTapped(gesture:)))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(VCChildTasksList.userImageDidTapped(gesture:)))
         
         tapGesture.delegate = self
         self.userImageVieqw.addGestureRecognizer(tapGesture)
         self.userImageVieqw.isUserInteractionEnabled = true
         self.childUserTable.tableFooterView = UIView()
         self.setChildInfo()
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        
-        self.startTimerForFetchingUserDetail()
+//        self.startTimerForFetchingUserDetail()
         self.setChildInfo()
     }
-
     
     func setChildInfo(){
-        
-        var tasks =  getTodayandFutureTask(earnItTasks: EarnItChildUser.currentUser.earnItTasks)
+        var tasks =  getTodayandFutureTask(earnItTasks: self.tasksForTheDay) //EarnItChildUser.currentUser.earnItTasks)
         self.dayTasks = getDayTaskListForChildUser(earnItTasks: tasks)
-        self.overDueTasks = getOverDueTaskListForChildDashBoard(earnItTasks: EarnItChildUser.currentUser.earnItTasks)
-        self.pendingApprovalTasks = getPendingApprovalTasks(earnItTasks: EarnItChildUser.currentUser.earnItTasks)
+        self.overDueTasks = getOverDueTaskListForChildDashBoard(earnItTasks: self.tasksForTheDay)
+        self.pendingApprovalTasks = getPendingApprovalTasks(earnItTasks: self.tasksForTheDay)
 
         print(EarnItChildUser.currentUser.childUserImageUrl!)
         self.userImageVieqw.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + EarnItChildUser.currentUser.childUserImageUrl!)
@@ -92,8 +86,6 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
             let tapLocation = sender.location(in: self.childUserTable)
             if let tappedIndexPath = self.childUserTable.indexPathForRow(at: tapLocation) {
                 if let tappedCell = self.childUserTable.cellForRow(at: tappedIndexPath) {
-                    
-                    
                       if self.pendingApprovalTasks.count > 0{
                         if self.overDueTasks.count > 0 {
                             if (tappedIndexPath.section == 0 ){
@@ -176,15 +168,12 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
 //                        self.present(taskSubmitScreen, animated:true, completion:nil)
 //                        
 //                    }
-                    
                 }
-                
             }
         }
     }
 
     @IBAction func openOption(_ sender: UIButton) {
-        
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
         let calendarView = storyBoard.instantiateViewController(withIdentifier: "CalendarView") as! CalendarViewController
         self.present(calendarView, animated: false, completion: nil)
@@ -214,347 +203,6 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
 //        return numberOfSectionToReturn
 //    }
 //
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        
-        var numberOfSectiontoReturn  = 0
-        if self.pendingApprovalTasks.count > 0  {
-            if self.overDueTasks.count > 0 {
-                numberOfSectiontoReturn =  self.dayTasks.count + 2
-            }
-            else{
-                numberOfSectiontoReturn =  self.dayTasks.count + 1
-            }
-        }
-            
-        else if self.overDueTasks.count > 0 {
-            numberOfSectiontoReturn =  self.dayTasks.count + 1
-        }
-        else {
-            numberOfSectiontoReturn =  self.dayTasks.count
-        }
-        for i in 0...numberOfSectiontoReturn {
-            var sectionDetail = TappedSectionDetails()
-            sectionDetail.sectionNo = i
-            sectionDetail.isCollapsed = false
-            
-            SectionDetailsArray.append(sectionDetail)
-        }
-        return numberOfSectiontoReturn
-    }
-
-    
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        
-//        var numberOfRows = 1
-//        
-//        if self.overDueTasks.count > 0 {
-//        
-//        if section == 0{
-//            
-//            numberOfRows = self.overDueTasks.count
-//            
-//        }else {
-//            
-//            numberOfRows = self.dayTasks[section-1].earnItTasks.count
-//         }
-//        
-//        }else {
-//            
-//            numberOfRows = self.dayTasks[section].earnItTasks.count
-//        }
-//        
-//        
-//        print("number of row = \(numberOfRows)")
-//        return numberOfRows
-//    
-//    
-//    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
-        
-        var  numberOfRows = 0
-        if self.pendingApprovalTasks.count > 0   {
-            if self.overDueTasks.count > 0 {
-                if (section == 0){
-                    numberOfRows =  self.pendingApprovalTasks.count
-                }
-                else if (section == 1){
-                    numberOfRows = self.overDueTasks.count
-                }
-                else{
-                    numberOfRows = self.dayTasks[section-2].earnItTasks.count
-                }
-            }
-            else {
-                if (section == 0){
-                    numberOfRows = self.pendingApprovalTasks.count
-                }
-                else{
-                    numberOfRows = self.dayTasks[section-1].earnItTasks.count
-                }
-            }
-        }
-        else if self.overDueTasks.count > 0 {
-            if (section == 0){
-                numberOfRows = self.overDueTasks.count
-            }
-            else{
-                numberOfRows = self.dayTasks[section-1].earnItTasks.count
-            }
-        }
-        else{
-            numberOfRows = self.dayTasks[section].earnItTasks.count
-        }
-        if SectionDetailsArray[section].isCollapsed {
-            return 0
-        }
-        else {
-            return numberOfRows
-        }
-    }
-    
-    
-    func configureTableCell(taskCell:ChildTaskDetailCell, type:String, indexPath:NSIndexPath ) -> ChildTaskDetailCell {
-        
-        if type == "PendingApproval" {
-            
-            taskCell.taskName.text = self.pendingApprovalTasks[indexPath.row].taskName
-            taskCell.taskDescription.text = self.pendingApprovalTasks[indexPath.row].dateMonthString + " @ " + self.pendingApprovalTasks[indexPath.row].dueTime
-            
-            taskCell.statusImage.backgroundColor = getColorStatusForTaskForChildDashBoard(earnItTask: self.pendingApprovalTasks[indexPath.row])
-            
-            //taskCell.checkButton.backgroundColor = UIColor.clear
-            //taskCell.layer.borderColor = UIColor.white.cgColor
-            //taskCell.layer.borderWidth = 1
-            // taskCell.checkButton.setImage(nil, for: .normal)
-            
-            
-            taskCell.askToRemoveTheCompletedTask = {
-                
-                self.completedTask = self.pendingApprovalTasks[indexPath.row]
-                let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
-                let taskSubmitScreen = storyBoard.instantiateViewController(withIdentifier: "TaskSubmitScreen") as! TaskSubmitScreen
-                
-                print("taskName \(self.completedTask.taskName)")
-                print("taskdes \(self.completedTask.taskDescription)")
-                print("ispicturereq \(self.completedTask.isPictureRequired)")
-                taskSubmitScreen.earnItTask = self.completedTask
-                //taskSubmitScreen.isPictureRequired = self.completedTask.isPictureRequired
-                //taskSubmitScreen.taskNameLabel.text = "hello"
-                //taskSubmitScreen.taskDescription.text = self.completedTask.taskDescription
-                self.present(taskSubmitScreen, animated:true, completion:nil)
-            }
-        }
-        else if type == "OverDue" {
-            
-            taskCell.taskName.text = self.overDueTasks[indexPath.row].taskName
-            taskCell.taskDescription.text = self.overDueTasks[indexPath.row].dateMonthString + " @ " + self.overDueTasks[indexPath.row].dueTime
-            
-            taskCell.statusImage.backgroundColor = getColorStatusForTaskForChildDashBoard(earnItTask: self.overDueTasks[indexPath.row])
-            
-            //taskCell.checkButton.backgroundColor = UIColor.clear
-            //taskCell.layer.borderColor = UIColor.white.cgColor
-            //taskCell.layer.borderWidth = 1
-            // taskCell.checkButton.setImage(nil, for: .normal)
-            
-            taskCell.askToRemoveTheCompletedTask = {
-                
-                self.completedTask = self.overDueTasks[indexPath.row]
-                let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
-                let taskSubmitScreen = storyBoard.instantiateViewController(withIdentifier: "TaskSubmitScreen") as! TaskSubmitScreen
-                
-                print("taskName \(self.completedTask.taskName)")
-                print("taskdes \(self.completedTask.taskDescription)")
-                print("ispicturereq \(self.completedTask.isPictureRequired)")
-                taskSubmitScreen.earnItTask = self.completedTask
-                //taskSubmitScreen.isPictureRequired = self.completedTask.isPictureRequired
-                //taskSubmitScreen.taskNameLabel.text = "hello"
-                //taskSubmitScreen.taskDescription.text = self.completedTask.taskDescription
-                self.present(taskSubmitScreen, animated:true, completion:nil)
-                
-            }
-        }
-            
-        else if type == "DayTask" {
-            taskCell.taskName.text = self.dayTasks[indexPath.section].earnItTasks[indexPath.row].taskName
-            taskCell.taskDescription.text = self.dayTasks[indexPath.section].earnItTasks[indexPath.row].dateMonthString + " @ " + self.dayTasks[indexPath.section].earnItTasks[indexPath.row].dueTime
-            
-            taskCell.statusImage.backgroundColor = getColorStatusForTaskForChildDashBoard(earnItTask: self.dayTasks[indexPath.section].earnItTasks[indexPath.row])
-            
-            //taskCell.checkButton.setImage(nil, for: .normal)
-            
-            taskCell.askToRemoveTheCompletedTask = {
-                
-                self.completedTask = self.dayTasks[indexPath.section].earnItTasks[indexPath.row]
-                
-                let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
-                let taskSubmitScreen = storyBoard.instantiateViewController(withIdentifier: "TaskSubmitScreen") as! TaskSubmitScreen
-                taskSubmitScreen.earnItTask = self.completedTask
-                //taskSubmitScreen.isPictureRequired = self.completedTask.isPictureRequired
-                //taskSubmitScreen.taskNameLabel.text = self.completedTask.taskName
-                //taskSubmitScreen.taskDescription.text = self.completedTask.taskDescription
-                
-                self.present(taskSubmitScreen, animated:true, completion:nil)
-            }
-        }
-        return taskCell
-    }
-    
-    //override
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
-//        
-//        let taskCell = self.childUserTable.dequeueReusableCell(withIdentifier: "ChildTaskDetailCell", for: indexPath as IndexPath) as! ChildTaskDetailCell
-//        //taskCell.taskName = ""
-//        
-//        
-//        if self.overDueTasks.count > 0 {
-//        
-//        if (indexPath.section == 0){
-//            
-//
-//            
-//            taskCell.taskName.text = self.overDueTasks[indexPath.row].taskName
-//            taskCell.taskDescription.text = self.overDueTasks[indexPath.row].dateMonthString + " @ " + self.overDueTasks[indexPath.row].dueTime
-//            
-//            taskCell.statusImage.backgroundColor = getColorStatusForTaskForChildDashBoard(earnItTask: self.overDueTasks[indexPath.row])
-//            
-//            //taskCell.checkButton.backgroundColor = UIColor.clear
-//            //taskCell.layer.borderColor = UIColor.white.cgColor
-//            //taskCell.layer.borderWidth = 1
-//            // taskCell.checkButton.setImage(nil, for: .normal)
-//            
-//
-//            
-//            taskCell.askToRemoveTheCompletedTask = {
-//                
-//                self.completedTask = self.overDueTasks[indexPath.row]
-//                let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
-//                let taskSubmitScreen = storyBoard.instantiateViewController(withIdentifier: "TaskSubmitScreen") as! TaskSubmitScreen
-//                
-//                print("taskName \(self.completedTask.taskName)")
-//                 print("taskdes \(self.completedTask.taskDescription)")
-//                 print("ispicturereq \(self.completedTask.isPictureRequired)")
-//                taskSubmitScreen.earnItTask = self.completedTask
-//                //taskSubmitScreen.isPictureRequired = self.completedTask.isPictureRequired
-//                //taskSubmitScreen.taskNameLabel.text = "hello"
-//                //taskSubmitScreen.taskDescription.text = self.completedTask.taskDescription
-//                self.present(taskSubmitScreen, animated:true, completion:nil)
-//
-//            }
-//            
-//        }else {
-//        
-//        
-//
-//        
-//            
-//            taskCell.taskName.text = self.dayTasks[indexPath.section - 1].earnItTasks[indexPath.row].taskName
-//            taskCell.taskDescription.text = self.dayTasks[indexPath.section - 1].earnItTasks[indexPath.row].dateMonthString + " @ " + self.dayTasks[indexPath.section - 1].earnItTasks[indexPath.row].dueTime
-//        
-//        
-//            taskCell.statusImage.backgroundColor = getColorStatusForTaskForChildDashBoard(earnItTask: self.dayTasks[indexPath.section - 1].earnItTasks[indexPath.row])
-//            
-//        
-//            //taskCell.checkButton.setImage(nil, for: .normal)
-//            
-//            taskCell.askToRemoveTheCompletedTask = {
-//            
-//            self.completedTask = self.dayTasks[indexPath.section - 1].earnItTasks[indexPath.row]
-//                
-//                let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
-//                let taskSubmitScreen = storyBoard.instantiateViewController(withIdentifier: "TaskSubmitScreen") as! TaskSubmitScreen
-//                taskSubmitScreen.earnItTask = self.completedTask
-//               // taskSubmitScreen.isPictureRequired = self.completedTask.isPictureRequired
-//                //taskSubmitScreen.taskNameLabel.text = self.completedTask.taskName
-//                //taskSubmitScreen.taskDescription.text = self.completedTask.taskDescription
-//                
-//                self.present(taskSubmitScreen, animated:true, completion:nil)
-//       
-//            
-//              }
-//
-//          }
-//            
-//        }else {
-//            
-//        
-//            taskCell.taskName.text = self.dayTasks[indexPath.section].earnItTasks[indexPath.row].taskName
-//            taskCell.taskDescription.text = self.dayTasks[indexPath.section].earnItTasks[indexPath.row].dateMonthString + " @ " + self.dayTasks[indexPath.section].earnItTasks[indexPath.row].dueTime
-//            
-//            taskCell.statusImage.backgroundColor = getColorStatusForTaskForChildDashBoard(earnItTask: self.dayTasks[indexPath.section].earnItTasks[indexPath.row])
-//            
-//            //taskCell.checkButton.setImage(nil, for: .normal)
-//            
-//            taskCell.askToRemoveTheCompletedTask = {
-//                
-//                self.completedTask = self.dayTasks[indexPath.section].earnItTasks[indexPath.row]
-//                
-//                let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
-//                let taskSubmitScreen = storyBoard.instantiateViewController(withIdentifier: "TaskSubmitScreen") as! TaskSubmitScreen
-//                taskSubmitScreen.earnItTask = self.completedTask
-//                //taskSubmitScreen.isPictureRequired = self.completedTask.isPictureRequired
-//                //taskSubmitScreen.taskNameLabel.text = self.completedTask.taskName
-//                //taskSubmitScreen.taskDescription.text = self.completedTask.taskDescription
-//                
-//                self.present(taskSubmitScreen, animated:true, completion:nil)
-//                
-//
-//            }
-//            
-//        }
-//        
-//        return taskCell
-//    }
-//    
-    
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
-        
-        var taskCell = self.childUserTable.dequeueReusableCell(withIdentifier: "ChildTaskDetailCell", for: indexPath as IndexPath) as! ChildTaskDetailCell
-        if self.pendingApprovalTasks.count > 0   {
-            if self.overDueTasks.count > 0 {
-                if (indexPath.section == 0){
-                    taskCell = self.configureTableCell(taskCell: taskCell, type: "PendingApproval", indexPath: indexPath as NSIndexPath)
-                }
-                else if (indexPath.section == 1){
-                    taskCell = self.configureTableCell(taskCell: taskCell, type: "OverDue", indexPath: indexPath as NSIndexPath)
-                }
-                else{
-                    var tempIndexPath = indexPath
-                    tempIndexPath.section = tempIndexPath.section - 2
-                    taskCell = self.configureTableCell(taskCell: taskCell, type: "DayTask", indexPath: tempIndexPath as NSIndexPath)
-                }
-            }
-            else {
-                if (indexPath.section == 0){
-                    taskCell = self.configureTableCell(taskCell: taskCell, type: "PendingApproval", indexPath: indexPath as NSIndexPath)
-                }
-                else{
-                    var tempIndexPath = indexPath
-                    tempIndexPath.section = tempIndexPath.section - 1
-                    
-                    taskCell = self.configureTableCell(taskCell: taskCell, type: "DayTask", indexPath: tempIndexPath as NSIndexPath)
-                }
-            }
-        }
-        else if self.overDueTasks.count > 0 {
-            if (indexPath.section == 0){
-                taskCell = self.configureTableCell(taskCell: taskCell, type: "OverDue", indexPath: indexPath as NSIndexPath)
-            }
-            else{
-                var tempIndexPath = indexPath
-                tempIndexPath.section = tempIndexPath.section - 1
-                taskCell = self.configureTableCell(taskCell: taskCell, type: "DayTask", indexPath: tempIndexPath as NSIndexPath)
-            }
-        }
-        else{
-            taskCell = self.configureTableCell(taskCell: taskCell, type: "DayTask", indexPath: indexPath as NSIndexPath)
-        }
-        
-        return taskCell
-    }
-    
     //ovrride
     func callControllerForDoneTask(alert: UIAlertAction) {
         
@@ -604,59 +252,428 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
         }
     }    
 
-    
-    //ovrride
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        
-//        let view  = Bundle.main.loadNibNamed("DayHeader", owner: nil, options: nil)?.first as! DayHeader
-//    
-//        if self.overDueTasks.count > 0{
-//            
-//        if (section == 0){
-//            
-//            view.dayDetail.text = "Overdue Tasks"
-//            
-//        }else if isCurrentDate(earnItTaskDate: self.dayTasks[section - 1].date) {
-//            
-//            view.dayDetail.text =  "Today's Tasks"
-//            
-//        }else{
-//            
-//           view.dayDetail.text =  self.dayTasks[section - 1].dayName + ", " + self.dayTasks[section - 1].date
-//         }
-//        
-//        }else {
-//            
-//         if isCurrentDate(earnItTaskDate: self.dayTasks[section].date) {
-//                
-//                view.dayDetail.text =  "Today's Tasks"
-//                
-//        }else{
-//                
-//                view.dayDetail.text =  self.dayTasks[section].dayName + ", " + self.dayTasks[section].date
-//            }
-//
-//        }
-//    
-//        return view
-//    }
-    
-
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func sectionDidTap(recognizer: UISwipeGestureRecognizer) {
         
-        let view  = Bundle.main.loadNibNamed("DayHeader", owner: nil, options: nil)?.first as! DayHeader
-        view.sectionNo = section
+        guard let Header = recognizer.view as? DayHeader else {
+            return
+        }
+        
+        if SectionDetailsArray[Header.sectionNo].isCollapsed {
+            SectionDetailsArray[Header.sectionNo].isCollapsed = false
+        }
+        else {
+            SectionDetailsArray[Header.sectionNo].isCollapsed = true
+        }
+        
+        // self.childTableForTodayTask.reloadData()
+        self.childUserTable.reloadSections((NSIndexSet(index: Header.sectionNo) as IndexSet), with: .automatic)
+    }
+    
+    func showPopup(task: EarnItTask){
+        self.childUserTable.isUserInteractionEnabled = false
+        detailView = (Bundle.main.loadNibNamed("DetailView", owner: self, options: nil)?[0] as? DetailView)!
+        
+        detailView.TaskName.text = task.taskName
+        detailView.Allowance.text = "$" + String(task.allowance)
+        detailView.expiryDate.text = task.dateMonthString + " @ " + task.dueTime
+        detailView.createdDate.text = task.createdDateMonthString + " @ " + task.createdDateTime
+        
+        detailView.close.addTarget(self, action: #selector(self.closeDetailView), for: UIControlEvents.touchUpInside)
+        
+        detailView.center = self.view.center
+        
+        self.view.addSubview(detailView)
+        
+        var dView:[String:UIView] = [:]
+        dView["DetailView"] = detailView
+        
+        let h_Pin = NSLayoutConstraint.constraints(withVisualFormat: "H:|-(36)-[DetailView]-(36)-|", options: NSLayoutFormatOptions(rawValue: 0) , metrics: nil, views: dView)
+        self.view.addConstraints(h_Pin)
+        
+        let v_Pin = NSLayoutConstraint.constraints(withVisualFormat: "V:|-(36)-[DetailView]-(36)-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: dView)
+        self.view.addConstraints(v_Pin)
+        
+        constY = NSLayoutConstraint(item: detailView, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0)
+        self.view.addConstraint(constY!)
+        
+        constX = NSLayoutConstraint(item: detailView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0)
+        self.view.addConstraint(constX!)
+        
+        UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 0.3, initialSpringVelocity: 0.50, options: UIViewAnimationOptions.layoutSubviews, animations: { () -> Void in
+            self.detailView.alpha = 1
+            self.view.layoutIfNeeded()
+        }) { (value:Bool) -> Void in
+            
+        }
+    }
+        
+    func showLoadingView(){
+        self.view.alpha = 0.7
+        self.view.isUserInteractionEnabled = false
+        self.activityIndicator.startAnimating()
+    }
+    
+    func hideLoadingView(){
+        self.view.alpha = 1
+        self.view.isUserInteractionEnabled = true
+        self.activityIndicator.stopAnimating()
+    }
 
+    func closeDetailView(sender: UIButton){
+         self.childUserTable.isUserInteractionEnabled = true
+         hideStatusInputView()
+    }
+
+    //MARK: Action Methods
+    
+    @IBAction func backButtonClicked(_ sender: Any) {
+        self.dismiss(animated: false, completion: nil)
+    }
+
+    // MARK: TableView Delegates
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        
+        var numberOfSectiontoReturn  = 0
+        if self.pendingApprovalTasks.count > 0  {
+            if self.overDueTasks.count > 0 {
+                numberOfSectiontoReturn =  self.dayTasks.count + 2
+            }
+            else{
+                numberOfSectiontoReturn =  self.dayTasks.count + 1
+            }
+        }
+            
+        else if self.overDueTasks.count > 0 {
+            numberOfSectiontoReturn =  self.dayTasks.count + 1
+        }
+        else {
+            numberOfSectiontoReturn =  self.dayTasks.count
+        }
+        for i in 0...numberOfSectiontoReturn {
+            var sectionDetail = TappedSectionDetails()
+            sectionDetail.sectionNo = i
+            sectionDetail.isCollapsed = false
+            
+            SectionDetailsArray.append(sectionDetail)
+        }
+        return numberOfSectiontoReturn
+    }
+    
+    
+    //    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    //
+    //        var numberOfRows = 1
+    //
+    //        if self.overDueTasks.count > 0 {
+    //
+    //        if section == 0{
+    //
+    //            numberOfRows = self.overDueTasks.count
+    //
+    //        }else {
+    //
+    //            numberOfRows = self.dayTasks[section-1].earnItTasks.count
+    //         }
+    //
+    //        }else {
+    //
+    //            numberOfRows = self.dayTasks[section].earnItTasks.count
+    //        }
+    //
+    //
+    //        print("number of row = \(numberOfRows)")
+    //        return numberOfRows
+    //
+    //
+    //    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
+        var  numberOfRows = 0
         if self.pendingApprovalTasks.count > 0   {
             if self.overDueTasks.count > 0 {
-                
                 if (section == 0){
+                    numberOfRows =  self.pendingApprovalTasks.count
+                }
+                else if (section == 1){
+                    numberOfRows = self.overDueTasks.count
+                }
+                else{
+                    numberOfRows = self.dayTasks[section-2].earnItTasks.count
+                }
+            }
+            else {
+                if (section == 0){
+                    numberOfRows = self.pendingApprovalTasks.count
+                }
+                else{
+                    numberOfRows = self.dayTasks[section-1].earnItTasks.count
+                }
+            }
+        }
+        else if self.overDueTasks.count > 0 {
+            if (section == 0){
+                numberOfRows = self.overDueTasks.count
+            }
+            else{
+                numberOfRows = self.dayTasks[section-1].earnItTasks.count
+            }
+        }
+        else{
+            numberOfRows = self.dayTasks[section].earnItTasks.count
+        }
+        if SectionDetailsArray[section].isCollapsed {
+            return 0
+        }
+        else {
+            return numberOfRows
+        }
+    }
+    
+    
+    func configureTableCell(taskCell:ChildTaskDetailCell, type:String, indexPath:NSIndexPath ) -> ChildTaskDetailCell {
+        if type == "PendingApproval" {
+            taskCell.taskName.text = self.pendingApprovalTasks[indexPath.row].taskName
+            taskCell.taskDescription.text = self.pendingApprovalTasks[indexPath.row].dateMonthString + " @ " + self.pendingApprovalTasks[indexPath.row].dueTime
+            
+            taskCell.statusImage.backgroundColor = getColorStatusForTaskForChildDashBoard(earnItTask: self.pendingApprovalTasks[indexPath.row])
+            
+            //taskCell.checkButton.backgroundColor = UIColor.clear
+            //taskCell.layer.borderColor = UIColor.white.cgColor
+            //taskCell.layer.borderWidth = 1
+            // taskCell.checkButton.setImage(nil, for: .normal)
+            taskCell.askToRemoveTheCompletedTask = {
+                self.completedTask = self.pendingApprovalTasks[indexPath.row]
+                let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
+                let taskSubmitScreen = storyBoard.instantiateViewController(withIdentifier: "TaskSubmitScreen") as! TaskSubmitScreen
+                
+                print("taskName \(self.completedTask.taskName)")
+                print("taskdes \(self.completedTask.taskDescription)")
+                print("ispicturereq \(self.completedTask.isPictureRequired)")
+                taskSubmitScreen.earnItTask = self.completedTask
+                //taskSubmitScreen.isPictureRequired = self.completedTask.isPictureRequired
+                //taskSubmitScreen.taskNameLabel.text = "hello"
+                //taskSubmitScreen.taskDescription.text = self.completedTask.taskDescription
+                self.present(taskSubmitScreen, animated:true, completion:nil)
+            }
+        }
+        else if type == "OverDue" {
+            
+            taskCell.taskName.text = self.overDueTasks[indexPath.row].taskName
+            taskCell.taskDescription.text = self.overDueTasks[indexPath.row].dateMonthString + " @ " + self.overDueTasks[indexPath.row].dueTime
+            
+            taskCell.statusImage.backgroundColor = getColorStatusForTaskForChildDashBoard(earnItTask: self.overDueTasks[indexPath.row])
+            
+            //taskCell.checkButton.backgroundColor = UIColor.clear
+            //taskCell.layer.borderColor = UIColor.white.cgColor
+            //taskCell.layer.borderWidth = 1
+            // taskCell.checkButton.setImage(nil, for: .normal)
+            
+            taskCell.askToRemoveTheCompletedTask = {
+                self.completedTask = self.overDueTasks[indexPath.row]
+                let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
+                let taskSubmitScreen = storyBoard.instantiateViewController(withIdentifier: "TaskSubmitScreen") as! TaskSubmitScreen
+                
+                print("taskName \(self.completedTask.taskName)")
+                print("taskdes \(self.completedTask.taskDescription)")
+                print("ispicturereq \(self.completedTask.isPictureRequired)")
+                taskSubmitScreen.earnItTask = self.completedTask
+                //taskSubmitScreen.isPictureRequired = self.completedTask.isPictureRequired
+                //taskSubmitScreen.taskNameLabel.text = "hello"
+                //taskSubmitScreen.taskDescription.text = self.completedTask.taskDescription
+                self.present(taskSubmitScreen, animated:true, completion:nil)
+            }
+        }
+            
+        else if type == "DayTask" {
+            taskCell.taskName.text = self.dayTasks[indexPath.section].earnItTasks[indexPath.row].taskName
+            taskCell.taskDescription.text = self.dayTasks[indexPath.section].earnItTasks[indexPath.row].dateMonthString + " @ " + self.dayTasks[indexPath.section].earnItTasks[indexPath.row].dueTime
+            
+            taskCell.statusImage.backgroundColor = getColorStatusForTaskForChildDashBoard(earnItTask: self.dayTasks[indexPath.section].earnItTasks[indexPath.row])
+            
+            //taskCell.checkButton.setImage(nil, for: .normal)
+            
+            taskCell.askToRemoveTheCompletedTask = {
+                
+                self.completedTask = self.dayTasks[indexPath.section].earnItTasks[indexPath.row]
+                
+                let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
+                let taskSubmitScreen = storyBoard.instantiateViewController(withIdentifier: "TaskSubmitScreen") as! TaskSubmitScreen
+                taskSubmitScreen.earnItTask = self.completedTask
+                //taskSubmitScreen.isPictureRequired = self.completedTask.isPictureRequired
+                //taskSubmitScreen.taskNameLabel.text = self.completedTask.taskName
+                //taskSubmitScreen.taskDescription.text = self.completedTask.taskDescription
+                
+                self.present(taskSubmitScreen, animated:true, completion:nil)
+            }
+        }
+        return taskCell
+    }
+    
+    //override
+    //    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
+    //
+    //        let taskCell = self.childUserTable.dequeueReusableCell(withIdentifier: "ChildTaskDetailCell", for: indexPath as IndexPath) as! ChildTaskDetailCell
+    //        //taskCell.taskName = ""
+    //
+    //
+    //        if self.overDueTasks.count > 0 {
+    //
+    //        if (indexPath.section == 0){
+    //
+    //
+    //
+    //            taskCell.taskName.text = self.overDueTasks[indexPath.row].taskName
+    //            taskCell.taskDescription.text = self.overDueTasks[indexPath.row].dateMonthString + " @ " + self.overDueTasks[indexPath.row].dueTime
+    //
+    //            taskCell.statusImage.backgroundColor = getColorStatusForTaskForChildDashBoard(earnItTask: self.overDueTasks[indexPath.row])
+    //
+    //            //taskCell.checkButton.backgroundColor = UIColor.clear
+    //            //taskCell.layer.borderColor = UIColor.white.cgColor
+    //            //taskCell.layer.borderWidth = 1
+    //            // taskCell.checkButton.setImage(nil, for: .normal)
+    //
+    //
+    //
+    //            taskCell.askToRemoveTheCompletedTask = {
+    //
+    //                self.completedTask = self.overDueTasks[indexPath.row]
+    //                let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
+    //                let taskSubmitScreen = storyBoard.instantiateViewController(withIdentifier: "TaskSubmitScreen") as! TaskSubmitScreen
+    //
+    //                print("taskName \(self.completedTask.taskName)")
+    //                 print("taskdes \(self.completedTask.taskDescription)")
+    //                 print("ispicturereq \(self.completedTask.isPictureRequired)")
+    //                taskSubmitScreen.earnItTask = self.completedTask
+    //                //taskSubmitScreen.isPictureRequired = self.completedTask.isPictureRequired
+    //                //taskSubmitScreen.taskNameLabel.text = "hello"
+    //                //taskSubmitScreen.taskDescription.text = self.completedTask.taskDescription
+    //                self.present(taskSubmitScreen, animated:true, completion:nil)
+    //
+    //            }
+    //
+    //        }else {
+    //
+    //
+    //
+    //
+    //
+    //            taskCell.taskName.text = self.dayTasks[indexPath.section - 1].earnItTasks[indexPath.row].taskName
+    //            taskCell.taskDescription.text = self.dayTasks[indexPath.section - 1].earnItTasks[indexPath.row].dateMonthString + " @ " + self.dayTasks[indexPath.section - 1].earnItTasks[indexPath.row].dueTime
+    //
+    //
+    //            taskCell.statusImage.backgroundColor = getColorStatusForTaskForChildDashBoard(earnItTask: self.dayTasks[indexPath.section - 1].earnItTasks[indexPath.row])
+    //
+    //
+    //            //taskCell.checkButton.setImage(nil, for: .normal)
+    //
+    //            taskCell.askToRemoveTheCompletedTask = {
+    //
+    //            self.completedTask = self.dayTasks[indexPath.section - 1].earnItTasks[indexPath.row]
+    //
+    //                let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
+    //                let taskSubmitScreen = storyBoard.instantiateViewController(withIdentifier: "TaskSubmitScreen") as! TaskSubmitScreen
+    //                taskSubmitScreen.earnItTask = self.completedTask
+    //               // taskSubmitScreen.isPictureRequired = self.completedTask.isPictureRequired
+    //                //taskSubmitScreen.taskNameLabel.text = self.completedTask.taskName
+    //                //taskSubmitScreen.taskDescription.text = self.completedTask.taskDescription
+    //
+    //                self.present(taskSubmitScreen, animated:true, completion:nil)
+    //
+    //
+    //              }
+    //
+    //          }
+    //
+    //        }else {
+    //
+    //
+    //            taskCell.taskName.text = self.dayTasks[indexPath.section].earnItTasks[indexPath.row].taskName
+    //            taskCell.taskDescription.text = self.dayTasks[indexPath.section].earnItTasks[indexPath.row].dateMonthString + " @ " + self.dayTasks[indexPath.section].earnItTasks[indexPath.row].dueTime
+    //
+    //            taskCell.statusImage.backgroundColor = getColorStatusForTaskForChildDashBoard(earnItTask: self.dayTasks[indexPath.section].earnItTasks[indexPath.row])
+    //
+    //            //taskCell.checkButton.setImage(nil, for: .normal)
+    //
+    //            taskCell.askToRemoveTheCompletedTask = {
+    //
+    //                self.completedTask = self.dayTasks[indexPath.section].earnItTasks[indexPath.row]
+    //
+    //                let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
+    //                let taskSubmitScreen = storyBoard.instantiateViewController(withIdentifier: "TaskSubmitScreen") as! TaskSubmitScreen
+    //                taskSubmitScreen.earnItTask = self.completedTask
+    //                //taskSubmitScreen.isPictureRequired = self.completedTask.isPictureRequired
+    //                //taskSubmitScreen.taskNameLabel.text = self.completedTask.taskName
+    //                //taskSubmitScreen.taskDescription.text = self.completedTask.taskDescription
+    //
+    //                self.present(taskSubmitScreen, animated:true, completion:nil)
+    //
+    //
+    //            }
+    //
+    //        }
+    //
+    //        return taskCell
+    //    }
+    //
+    
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
+        
+        var taskCell = self.childUserTable.dequeueReusableCell(withIdentifier: "ChildTaskDetailCell", for: indexPath as IndexPath) as! ChildTaskDetailCell
+        if self.pendingApprovalTasks.count > 0   {
+            if self.overDueTasks.count > 0 {
+                if (indexPath.section == 0){
+                    taskCell = self.configureTableCell(taskCell: taskCell, type: "PendingApproval", indexPath: indexPath as NSIndexPath)
+                }
+                else if (indexPath.section == 1){
+                    taskCell = self.configureTableCell(taskCell: taskCell, type: "OverDue", indexPath: indexPath as NSIndexPath)
+                }
+                else{
+                    var tempIndexPath = indexPath
+                    tempIndexPath.section = tempIndexPath.section - 2
+                    taskCell = self.configureTableCell(taskCell: taskCell, type: "DayTask", indexPath: tempIndexPath as NSIndexPath)
+                }
+            }
+            else {
+                if (indexPath.section == 0){
+                    taskCell = self.configureTableCell(taskCell: taskCell, type: "PendingApproval", indexPath: indexPath as NSIndexPath)
+                }
+                else{
+                    var tempIndexPath = indexPath
+                    tempIndexPath.section = tempIndexPath.section - 1
                     
+                    taskCell = self.configureTableCell(taskCell: taskCell, type: "DayTask", indexPath: tempIndexPath as NSIndexPath)
+                }
+            }
+        }
+        else if self.overDueTasks.count > 0 {
+            if (indexPath.section == 0){
+                taskCell = self.configureTableCell(taskCell: taskCell, type: "OverDue", indexPath: indexPath as NSIndexPath)
+            }
+            else{
+                var tempIndexPath = indexPath
+                tempIndexPath.section = tempIndexPath.section - 1
+                taskCell = self.configureTableCell(taskCell: taskCell, type: "DayTask", indexPath: tempIndexPath as NSIndexPath)
+            }
+        }
+        else{
+            taskCell = self.configureTableCell(taskCell: taskCell, type: "DayTask", indexPath: indexPath as NSIndexPath)
+        }
+        
+        return taskCell
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view  = Bundle.main.loadNibNamed("DayHeader", owner: nil, options: nil)?.first as! DayHeader
+        view.sectionNo = section
+        
+        if self.pendingApprovalTasks.count > 0   {
+            if self.overDueTasks.count > 0 {
+                if (section == 0){
                     view.dayDetail.text = "Pending Approval"
                 }
                 else if (section == 1){
-                    
                     view.dayDetail.text = "Past Due"
                 }
                 else if isCurrentDate(earnItTaskDate: self.dayTasks[section - 2].date) {
@@ -664,59 +681,40 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
                     view.dayDetail.text =  "Today" + " " + self.dayTasks[section - 2].date
                 }
                 else{
-                    
                     view.dayDetail.text =  self.dayTasks[section - 2].dayName + " " + self.dayTasks[section-2].date
                 }
-                
             }
             else {
-                
                 if (section == 0){
-                    
                     view.dayDetail.text = "Pending Approval"
                 }
-                    
                 else if isCurrentDate(earnItTaskDate: self.dayTasks[section - 1].date) {
-                    
                     view.dayDetail.text =  "Today" + " " + self.dayTasks[section - 1].date
                 }
                 else{
-                    
                     view.dayDetail.text =  self.dayTasks[section-1].dayName + " " + self.dayTasks[section-1].date
                 }
-                
             }
-            
         }
         else if self.overDueTasks.count > 0 {
-            
             if (section == 0){
-                
                 view.dayDetail.text = "Past Due"
             }
             else if isCurrentDate(earnItTaskDate: self.dayTasks[section - 1].date) {
-                
-                view.dayDetail.text = "Today" + " " + self.dayTasks[section - 1].date            }
+                view.dayDetail.text = "Today" + " " + self.dayTasks[section - 1].date
+            }
             else{
-                
                 view.dayDetail.text =  self.dayTasks[section-1].dayName + " " + self.dayTasks[section-1].date
             }
-            
         }
         else {
-            
             if isCurrentDate(earnItTaskDate: self.dayTasks[section].date) {
-                
                 view.dayDetail.text =  "Today" + " " + self.dayTasks[section ].date
-                
             }
             else{
-                
                 view.dayDetail.text =  self.dayTasks[section].dayName + " " + self.dayTasks[section].date
             }
-            
         }
-        
         
         
         //          if self.overdueTasks.count > 0{
@@ -744,99 +742,21 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
         //
         //            }
         //            else{
-        //                
+        //
         //                view.dayDetail.text =  self.dayTasks[section].dayName + ", " + self.dayTasks[section].date
         //            }
-        //            
+        //
         //          }
-        
         
         if !SectionDetailsArray[section].isCollapsed {
             view.arrowLabel.transform = CGAffineTransform(rotationAngle: CGFloat.pi/2)
         }
-        
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(sectionDidTap))
         view.addGestureRecognizer(tapRecognizer)
         
         return view
     }
 
-    func sectionDidTap(recognizer: UISwipeGestureRecognizer) {
-        
-        guard let Header = recognizer.view as? DayHeader else {
-            return
-        }
-        
-        if SectionDetailsArray[Header.sectionNo].isCollapsed {
-            SectionDetailsArray[Header.sectionNo].isCollapsed = false
-        }
-        else {
-            SectionDetailsArray[Header.sectionNo].isCollapsed = true
-        }
-        
-        // self.childTableForTodayTask.reloadData()
-        self.childUserTable.reloadSections((NSIndexSet(index: Header.sectionNo) as IndexSet), with: .automatic)
-    }
-    
-    func showPopup(task: EarnItTask){
-        
-        self.childUserTable.isUserInteractionEnabled = false
-        detailView = (Bundle.main.loadNibNamed("DetailView", owner: self, options: nil)?[0] as? DetailView)!
-        
-        detailView.TaskName.text = task.taskName
-        detailView.Allowance.text = "$" + String(task.allowance)
-        detailView.expiryDate.text = task.dateMonthString + " @ " + task.dueTime
-        detailView.createdDate.text = task.createdDateMonthString + " @ " + task.createdDateTime
-        
-        detailView.close.addTarget(self, action: #selector(self.closeDetailView), for: UIControlEvents.touchUpInside)
-        
-        detailView.center = self.view.center
-        
-        self.view.addSubview(detailView)
-        
-        var dView:[String:UIView] = [:]
-        dView["DetailView"] = detailView
-        
-        let h_Pin = NSLayoutConstraint.constraints(withVisualFormat: "H:|-(36)-[DetailView]-(36)-|", options: NSLayoutFormatOptions(rawValue: 0) , metrics: nil, views: dView)
-        self.view.addConstraints(h_Pin)
-        
-        let v_Pin = NSLayoutConstraint.constraints(withVisualFormat: "V:|-(36)-[DetailView]-(36)-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: dView)
-        self.view.addConstraints(v_Pin)
-        
-        constY = NSLayoutConstraint(item: detailView, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0)
-        self.view.addConstraint(constY!)
-        
-        
-        constX = NSLayoutConstraint(item: detailView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0)
-        self.view.addConstraint(constX!)
-        
-        UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 0.3, initialSpringVelocity: 0.50, options: UIViewAnimationOptions.layoutSubviews, animations: { () -> Void in
-            self.detailView.alpha = 1
-            self.view.layoutIfNeeded()
-        }) { (value:Bool) -> Void in
-            
-        }
-    }
-        
-
-    func showLoadingView(){
-        
-        self.view.alpha = 0.7
-        self.view.isUserInteractionEnabled = false
-        self.activityIndicator.startAnimating()
-    }
-    
-    func hideLoadingView(){
-        self.view.alpha = 1
-        self.view.isUserInteractionEnabled = true
-        self.activityIndicator.stopAnimating()
-    }
-
-    func closeDetailView(sender: UIButton){
-         self.childUserTable.isUserInteractionEnabled = true
-         hideStatusInputView()
-    }
-        
     // MARK: - function to hidePopupView
     /**
      */
@@ -864,9 +784,7 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
     }
     
     func fetchUserDetailFromBackground(){
-        
         DispatchQueue.global().async {
-            
             let keychain = KeychainSwift()
             //let _ : Int = Int(keychain.get("userId")!)!
             guard  let _ = keychain.get("email") else  {
@@ -879,7 +797,6 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
             checkUserAuthentication(email: email, password: password, success: {
                 
                 (responseJSON) ->() in
-                
                 print("Response : \(responseJSON)")
                 if (responseJSON["userType"].stringValue == "CHILD"){
                     EarnItChildUser.currentUser.setAttribute(json: responseJSON)
@@ -896,7 +813,6 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
             }
 
             DispatchQueue.main.async {
-                
                 print("done calling background fetch....")
                 if EarnItChildUser.currentUser.firstName != nil {
                     
@@ -907,12 +823,10 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
 
                     self.childUserTable.reloadData()
                     self.getGoalForCurrentUser()
-
-                }else {
-                    
+                }
+                else {
                     print("response is nil")
                 }
-             
             }
         }
     }
@@ -920,8 +834,8 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
     func userImageDidTapped(gesture: UIGestureRecognizer) {
         // if the tapped view is a UIImageView then set it to imageview
         print("User Image got tapped")
+        return
         //_ = sender.view as! UIImageView
-
         let optionView  = (Bundle.main.loadNibNamed("ChildOptionView", owner: self, options: nil)?[0] as? ChildOptionView)!
         optionView.center = self.view.center
         optionView.userImageView.image = self.userImageVieqw.image
