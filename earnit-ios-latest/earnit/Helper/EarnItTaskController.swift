@@ -227,6 +227,11 @@ func getDayTaskListForChildUser(earnItTasks: [EarnItTask]) -> [DayTask]{
         formatter.dateFormat = "M/dd"
         let dateString = day
         let calendar = Calendar.current
+//        if (tasks.count == 0) {
+//            return dayTasks
+//        }
+        print(tasks)
+        print(calendar.component(.weekday, from: (tasks.first?.dueDate)!))
         let weekday = calendar.component(.weekday, from: (tasks.first?.dueDate)!)
         let weekdayname = getWeekDayName(weekdayValue: weekday)
         let dayTask = DayTask( dayName: weekdayname, date: dateString, earnItTasks: tasks, dueDate: (tasks.first?.dueDate)!)

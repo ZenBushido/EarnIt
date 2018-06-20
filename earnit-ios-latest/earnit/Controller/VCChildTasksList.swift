@@ -65,11 +65,12 @@ class VCChildTasksList : UIViewController ,UITableViewDelegate, UITableViewDataS
     
     override func viewDidAppear(_ animated: Bool) {
 //        self.startTimerForFetchingUserDetail()
-        self.setChildInfo()
+//        self.setChildInfo()
     }
     
     func setChildInfo(){
         var tasks =  getTodayandFutureTask(earnItTasks: self.tasksForTheDay) //EarnItChildUser.currentUser.earnItTasks)
+//        var tasks =  getTodayandFutureTask(earnItTasks: EarnItChildUser.currentUser.earnItTasks)
         self.dayTasks = getDayTaskListForChildUser(earnItTasks: tasks)
         self.overDueTasks = getOverDueTaskListForChildDashBoard(earnItTasks: self.tasksForTheDay)
         self.pendingApprovalTasks = getPendingApprovalTasks(earnItTasks: self.tasksForTheDay)

@@ -106,7 +106,7 @@
                   moduleName = "earnit-Dev"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/gaurav/Documents/my_projects_own/Earnit_Apps_Main/earnit-ios-latest/earnit/Controller/TaskViewController.swift"
-                  timestampString = "550982267.057411"
+                  timestampString = "551157159.640871"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "852"
@@ -121,7 +121,7 @@
                   moduleName = "earnit-Dev"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/gaurav/Documents/my_projects_own/Earnit_Apps_Main/earnit-ios-latest/earnit/Controller/TaskViewController.swift"
-                  timestampString = "550982267.060907"
+                  timestampString = "551157159.644472"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "852"
@@ -154,7 +154,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "earnit/AppDelegate.swift"
-            timestampString = "550951258.5604841"
+            timestampString = "551153155.578303"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "60"
@@ -239,6 +239,54 @@
                   startingLineNumber = "53"
                   endingLineNumber = "53"
                   offsetFromSymbolStart = "4134">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "earnit/Helper/EarnItTaskController.swift"
+            timestampString = "551157159.396933"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "234"
+            endingLineNumber = "234"
+            landmarkName = "getDayTaskListForChildUser(earnItTasks:)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "earnit_Dev.getDayTaskListForChildUser(earnItTasks: Swift.Array&lt;earnit_Dev.EarnItTask&gt;) -&gt; Swift.Array&lt;earnit_Dev.DayTask&gt;"
+                  moduleName = "earnit-Dev"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/gaurav/Documents/my_projects_own/Earnit_Apps_Main/earnit-ios-latest/earnit/Helper/EarnItTaskController.swift"
+                  timestampString = "551154412.782262"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "234"
+                  endingLineNumber = "234"
+                  offsetFromSymbolStart = "4579">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "earnit_Dev.getDayTaskListForChildUser(earnItTasks: Swift.Array&lt;earnit_Dev.EarnItTask&gt;) -&gt; Swift.Array&lt;earnit_Dev.DayTask&gt;"
+                  moduleName = "earnit-Dev"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/gaurav/Documents/my_projects_own/Earnit_Apps_Main/earnit-ios-latest/earnit/Helper/EarnItTaskController.swift"
+                  timestampString = "551154412.785656"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "234"
+                  endingLineNumber = "234"
+                  offsetFromSymbolStart = "6229">
                </Location>
             </Locations>
          </BreakpointContent>

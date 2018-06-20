@@ -75,7 +75,7 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
     
     func setChildInfo(){
         
-        var tasks =  getTodayandFutureTask(earnItTasks: EarnItChildUser.currentUser.earnItTasks)
+        let tasks =  getTodayandFutureTask(earnItTasks: EarnItChildUser.currentUser.earnItTasks)
         self.dayTasks = getDayTaskListForChildUser(earnItTasks: tasks)
         self.overDueTasks = getOverDueTaskListForChildDashBoard(earnItTasks: EarnItChildUser.currentUser.earnItTasks)
         self.pendingApprovalTasks = getPendingApprovalTasks(earnItTasks: EarnItChildUser.currentUser.earnItTasks)
@@ -884,8 +884,8 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
                 if (responseJSON["userType"].stringValue == "CHILD"){
                     EarnItChildUser.currentUser.setAttribute(json: responseJSON)
                     //success(true)
-                }else {
-                    
+                }
+                else {
                     EarnItAccount.currentUser.setAttribute(json: responseJSON)
                     keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
                    // success(true)
@@ -896,11 +896,9 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
             }
 
             DispatchQueue.main.async {
-                
                 print("done calling background fetch....")
                 if EarnItChildUser.currentUser.firstName != nil {
-                    
-                    var tasks =  getTodayandFutureTask(earnItTasks: EarnItChildUser.currentUser.earnItTasks)
+                    let tasks =  getTodayandFutureTask(earnItTasks: EarnItChildUser.currentUser.earnItTasks)
                     self.dayTasks = getDayTaskListForChildUser(earnItTasks: tasks)
                     self.overDueTasks = getOverDueTaskListForChild(earnItTasks: EarnItChildUser.currentUser.earnItTasks)
                     self.pendingApprovalTasks = getPendingApprovalTasks(earnItTasks: EarnItChildUser.currentUser.earnItTasks)
@@ -909,10 +907,8 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
                     self.getGoalForCurrentUser()
 
                 }else {
-                    
                     print("response is nil")
                 }
-             
             }
         }
     }
@@ -956,8 +952,6 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
         optionView.secondOption.setImage(EarnItImage.setEarnItAppBalanceIcon(), for: .normal)
         optionView.thirdOption.setImage(EarnItImage.setEarnItAppCalendarIcon(), for: .normal)
         optionView.fourthOption.setImage(EarnItImage.setEarnItLogoutIcon(), for: .normal)
-
-        //optionView.sixthOption.setImage(EarnItImage.setEarnItCommentIcon(), for: .normal)
         
         optionView.firstOption.setTitle("View Tasks", for: .normal)
         optionView.secondOption.setTitle("Balances", for: .normal)
@@ -977,7 +971,7 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
         }
         optionView.doActionForThirdOption = {
             self.removeActionView()
-            //Show calendar view here
+            //Show Child calendar here
             let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
             let childCalendarController = storyBoard.instantiateViewController(withIdentifier: "VCChildCalendar") as! VCChildCalendar
             childCalendarController.earnItChildUser = EarnItChildUser.currentUser

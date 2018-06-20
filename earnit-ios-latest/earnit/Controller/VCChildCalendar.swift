@@ -30,6 +30,8 @@ class VCChildCalendar: UIViewController, FSCalendarDataSource, FSCalendarDelegat
     @IBOutlet var repeatCalendar: FSCalendar!
     @IBOutlet var btnOnDayNumber: UIButton!
     @IBOutlet var btnOnDayName: UIButton!
+    var tasksForTheMonth = [EarnItTask]()
+
 //    @IBOutlet var activityIndicator: UIActivityIndicatorView!
 
     var weekPickerView = UIPickerView()
@@ -42,6 +44,7 @@ class VCChildCalendar: UIViewController, FSCalendarDataSource, FSCalendarDelegat
         super.viewDidLoad()
         self.title = "Calendar"
         print(EarnItAccount.currentUser.firstName)
+//        self.setupTasksArrayForChildCalendar()
         
         if (EarnItAccount.currentUser.firstName != nil){
             self.lblTitle.text = "\(EarnItAccount.currentUser.firstName!)"
@@ -65,7 +68,6 @@ class VCChildCalendar: UIViewController, FSCalendarDataSource, FSCalendarDelegat
         
         self.setupRepeatView()
         self.setupCalendarView()
-//        print(self.earnItChildUser.earnItTasks.count)
 //        self.fetchChildAllTasks()
     }
 
@@ -75,6 +77,11 @@ class VCChildCalendar: UIViewController, FSCalendarDataSource, FSCalendarDelegat
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        self.tasksForTheMonth.removeAll()
+        super.viewDidAppear(animated)
     }
     
     func setupCalendarView() {
@@ -343,6 +350,7 @@ class VCChildCalendar: UIViewController, FSCalendarDataSource, FSCalendarDelegat
         var taskCount = Int()
         var selectedDateTasks = [EarnItTask]()
         for task in  self.earnItChildUser.earnItTasks {
+//        for task in self.tasksForTheMonth {
             if(dateFormatter.string(from: date) == dateFormatter.string(from: task.dueDate)) {
                 taskCount = taskCount+1
                 selectedDateTasks.append(task)
@@ -402,6 +410,43 @@ class VCChildCalendar: UIViewController, FSCalendarDataSource, FSCalendarDelegat
         return true
     }
     
+    func setupTasksArrayForChildCalendar() {
+        self.tasksForTheMonth.removeAll()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy/MM/dd"
+        dateFormatter.locale = Locale(identifier: "en_US")
+        for task in  self.earnItChildUser.earnItTasks {
+            if(task.repeatMode == repeatMode(rawValue: "daily")!) {
+                for i in 0 ..< 40 {
+                    task.dueDate = task.dueDate.addingTimeInterval(TimeInterval(60*60*24*i))
+                    self.tasksForTheMonth.append(task)
+                }
+            }
+            else if(task.repeatMode == repeatMode(rawValue: "weekly")!) {
+                for i in 0 ..< 5 {
+                    task.dueDate = task.dueDate.addingTimeInterval(TimeInterval(60*60*24*7*i))
+                    self.tasksForTheMonth.append(task)
+                }
+            }
+            else if(task.repeatMode == repeatMode(rawValue: "monthly")!) {
+                for i in 0 ..< 3 {
+                    task.dueDate = task.dueDate.addingTimeInterval(TimeInterval(60*60*24*31*i))
+                    self.tasksForTheMonth.append(task)
+                }
+            }
+            else {
+                self.tasksForTheMonth.append(task)
+                print("none")
+            }
+        }
+    }
+    
+    func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
+        let currentMonth = calendar.month(of: calendar.currentPage)
+        print("this is the current Month \(currentMonth)")
+//        self.setupTasksArrayForChildCalendar()
+    }
+    
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy/MM/dd"
@@ -409,8 +454,31 @@ class VCChildCalendar: UIViewController, FSCalendarDataSource, FSCalendarDelegat
         dateFormatter.locale = Locale(identifier: "en_US")
         var taskCount = Int()
         taskCount = 0
+        
+//        for task in  self.tasksForTheMonth {
+////            print(dateFormatter.string(from: date))
+//            print(dateFormatter.string(from: task.dueDate))
+//            if (dateFormatter.string(from: task.dueDate) == "2018/03/26") {
+//                print("XXX")
+//            }
+//            if (dateFormatter.string(from: task.dueDate) == "2018/06/20") {
+//                print("XXX")
+//            }
+//            if (dateFormatter.string(from: date) == "2018/06/19") {
+//                print("XXX")
+//            }
+//
+//            if(dateFormatter.string(from: date) == dateFormatter.string(from: task.dueDate)) {
+//                //                earnItTask.repeatMode.rawValue
+//                taskCount = taskCount+1
+//            }
+//        }
+//        return taskCount
+
+        
         for task in  self.earnItChildUser.earnItTasks {
             if(dateFormatter.string(from: date) == dateFormatter.string(from: task.dueDate)) {
+//                earnItTask.repeatMode.rawValue
                 taskCount = taskCount+1
             }
         }
