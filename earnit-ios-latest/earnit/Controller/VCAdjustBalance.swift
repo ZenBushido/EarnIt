@@ -405,7 +405,6 @@ class VCAdjustBalance : UIViewController, UITextViewDelegate, UIGestureRecognize
             self.actionView.addSubview(childOptionView)
             self.actionView.backgroundColor = UIColor.clear
             self.view.addSubview(self.actionView)
-            
         }
         else {
             optionView.firstOption.setImage(EarnItImage.setEarnItAddIcon(), for: .normal)

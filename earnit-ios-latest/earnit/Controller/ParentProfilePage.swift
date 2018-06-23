@@ -227,10 +227,7 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
         
         NotificationCenter.default.addObserver(self, selector: #selector(ParentProfilePage.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ParentProfilePage.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide  , object: nil)
-        
     }
-    
-    
     
     /**
      Responds to keyboard showing and adjusts the scrollview.
@@ -502,6 +499,27 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
         return true
     }
 
+    //MARK: Upload Image Methods
+    
+//    func upload(image: UIImage, progressCompletion: @escaping (_ percent: Float) -> Void, completion: @escaping (_ tags: [String]?, _ colors: [PhotoColor]?) -> Void) {
+//        // 1
+//        guard let imageData = UIImageJPEGRepresentation(image, 0.5) else {
+//            print("Could not get JPEG representation of UIImage")
+//            return
+//        }
+//
+//        // 2
+//        /*Alamofire.upload(multipartFormData: { multipartFormData in
+//            multipartFormData.append(imageData,
+//                                     withName: "imagefile",
+//                                     fileName: "image.jpg",
+//                                     mimeType: "image/jpeg")
+//        },
+//                         to: "http://api.imagga.com/v1/content",
+//                         headers: ["Authorization": "Basic xxx"],
+//                         encodingCompletion: { encodingResult in
+//        })*/
+//    }
     //MARK: Action Methods
     
     @IBAction func openChangePasswordDialog(_ sender: Any) {
@@ -598,26 +616,24 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
                 let password : String = (keychain.get("password")!)
                 
                 checkUserAuthentication(email: email, password: password, success: {
-                    
                     (responseJSON) ->() in
-                    
-                    self.view.makeToast("Update successful")
-                    self.dismissScreen()
-                    //                    let alert = showAlertWithOption(title: "", message: "Update successful")
-                    //                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: self.dismissScreen))
-                    //                    self.present(alert, animated: true, completion: nil)
-                    
-                    EarnItAccount.currentUser.setAttribute(json: responseJSON)
-                    keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
-                    self.hideLoadingView()
-                    // success(true)
-                    
-                    
+                    if (responseJSON["email"].string == nil || responseJSON["email"].stringValue == ""){
+                        self.dismissScreenToLogin()
+                    }
+                    else {
+                        self.view.makeToast("Update successful")
+                        self.dismissScreen()
+                        //                    let alert = showAlertWithOption(title: "", message: "Update successful")
+                        //                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: self.dismissScreen))
+                        //                    self.present(alert, animated: true, completion: nil)
+                        
+                        EarnItAccount.currentUser.setAttribute(json: responseJSON)
+                        keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
+                        self.hideLoadingView()
+                        // success(true)
+                    }
                 }) { (error) -> () in
-                    
-                    
                     self.dismissScreenToLogin()
-                    
                     //                    let alert = showAlertWithOption(title: "Authentication failed", message: "please login again")
                     //                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: self.dismissScreenToLogin))
                     //                    self.present(alert, animated: true, completion: nil)
@@ -998,8 +1014,13 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
                     checkUserAuthentication(email: email, password: password, success: {
                         
                         (responseJSON) ->() in
-                        EarnItAccount.currentUser.setAttribute(json: responseJSON)
-                        keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
+                        if (responseJSON["email"].string == nil || responseJSON["email"].stringValue == ""){
+                            self.dismissScreenToLogin()
+                        }
+                        else {
+                            EarnItAccount.currentUser.setAttribute(json: responseJSON)
+                            keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
+                        }
                     }) { (error) -> () in
                         self.dismissScreenToLogin()
 //                        let alert = showAlertWithOption(title: "Authentication failed", message: "please login again")
@@ -1013,9 +1034,7 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
 //                    self.present(alert, animated: true, completion: nil)
 //                    print(" Set status completed failed")
                 }
-                
             }
-                
             else {
                 self.view.makeToast("Update Profile Failed")
 //                let alert = showAlert(title: "Opps", message: "Failed to Upload Image")
@@ -1051,25 +1070,24 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
             let password : String = (keychain.get("password")!)
             
             checkUserAuthentication(email: email, password: password, success: {
-                
                 (responseJSON) ->() in
-                
-                if (responseJSON["userType"].stringValue == "CHILD"){
-                    
-                    EarnItChildUser.currentUser.setAttribute(json: responseJSON)
-                    //success(true)
-                    
-                }else {
-                    
-                    let keychain = KeychainSwift()
-                    if responseJSON["token"].stringValue != keychain.get("token") || responseJSON["token"] == nil{
-                        
-                    }
-                    EarnItAccount.currentUser.setAttribute(json: responseJSON)
-                    keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
-                    // success(true)
+                if (responseJSON["email"].string == nil || responseJSON["email"].stringValue == ""){
+                    self.dismissScreenToLogin()
                 }
-                
+                else {
+                    if (responseJSON["userType"].stringValue == "CHILD"){
+                        EarnItChildUser.currentUser.setAttribute(json: responseJSON)
+                        //success(true)
+                    }
+                    else {
+                        let keychain = KeychainSwift()
+                        if responseJSON["token"].stringValue != keychain.get("token") || responseJSON["token"] == nil{
+                        }
+                        EarnItAccount.currentUser.setAttribute(json: responseJSON)
+                        keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
+                        // success(true)
+                    }
+                }
             }) { (error) -> () in
                 
                   self.dismissScreenToLogin()

@@ -579,18 +579,18 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
             checkUserAuthentication(email: email, password: password, success: {
                 
                 (responseJSON) ->() in
-                
-                if (responseJSON["userType"].stringValue == "CHILD"){
-                    EarnItChildUser.currentUser.setAttribute(json: responseJSON)
-                    self.setChildInfo()
-                    self.hideLoadingView()
+                if (responseJSON["email"].string == nil || responseJSON["email"].stringValue == "") {
+                    if (responseJSON["userType"].stringValue == "CHILD"){
+                        EarnItChildUser.currentUser.setAttribute(json: responseJSON)
+                        self.setChildInfo()
+                        self.hideLoadingView()
+                    }
+                    else {
+                        EarnItAccount.currentUser.setAttribute(json: responseJSON)
+                        keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
+                        self.hideLoadingView()
+                    }
                 }
-                else {
-                    EarnItAccount.currentUser.setAttribute(json: responseJSON)
-                    keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
-                    self.hideLoadingView()
-                }
-                
             }) { (error) -> () in
                 
             }
@@ -879,18 +879,21 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
             checkUserAuthentication(email: email, password: password, success: {
                 
                 (responseJSON) ->() in
-                
                 print("Response : \(responseJSON)")
-                if (responseJSON["userType"].stringValue == "CHILD"){
-                    EarnItChildUser.currentUser.setAttribute(json: responseJSON)
-                    //success(true)
+                if (responseJSON["email"].string == nil || responseJSON["email"].stringValue == ""){
+                    self.dismiss(animated: true, completion: nil)
                 }
                 else {
-                    EarnItAccount.currentUser.setAttribute(json: responseJSON)
-                    keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
-                   // success(true)
+                    if (responseJSON["userType"].stringValue == "CHILD"){
+                        EarnItChildUser.currentUser.setAttribute(json: responseJSON)
+                        //success(true)
+                    }
+                    else {
+                        EarnItAccount.currentUser.setAttribute(json: responseJSON)
+                        keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
+                        // success(true)
+                    }
                 }
-                
             }) { (error) -> () in
                 self.dismiss(animated: true, completion: nil)
             }
@@ -984,6 +987,7 @@ class ChildDashBoard : UIViewController ,UITableViewDelegate, UITableViewDataSou
             keychain.delete("email")
             keychain.delete("password")
             keychain.delete("isProfileUpdated")
+            keychain.delete("user_auth")
             UIApplication.shared.unregisterForRemoteNotifications()
             
             //keychain.delete("token")

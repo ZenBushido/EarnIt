@@ -226,18 +226,22 @@ class VCChildTasksList : UIViewController ,UITableViewDelegate, UITableViewDataS
             let password : String = (keychain.get("password")!)
             
             checkUserAuthentication(email: email, password: password, success: {
-                
                 (responseJSON) ->() in
-                
-                if (responseJSON["userType"].stringValue == "CHILD"){
-                    EarnItChildUser.currentUser.setAttribute(json: responseJSON)
-                    self.setChildInfo()
+                if (responseJSON["email"].string == nil || responseJSON["email"].stringValue == ""){
+                    self.view.makeToast("Something went wrong")
                     self.hideLoadingView()
                 }
                 else {
-                    EarnItAccount.currentUser.setAttribute(json: responseJSON)
-                    keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
-                    self.hideLoadingView()
+                    if (responseJSON["userType"].stringValue == "CHILD"){
+                        EarnItChildUser.currentUser.setAttribute(json: responseJSON)
+                        self.setChildInfo()
+                        self.hideLoadingView()
+                    }
+                    else {
+                        EarnItAccount.currentUser.setAttribute(json: responseJSON)
+                        keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
+                        self.hideLoadingView()
+                    }
                 }
                 
             }) { (error) -> () in
@@ -794,19 +798,22 @@ class VCChildTasksList : UIViewController ,UITableViewDelegate, UITableViewDataS
             }
             let email : String = (keychain.get("email")!)
             let password : String = (keychain.get("password")!)
-            
             checkUserAuthentication(email: email, password: password, success: {
-                
                 (responseJSON) ->() in
                 print("Response : \(responseJSON)")
-                if (responseJSON["userType"].stringValue == "CHILD"){
-                    EarnItChildUser.currentUser.setAttribute(json: responseJSON)
-                    //success(true)
-                }else {
-                    
-                    EarnItAccount.currentUser.setAttribute(json: responseJSON)
-                    keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
-                   // success(true)
+                if (responseJSON["email"].string == nil || responseJSON["email"].stringValue == ""){
+                    self.dismiss(animated: true, completion: nil)
+                }
+                else {
+                    if (responseJSON["userType"].stringValue == "CHILD"){
+                        EarnItChildUser.currentUser.setAttribute(json: responseJSON)
+                        //success(true)
+                    }
+                    else {
+                        EarnItAccount.currentUser.setAttribute(json: responseJSON)
+                        keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
+                        // success(true)
+                    }
                 }
                 
             }) { (error) -> () in
@@ -904,7 +911,7 @@ class VCChildTasksList : UIViewController ,UITableViewDelegate, UITableViewDataS
             keychain.delete("isActiveUser")
             keychain.delete("email")
             keychain.delete("password")
-            keychain.delete("isProfileUpdated")
+            keychain.delete("user_auth")
             UIApplication.shared.unregisterForRemoteNotifications()
             
             //keychain.delete("token")

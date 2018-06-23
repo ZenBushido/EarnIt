@@ -716,30 +716,25 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
                 let password : String = (keychain.get("password")!)
                 
                 checkUserAuthentication(email: email, password: password, success: {
-                    
                     (responseJSON) ->() in
-                    
-                    if (responseJSON["userType"].stringValue == "CHILD"){
-                        
-                        EarnItChildUser.currentUser.setAttribute(json: responseJSON)
-                        //success(true)
-                        
-                    }else {
-                        
-                        let keychain = KeychainSwift()
-                        if responseJSON["token"].stringValue != keychain.get("token") || responseJSON["token"] == nil{
-                            
-                        }
-                        
-                        EarnItAccount.currentUser.setAttribute(json: responseJSON)
-                        keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
-                        // success(true)
+                    if (responseJSON["email"].string == nil || responseJSON["email"].stringValue == ""){
+                        self.dismissScreenToLogin()
                     }
-                    
+                    else{
+                        if (responseJSON["userType"].stringValue == "CHILD"){
+                            EarnItChildUser.currentUser.setAttribute(json: responseJSON)
+                            //success(true)
+                        }else {
+                            let keychain = KeychainSwift()
+                            if responseJSON["token"].stringValue != keychain.get("token") || responseJSON["token"] == nil{
+                            }
+                            EarnItAccount.currentUser.setAttribute(json: responseJSON)
+                            keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
+                            // success(true)
+                        }
+                    }
                 }) { (error) -> () in
-                    
                       self.dismissScreenToLogin()
-                    
 //                    let alert = showAlertWithOption(title: "", message: "Login failed")
 //                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: self.dismissScreenToLogin))
 //                    self.present(alert, animated: true, completion: nil)

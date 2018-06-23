@@ -60,27 +60,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate , SlideMenuControllerDeleg
         if let isActiveUser = keychain.getBool("isActiveUser"){
             if isActiveUser {
                 print("active user")
-                checkUserAuthentication(email: email, password: password, success: {
-                    
+                checkUserAuthentication(email: email, password: password, success: {                    
                     (responseJSON) ->() in
-                    
                     print("Reponse json after login - \(responseJSON)")
-                    
+                    if (responseJSON["email"].string == nil || responseJSON["email"].stringValue == "") {
+                        
+                        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                        let loginPage = storyBoard.instantiateViewController(withIdentifier: "LoginController") as! LoginPageController
+                        self.window?.rootViewController = loginPage
+
+                        return
+                    }
                     let keychain = KeychainSwift()
                     keychain.set(responseJSON["email"].stringValue, forKey: "email")
                     //keychain.set(responseJSON["password"].stringValue, forKey: "password")
-                    
                     if (responseJSON["userType"].stringValue == "CHILD"){
-                        
                         print("App delegate  going to child Page")
                         EarnItChildUser.currentUser.setAttribute(json: responseJSON)
-                        
                         if EarnItChildUser.currentUser.childMessage == nil || EarnItChildUser.currentUser.childMessage == "" {
-                            
                             let childDashBoard = storyBoard.instantiateViewController(withIdentifier: "childDashBoard") as! ChildDashBoard
                             self.window?.rootViewController = childDashBoard
                         }else {
-                            
                             let childDashBoard = storyBoard.instantiateViewController(withIdentifier: "MessageDisplayScreen") as! MessageDisplayScreen
                             self.window?.rootViewController = childDashBoard
                         }
@@ -101,7 +101,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate , SlideMenuControllerDeleg
                             slideMenuController.delegate = parentLandingPage
                             
                             self.window?.rootViewController = slideMenuController
-                             
                         }
                         else {
                             print("App delegate  going to First time profile screen")
@@ -111,27 +110,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate , SlideMenuControllerDeleg
                             let profilePage  = storyBoard.instantiateViewController(withIdentifier: "FirstTimeLoginProfileUpdateScreen") as! FirstTimeLoginProfileScreen
                             //   profilePage.shouldGoBackToLandingPage = true
                             
-                         //   let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
+                            //   let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
                             
-                       //     let slideMenuController  = SlideMenuViewController(mainViewController: profilePage, leftMenuViewController: optionViewController)
+                            //     let slideMenuController  = SlideMenuViewController(mainViewController: profilePage, leftMenuViewController: optionViewController)
                             
-                        //    slideMenuController.automaticallyAdjustsScrollViewInsets = true
+                            //    slideMenuController.automaticallyAdjustsScrollViewInsets = true
                             //slideMenuController.delegate = profilePage
                             self.window?.rootViewController = profilePage
-
                         }
-                     
-                        
                     }
-                    
                 }) { (error) -> () in
                     
                     let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                     let loginPage = storyBoard.instantiateViewController(withIdentifier: "LoginController") as! LoginPageController
                     self.window?.rootViewController = loginPage
-                    
                 }
-                
             }
             else {
                 print("App delegate  going to Login Page")
@@ -362,4 +355,5 @@ extension AppDelegate : MessagingDelegate {
         print("%@", remoteMessage.appData)
     }
 }
+
 

@@ -69,6 +69,7 @@ class VCChildCalendar: UIViewController, FSCalendarDataSource, FSCalendarDelegat
         self.setupRepeatView()
         self.setupCalendarView()
 //        self.fetchChildAllTasks()
+//        /childrens/profile/images
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -349,8 +350,8 @@ class VCChildCalendar: UIViewController, FSCalendarDataSource, FSCalendarDelegat
         dateFormatter.locale = Locale(identifier: "en_US")
         var taskCount = Int()
         var selectedDateTasks = [EarnItTask]()
-        for task in  self.earnItChildUser.earnItTasks {
-//        for task in self.tasksForTheMonth {
+//        for task in  self.earnItChildUser.earnItTasks {
+        for task in self.tasksForTheMonth {
             if(dateFormatter.string(from: date) == dateFormatter.string(from: task.dueDate)) {
                 taskCount = taskCount+1
                 selectedDateTasks.append(task)
@@ -419,23 +420,34 @@ class VCChildCalendar: UIViewController, FSCalendarDataSource, FSCalendarDelegat
             if(task.repeatMode == repeatMode(rawValue: "daily")!) {
                 for i in 0 ..< 40 {
                     task.dueDate = task.dueDate.addingTimeInterval(TimeInterval(60*60*24*i))
-                    self.tasksForTheMonth.append(task)
+                    var taskObj = EarnItTask()
+                    taskObj = task
+                    taskObj.dueDate = taskObj.dueDate.addingTimeInterval(TimeInterval(60*60*24*i))
+                    self.tasksForTheMonth.append(taskObj)
                 }
             }
             else if(task.repeatMode == repeatMode(rawValue: "weekly")!) {
                 for i in 0 ..< 5 {
-                    task.dueDate = task.dueDate.addingTimeInterval(TimeInterval(60*60*24*7*i))
-                    self.tasksForTheMonth.append(task)
+//                    task.dueDate = task.dueDate.addingTimeInterval(TimeInterval(60*60*24*7*i))
+                    var taskObj = EarnItTask()
+                    taskObj = task
+                    taskObj.dueDate = taskObj.dueDate.addingTimeInterval(TimeInterval(60*60*24*7*i))
+                    self.tasksForTheMonth.append(taskObj)
                 }
             }
             else if(task.repeatMode == repeatMode(rawValue: "monthly")!) {
-                for i in 0 ..< 3 {
-                    task.dueDate = task.dueDate.addingTimeInterval(TimeInterval(60*60*24*31*i))
-                    self.tasksForTheMonth.append(task)
+                for i in 0 ..< 2 {
+//                    task.dueDate = task.dueDate.addingTimeInterval(TimeInterval(60*60*24*31*i))
+                    var taskObj = EarnItTask()
+                    taskObj = task
+                    taskObj.dueDate = taskObj.dueDate.addingTimeInterval(TimeInterval(60*60*24*31*i))
+                    self.tasksForTheMonth.append(taskObj)
                 }
             }
             else {
-                self.tasksForTheMonth.append(task)
+                var taskObj = EarnItTask()
+                taskObj = task
+                self.tasksForTheMonth.append(taskObj)
                 print("none")
             }
         }

@@ -487,18 +487,23 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
             let password : String = (keychain.get("password")!)
             checkUserAuthentication(email: email, password: password, success: {
                 (responseJSON) ->() in
-                
-                if (responseJSON["userType"].stringValue == "CHILD"){
-                    EarnItChildUser.currentUser.setAttribute(json: responseJSON)
+                if (responseJSON["email"].string == nil || responseJSON["email"].stringValue == ""){
                     self.hideLoadingView()
-                    
-                    self.view.makeToast("Task submitted")
-                    self.dismissscreen()
-//                    let alert = showAlertWithOption(title: "", message: "Task submitted")
-//                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: self.dismissscreen))
-//                    self.present(alert, animated: true, completion: nil)
+                    self.view.makeToast("Task submission failed")
                 }
                 else {
+                    if (responseJSON["userType"].stringValue == "CHILD"){
+                        EarnItChildUser.currentUser.setAttribute(json: responseJSON)
+                        self.hideLoadingView()
+                        
+                        self.view.makeToast("Task submitted")
+                        self.dismissscreen()
+                        //                    let alert = showAlertWithOption(title: "", message: "Task submitted")
+                        //                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: self.dismissscreen))
+                        //                    self.present(alert, animated: true, completion: nil)
+                    }
+                    else {
+                    }
                 }
             }) { (error) -> () in
             }

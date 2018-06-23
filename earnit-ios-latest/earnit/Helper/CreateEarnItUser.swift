@@ -38,7 +38,7 @@ func callUpdateProfileApiForParentt(firstName: String, lastName: String, phoneNu
 //            "Authorization": authorizationHeader.value,
             "Content-Type": "application/json",
             "Authorization": "Basic \(keychain.get("user_auth")!)"
-        ]        
+        ]
     }
 //    
 //    var token : String!

@@ -43,8 +43,6 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-       
         self.isImageChanged = false
 
         profileImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + EarnItAccount.currentUser.avatar!)
@@ -315,41 +313,36 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
                 let password : String = (keychain.get("password")!)
                 
                 checkUserAuthentication(email: email, password: password, success: {
-                    
                     (responseJSON) ->() in
-                    
-                    self.view.makeToast("Update successful")
-         
-                    
-                    EarnItAccount.currentUser.setAttribute(json: responseJSON)
-                    keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
-                    keychain.set(true, forKey: "isProfileUpdated")
-                    self.hideLoadingView()
-                    
-                    // success(true)
-                    let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-
-                    let parentLandingPage  = storyBoard.instantiateViewController(withIdentifier: "ParentLandingPage") as! ParentLandingPage
-                    
-                    let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
-                    
-                    let slideMenuController  = SlideMenuViewController(mainViewController: parentLandingPage, leftMenuViewController: optionViewController)
-                    
-                    slideMenuController.automaticallyAdjustsScrollViewInsets = true
-                    slideMenuController.delegate = parentLandingPage
-                    
-                    self.present(slideMenuController, animated:false, completion:nil)
-                    
-                    
+                    if (responseJSON["email"].string == nil || responseJSON["email"].stringValue == ""){
+                        self.hideLoadingView()
+                        self.view.makeToast("Update Profile Failed")
+                    }
+                    else {
+                        self.view.makeToast("Update successful")
+                        EarnItAccount.currentUser.setAttribute(json: responseJSON)
+                        keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
+                        keychain.set(true, forKey: "isProfileUpdated")
+                        self.hideLoadingView()
+                        // success(true)
+                        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                        
+                        let parentLandingPage  = storyBoard.instantiateViewController(withIdentifier: "ParentLandingPage") as! ParentLandingPage
+                        
+                        let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
+                        
+                        let slideMenuController  = SlideMenuViewController(mainViewController: parentLandingPage, leftMenuViewController: optionViewController)
+                        
+                        slideMenuController.automaticallyAdjustsScrollViewInsets = true
+                        slideMenuController.delegate = parentLandingPage
+                        
+                        self.present(slideMenuController, animated:false, completion:nil)
+                    }
                     
                 }) { (error) -> () in
                     self.hideLoadingView()
                     self.view.makeToast("Update Profile Failed")
-
-               
-                    
                 }
-                
                 
             }) { (error) -> () in
             
@@ -522,15 +515,12 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
                     let password : String = (keychain.get("password")!)
                     
                     checkUserAuthentication(email: email, password: password, success: {
-                        
                         (responseJSON) ->() in
-                        
-                        
+                        if (responseJSON["email"].string == nil || responseJSON["email"].stringValue == "") {
+                            return
+                        }
                         EarnItAccount.currentUser.setAttribute(json: responseJSON)
                         keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
-                        
-                        
-                        
                     }) { (error) -> () in
                         
                      //   self.dismissScreenToLogin()
@@ -548,24 +538,16 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
                     //                    self.present(alert, animated: true, completion: nil)
                     //                    print(" Set status completed failed")
                 }
-                
             }
-                
             else {
-                
-                
                 self.view.makeToast("Update Profile Failed")
                 //                let alert = showAlert(title: "Opps", message: "Failed to Upload Image")
                 //                self.present(alert, animated: true, completion: nil)
                 
                 return nil
-                
             }
-            
             return nil
-            
         })
-        
     }
     
 

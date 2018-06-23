@@ -146,10 +146,9 @@ class EarnItAccount: NSObject {
         self.userType = json["userType"].stringValue
         self.password = json["password"].stringValue
         self.fcmToken = json["fcmToken"].stringValue
-        
-//    
-          var userAvatarUrlString = self.avatar
-          self.avatar = userAvatarUrlString?.replacingOccurrences(of: "\"", with:  " ")
+
+        let userAvatarUrlString = self.avatar
+        self.avatar = userAvatarUrlString?.replacingOccurrences(of: "\"", with:  " ")
 //        let url = URL(string: userAvatarUrlString!)
 //        var userImage = UIImage()
 //        if url != nil{

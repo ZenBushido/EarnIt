@@ -411,6 +411,7 @@
 				F4B02EEE20776F8900304865 /* VCAppsMonitor.swift */,
 				F4F05CBC20D60A03009AD64E /* VCChildCalendar.swift */,
 				F4F1578520D73D2400A2AB5C /* VCChildTasksList.swift */,
+				F4AFAC0220DDE73000DF0DC9 /* Apps_Usage */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -617,6 +618,13 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		F4AFAC0220DDE73000DF0DC9 /* Apps_Usage */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Apps_Usage;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -709,6 +717,7 @@
 					4792841F1F0B32DC00EDAC6D = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = ML66WE2RMQ;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -733,6 +742,7 @@
 					};
 					ED89A5371F96F5EE008BC2FD = {
 						DevelopmentTeam = ML66WE2RMQ;
+						LastSwiftMigration = 0920;
 					};
 				};
 			};
@@ -1332,6 +1342,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = earnit/earnit.entitlements;
 				DEVELOPMENT_TEAM = ML66WE2RMQ;
 				INFOPLIST_FILE = earnit/Info.plist;
@@ -1339,6 +1350,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobiledi.earnit;
 				PRODUCT_NAME = EarnIt;
+				SWIFT_OBJC_BRIDGING_HEADER = "earnit/Controller/earnit-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1350,6 +1363,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = earnit/earnit.entitlements;
 				DEVELOPMENT_TEAM = ML66WE2RMQ;
 				INFOPLIST_FILE = earnit/Info.plist;
@@ -1357,6 +1371,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobiledi.earnit;
 				PRODUCT_NAME = EarnIt;
+				SWIFT_OBJC_BRIDGING_HEADER = "earnit/Controller/earnit-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1426,6 +1441,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = earnit/earnit.entitlements;
 				DEVELOPMENT_TEAM = ML66WE2RMQ;
 				INFOPLIST_FILE = "$(SRCROOT)/earnit/earnit Dev-Info.plist";
@@ -1434,6 +1450,8 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-D\" \"DEVELOPMENT\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobiledi.earnit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1445,6 +1463,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = earnit/earnit.entitlements;
 				DEVELOPMENT_TEAM = ML66WE2RMQ;
 				INFOPLIST_FILE = "$(SRCROOT)/earnit/earnit Dev-Info.plist";
@@ -1453,6 +1472,7 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-D\" \"DEVELOPMENT\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mobiledi.earnit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
