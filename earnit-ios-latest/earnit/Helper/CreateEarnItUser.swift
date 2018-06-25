@@ -25,6 +25,10 @@ func callUpdateProfileApiForParentt(firstName: String, lastName: String, phoneNu
         print(" /n Unable to fetch user credentials from keychain \n")
         return
     }
+    guard  let _ = keychain.get("user_auth") else  {
+        print(" /n Unable to fetch user auth from keychain \n")
+        return
+    }
     let email : String = keychain.get("email") as! String
     let password : String = keychain.get("password") as! String
 
@@ -53,7 +57,6 @@ func callUpdateProfileApiForParentt(firstName: String, lastName: String, phoneNu
 //    }
     
     let params = [
-        
         "id": EarnItAccount.currentUser.id,
         "email": email,
         "firstName": firstName,
@@ -69,11 +72,8 @@ func callUpdateProfileApiForParentt(firstName: String, lastName: String, phoneNu
     
     print("param before parent update \(params)")
     Alamofire.request("\(EarnItApp_BASE_URL)/parent",method: .put,parameters: params, encoding: JSONEncoding.default,headers: headers).responseJSON{ response in
-        
         switch(response.result){
-            
         case .success:
-            
             let responseJSON = JSON(response.result.value)
             EarnItAccount.currentUser.setAttribute(json: responseJSON)
             keychain.set(responseJSON["email"].stringValue, forKey: "email")
@@ -151,9 +151,13 @@ func callSignUpApiForParent(email: String, password: String,success: @escaping(J
         
         switch(response.result){
         case .success:
+            let loginString = String(format:"%@:%@", email, password)
+            let base64LoginString = loginString.base64Encoded()
+            let keychain = KeychainSwift()
+            keychain.set("\(String(describing: base64LoginString!))", forKey: "user_auth")
+            print(keychain.get("user_auth")!)
             
             let responseJSON = JSON(response.result.value)
-            
             print("response.result.value EarnIt Parent User,\(responseJSON)")
             success(responseJSON,responseJSON["code"].stringValue)
         case .failure(_):

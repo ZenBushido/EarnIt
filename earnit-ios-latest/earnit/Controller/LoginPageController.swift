@@ -12,29 +12,19 @@ import KeychainSwift
 
 class LoginPageController : UIViewController , UITextFieldDelegate , UIGestureRecognizerDelegate{
     
-    
     @IBOutlet var earnItLogo: UIImageView!
-    
     @IBOutlet var earnItTagLine: UILabel!
-    
     @IBOutlet var emailTextField: UITextField!
-    
     @IBOutlet var passwordTextField: UITextField!
-    
     @IBOutlet var signInButton: UIButton!
-    
     @IBOutlet var signUpButton: UIButton!
-    
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     //keyboardOffset
     var currentKeyboardOffset : CGFloat = 0.0
     
     @IBOutlet var donotHaveAnAccountLabel: UILabel!
-    
     @IBOutlet var signUpRestrictionMessageForChild: UILabel!
-    
     @IBOutlet weak var scrollView: UIScrollView!
-
     @IBOutlet var lblRememberMe: UILabel!
     @IBOutlet var btnRememberMe: UIButton!
     @IBOutlet var btnForgotPswrd: UIButton!
@@ -75,7 +65,7 @@ class LoginPageController : UIViewController , UITextFieldDelegate , UIGestureRe
         self.signUpButton.alpha = 1
         
         //self.getAppsUsedMemory()
-//        emailTextField.text = "tracy@tracy.com"//"ssgappz@gmail.com"//"Tracyliv@gmail.com"//"cheryl@cheryl.com"//"zzz@zzz.com"//"ccv@ccv@gmail.com"//"fessn14@gmail.com"//"dadch4@gmail.com"//"mah@gmail.com "//"bbb@bbb.com"
+//        emailTextField.text = "ssgappz@gmail.com"//"tracy@tracy.com"//"Tracyliv@gmail.com"//"cheryl@cheryl.com"//"zzz@zzz.com"//"ccv@ccv@gmail.com"//"fessn14@gmail.com"//"dadch4@gmail.com"//"mah@gmail.com "//"bbb@bbb.com"
 //        passwordTextField.text = "test123"//"dingo1987"//"qqq123" //"dingo1987" //"test123"//"123456"//"qqq123"//"test123"
     }
 
@@ -386,10 +376,8 @@ class LoginPageController : UIViewController , UITextFieldDelegate , UIGestureRe
 //            self.present(alert, animated: true, completion: nil)
         }else {
         checkUserAuthentication(email: self.emailTextField.text!, password: self.passwordTextField.text!, success: {
-            
             (responseJSON) ->() in
             print("Reponse json after login - \(responseJSON)")
-
             if (responseJSON["email"].string == nil || responseJSON["email"].stringValue == "") {
                 self.hideLoadingView()
                 self.view.makeToast("Login Failed")
@@ -415,9 +403,7 @@ class LoginPageController : UIViewController , UITextFieldDelegate , UIGestureRe
             let fcmToken : String? = keychain.get("token")
             
             if (responseJSON["userType"].stringValue == "CHILD"){
-                
                 EarnItChildUser.currentUser.setAttribute(json: responseJSON)
-                
                 if responseJSON["fcmToken"].stringValue != keychain.get("token") ||  responseJSON["fcmToken"].stringValue == nil  || responseJSON["fcmToken"].stringValue == ""{
                     /*print("fcm token is null")
                     print("firstname \(EarnItChildUser.currentUser.firstName)")
@@ -442,7 +428,6 @@ class LoginPageController : UIViewController , UITextFieldDelegate , UIGestureRe
                         self.present(alert, animated: true, completion: nil)
                         print(" Set status completed failed")
                     }
-                    
                 }
                
         if EarnItChildUser.currentUser.childMessage == nil || EarnItChildUser.currentUser.childMessage == "" {
@@ -462,12 +447,9 @@ class LoginPageController : UIViewController , UITextFieldDelegate , UIGestureRe
                 
                 print("START earnIt parent creation \(responseJSON["firstName"].stringValue)")
                 print(Date().millisecondsSince1970)
-                
                 EarnItAccount.currentUser.setAttribute(json: responseJSON)
-       
                 print("END earnIt parent creation \(responseJSON["firstName"].stringValue)")
-                print(Date().millisecondsSince1970)
-                
+//                print(Date().millisecondsSince1970)
                 if responseJSON["fcmToken"].stringValue != keychain.get("token") || responseJSON["fcmToken"].stringValue == nil || responseJSON["fcmToken"].stringValue == ""{
            
                     print("fcm token is null")

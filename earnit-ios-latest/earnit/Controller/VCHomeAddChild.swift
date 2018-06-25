@@ -13,6 +13,8 @@ import AVFoundation
 import AWSS3
 import KeychainSwift
 import ALCameraViewController
+import SwiftyJSON
+import Alamofire
 
 class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate{
     
@@ -166,27 +168,19 @@ class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextF
         }
         else {
             
-            if self.isImageChanged == true{
-                
+            if self.isInEditingMode == true{
                 DispatchQueue.global().async {
-                    
                     self.prepareUserImageForUpload()
-                    
                     DispatchQueue.main.async {
-                        
                         print("Done with image Upload and updated to backend!")
                     }
                 }
-                //self.prepareUserImageForUpload()
             }
-            
             let contactNumber = "\(self.countryCodeLabel.text!)\(self.phone.text!)"
-            
                 if self.isInEditingMode == true{
-                    
                     self.callUpdateForChild(firstName: self.firstName.text!,email: self.email.text!,password: self.password.text!,childAvatar: self.childImageUrl,phoneNumber: contactNumber)
-                    
-                }else {
+                }
+                else {
                      self.callSignUpForChild(firstName: self.firstName.text!,email: self.email.text!,password: self.password.text!,childAvatar: "",phoneNumber: contactNumber)
                 }
         }
@@ -235,7 +229,9 @@ class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextF
                 EarnItAccount.currentUser.earnItChildUsers = earnItChildUsers
                 
                 print("EarnItAccount.currentUser.earnItChildUsers.count in profile page \(EarnItAccount.currentUser.earnItChildUsers.count )")
-
+                DispatchQueue.global().async {
+                    self.prepareUserImageForUpload()
+                }
                 self.view.makeToast(" \(self.firstName.text!) added")
                 self.dismissScreen()
 //                let alert = showAlertWithOption(title: "", message: " \(self.firstName.text!) added")
@@ -265,21 +261,16 @@ class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextF
         callUpdateApiForChild(firstName: firstName,childEmail: email,childPassword: password,childAvatar: self.childImageUrl,createDate: self.earnItChildUser.createDate,childUserId: self.earnItChildUser.childUserId, childuserAccountId: self.earnItChildUser.childAccountId,phoneNumber: phoneNumber, fcmKey: fcmToken, message: self.earnItChildUser.childMessage, success: {
             
             (earnItTask) ->() in
-            
             createEarnItAppChildUser( success: {
-                
                 (earnItChildUsers) -> () in
                 
                 for user in earnItChildUsers {
                     
                     for task in user.earnItTasks {
-                        
                         print(task.taskId)
                         print(task.taskName)
                     }
-                    
-                    for task in user.earnItTopThreePendingApprovalTask{
-                        
+                    for task in user.earnItTopThreePendingApprovalTask{   
                         print("task.taskName \(task.taskName)")
                     }
                 }
@@ -291,7 +282,6 @@ class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextF
 //                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: self.dismissScreen))
 //                self.present(alert, animated: true, completion: nil)
                 self.hideLoadingView()
-
             }) {  (error) -> () in
                 print("error")
             }
@@ -440,13 +430,56 @@ class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextF
      
      */
     
+    func requestToUploadImage(profileImage:UIImage, onCompletion: ((JSON?) -> Void)? = nil, onError: ((Error?) -> Void)? = nil){
+        let imageData = UIImagePNGRepresentation(profileImage)
+        if(imageData == nil)  { return; }
+        let keychain = KeychainSwift()
+//        let url = "\(EarnItApp_BASE_URL)\(EarnItApp_CHILD_IMAGE_FOLDER)"
+        let url = "\(EarnItApp_BASE_URL)/parents/children/\(self.earnItChildUser.childUserId)/profile/images"
+        print(self.earnItChildUser.childUserId)
+        let headers: HTTPHeaders = [
+            "accept": "application/json",
+            "Authorization": "Basic \(keychain.get("user_auth")!)",
+        ]
+        Alamofire.upload(multipartFormData: { (multipartFormData) in
+            if let data = imageData{
+                multipartFormData.append(data, withName: "file", fileName: "profileimage.png", mimeType: "image/png")
+            }
+        }, usingThreshold: UInt64.init(), to: url, method: .post, headers: headers) { (result) in
+            switch result{
+            case .success(let upload, _, _):
+                upload.responseString { response in
+                    print("Succesfully uploaded")
+                    if let err = response.error{
+                        onError?(err)
+                        print(err)
+                        self.view.makeToast("Failed to Upload Image")
+                        return
+                    }
+                    self.childImageUrl = String("\(String(describing: response.value!))")
+                    self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.childImageUrl!)
+                    let contactNumber = "\(self.countryCodeLabel.text!)\(self.phone.text!)"
+                    if self.isInEditingMode == true{
+                        self.callUpdateForChild(firstName: self.firstName.text!,email: self.email.text!,password: self.password.text!,childAvatar: self.childImageUrl, phoneNumber: contactNumber)
+                    }
+                    else {
+                        self.callUpdateForChild(firstName: self.firstName.text!,email: self.email.text!,password: self.password.text!,childAvatar: self.childImageUrl, phoneNumber: contactNumber)
+                    }
+                }
+            case .failure(let error):
+                print("Error in upload: \(error.localizedDescription)")
+                self.view.makeToast("Failed to Upload Image")
+                onError?(error)
+            }
+        }
+    }
     
     func prepareUserImageForUpload(){
+        self.requestToUploadImage(profileImage: self.userImage!)
+        return
         
-        print("Inside prepareUserImageForUpload")
         let date = NSDate()
-        let hashableString = NSString(format: "%f",
-                                      date.timeIntervalSinceReferenceDate)
+        let hashableString = NSString(format: "%f", date.timeIntervalSinceReferenceDate)
         let s3BucketName = EarnItApp_AWS_BUCKET_NAME
         let imageData: NSData = UIImagePNGRepresentation(self.userImage!)! as NSData
         let hashStr = changePasswordToHexcode(hashableString as String)
@@ -467,107 +500,64 @@ class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextF
             AWSS3TransferManager.default()
         
         transferManager.upload(uploadRequest).continue({ (task) -> AnyObject! in
-            
             if task.error != nil {
-                
                 print("Image Uploading to AWS server failed..")
                 if(task.error!._code == -1009){
-                    
                     print("error in uploading with error code\(task.error!._code)")
                     self.view.makeToast("You seem to be offline")
-                    
 //                    let alert = showAlert(title: "Opps", message: "You seem to be offline")
-//                    
 //                    self.present(alert, animated: true, completion: nil)
-                    
-                    
-                    
-                }else if(task.error!._code == -1004){
-                    
+                }
+                else if(task.error!._code == -1004){
                     print("error in uploading with error code\(task.error!._code)")
                     self.view.makeToast("Couldn't connect to server")
-                    
 //                    let alert = showAlert(title: "Opps", message: "Couldn't connect to server")
-//                    
 //                    self.present(alert, animated: true, completion: nil)
-                    
-                    
-                    
-                }else if(task.error!._code == -1001){
-                    
-                    
+                }
+                else if(task.error!._code == -1001){
                     print("error in uploading with error code\(task.error!._code)")
-                    
                     self.view.makeToast("Request timed out")
-                    
 //                    let alert = showAlert(title: "Opps", message: "Request timed out")
 //                    self.present(alert, animated: true, completion: nil)
-                    
-                }else{
-                    
+                }
+                else{
                     print("error in uploading with error code\(task.error!._code)")
                     self.view.makeToast("Something went wrong")
-                    
 //                    let alert = showAlert(title: "Opps", message: "Something went wrong")
-//                    
 //                    self.present(alert, animated: true, completion: nil)
-                    
                 }
-                
-                
             }
             if task.exception != nil {
-                
                 self.view.makeToast("Failed to Upload Image")
 //                let alert = showAlert(title: "Opps", message: "Failed to Upload Image")
 //                self.present(alert, animated: true, completion: nil)
-                
             }
             if task.result != nil {
-                
-                
                 self.childImageUrl = String("\(AWS_URL)\(s3BucketName)/\(uploadRequest.key!)")
-                
                 let contactNumber = "\(self.countryCodeLabel.text!)\(self.phone.text!)"
-                
                     if self.isInEditingMode == true{
-                        
                          self.callUpdateForChild(firstName: self.firstName.text!,email: self.email.text!,password: self.password.text!,childAvatar: self.childImageUrl, phoneNumber: contactNumber)
-                        
-                    }else {
-                        
-                        
-                        self.callUpdateForChild(firstName: self.firstName.text!,email: self.email.text!,password: self.password.text!,childAvatar: self.childImageUrl, phoneNumber: contactNumber)
-                       
                     }
-
-                
+                    else {
+                        self.callUpdateForChild(firstName: self.firstName.text!,email: self.email.text!,password: self.password.text!,childAvatar: self.childImageUrl, phoneNumber: contactNumber)
+                    }
             }
-                
             else {
-                
                 self.view.makeToast("Failed to Upload Image")
 //                let alert = showAlert(title: "Opps", message: "Failed to Upload Image")
 //                self.present(alert, animated: true, completion: nil)
-                
                 return nil
-                
             }
-            
             return nil
-            
         })
-        
     }
     
     //Change passwordToHexcode method
     
     func changePasswordToHexcode(_ string: String) -> String {
-        
         let data = string.data(using: .utf8)!
         let hexString = data.map{ String(format:"%02x", $0) }.joined()
         return hexString
-        
     }
   
     func showLoadingView(){
@@ -576,12 +566,9 @@ class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextF
         self.view.isUserInteractionEnabled = false
         self.view.bringSubview(toFront: self.activityIndicator)
         self.activityIndicator.startAnimating()
-        
     }
     
-    
     func hideLoadingView(){
-        
         self.view.alpha = 1
         self.view.isUserInteractionEnabled = true
         self.activityIndicator.stopAnimating()

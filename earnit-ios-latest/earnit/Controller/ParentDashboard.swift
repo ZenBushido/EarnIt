@@ -107,7 +107,6 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
         self.taskApprovalView.removeFromSuperview()
     }
 
-    
     func loadRefreshedTasks()  {
         var tasks = earnItChildUserForParent.earnItTasks
         for daytask in earnItChildUserForParent.earnItTasks{

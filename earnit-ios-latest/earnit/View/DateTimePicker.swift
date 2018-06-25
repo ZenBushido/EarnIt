@@ -12,7 +12,6 @@ import UIKit
 
 class DateTimePicker : UIView {
     
-    
     var storeDate: (() -> Void)?
     
     var timePicker : UIDatePicker = {
@@ -31,33 +30,23 @@ class DateTimePicker : UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        
         if UIDevice().userInterfaceIdiom == .phone {
             switch UIScreen.main.nativeBounds.height {
                 
             case 480:
                 
-                
                 self.frame = CGRect(0, 0, 390,200)
                 timePicker.frame = CGRect(0, 0, 400, 200)
-                
-                
                 
             case 960:
                 
-                
                 self.frame = CGRect(0, 0, 390,200)
                 timePicker.frame = CGRect(0, 0, 400, 200)
                 
-                
-                
             case 1136:
-                
                 
                 self.frame = CGRect(0, 0, 330,200)
                 timePicker.frame = CGRect(0, 0, 330, 200)
-                
-                
                 
             case 1334:
                 
@@ -78,20 +67,15 @@ class DateTimePicker : UIView {
                 self.frame = CGRect(0, 0, 390,200)
                 timePicker.frame = CGRect(0, 0, 400, 200)
             }
-            
         }
         else if  UIDevice().userInterfaceIdiom == .pad {
             
             self.frame = CGRect(0, 0, UIScreen.main.nativeBounds.width/2,500)
             timePicker.frame = CGRect(0, 0, UIScreen.main.nativeBounds.width/2, 500)
         }
-        
-    
-        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = " yyyy-MM-dd HH:mm:ss"
         self.timePicker.date =  Date()
-        
         
         let toolBar = UIToolbar()
         toolBar.barStyle = .default
@@ -100,16 +84,12 @@ class DateTimePicker : UIView {
         
         let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneButtonPressed))
         
-        
         let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(closeButtonPressed))
         
-        
         toolBar.setItems([cancelButton, spaceButton, doneButton], animated: false)
         
-        
         toolBar.isUserInteractionEnabled = true
-        
         
         self.timePicker.datePickerMode = UIDatePickerMode.dateAndTime
         self.addSubview(timePicker)
@@ -118,7 +98,6 @@ class DateTimePicker : UIView {
 
     }
     
-    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -126,18 +105,15 @@ class DateTimePicker : UIView {
     func datePickerPressed(sender : UIBarButtonItem) {
         
         self.storeDate!()
-        
     }
     
     func doneButtonPressed(sender: UIBarButtonItem){
         
         self.setSelectedDate!()
-        
     }
     
     func closeButtonPressed(sender: UIBarButtonItem) {
     
         self.closeDatePicker!()
-    
     }
 }

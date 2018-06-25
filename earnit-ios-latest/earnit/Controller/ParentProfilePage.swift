@@ -13,8 +13,10 @@ import AssetsLibrary
 import AVFoundation
 import AWSS3
 import ALCameraViewController
+import SwiftyJSON
+import Alamofire
 
-class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate, UINavigationControllerDelegate,UITextFieldDelegate{
+class ParentProfilePage : UIViewController, UIImagePickerControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate,  UINavigationControllerDelegate, UITextFieldDelegate{
     
     @IBOutlet var welcomeLabel: UILabel!
     @IBOutlet var childTableHeightConstraint: NSLayoutConstraint!
@@ -70,8 +72,7 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
         self.childUserTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         self.childUserTable.tableFooterView = UIView()
         self.scrollView.contentSize = CGSize(290, 1000)
-        userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + EarnItAccount.currentUser.avatar!)
-        
+        self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + EarnItAccount.currentUser.avatar!)
         self.creatLeftPadding(textField: firstName)
         self.creatLeftPadding(textField: lastName)
         self.creatLeftPadding(textField: email)
@@ -785,9 +786,7 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
     }
     
     @IBAction func userImageViewGotTapped(_ sender: UITapGestureRecognizer) {
-
         print("ImageView got tapped")
-        
         var libraryEnabled: Bool = true
         var croppingEnabled: Bool = true
         var allowResizing: Bool = true
@@ -797,14 +796,8 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
         var croppingParameters: CroppingParameters {
             return CroppingParameters(isEnabled: croppingEnabled, allowResizing: allowResizing, allowMoving: allowMoving, minimumSize: minimumSize)
         }
-        
-        
-        
-        
         let cameraViewController = CameraViewController(croppingParameters: croppingParameters, allowsLibraryAccess: libraryEnabled) { [weak self] image, asset in
-            
-            if image != nil
-            {
+            if image != nil {
                 let resizedImage = self?.resizeImage(image!, newWidth: 300)
                 self?.userImage = resizedImage
                 self?.userImageView.image = resizedImage
@@ -812,16 +805,9 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
                 self?.didShownImagePicker = true
             }
             self?.dismiss(animated: true, completion: nil)
-            
         }
         present(cameraViewController, animated: true, completion: nil)
-        
-        
-        
         return
-        
-
-        
         
 //        let actionSheet = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
 //        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
@@ -922,12 +908,110 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
      */
     
     
-    func prepareUserImageForUpload(){
+//        func upload(image: UIImage, progressCompletion: @escaping (_ percent: Float) -> Void, completion: @escaping (_ tags: [String]?, _ colors: [PhotoColor]?) -> Void) {
+//            // 1
+//            guard let imageData = UIImageJPEGRepresentation(image, 0.5) else {
+//                print("Could not get JPEG representation of UIImage")
+//                return
+//            }
+//
+//            // 2
+//            /*Alamofire.upload(multipartFormData: { multipartFormData in
+//                multipartFormData.append(imageData,
+//                                         withName: "imagefile",
+//                                         fileName: "image.jpg",
+//                                         mimeType: "image/jpeg")
+//            },
+//                             to: "http://api.imagga.com/v1/content",
+//                             headers: ["Authorization": "Basic xxx"],
+//                             encodingCompletion: { encodingResult in
+//            })*/
+//        }
+
+    func requestToUploadImage(profileImage:UIImage, parameters: [String : Any], onCompletion: ((JSON?) -> Void)? = nil, onError: ((Error?) -> Void)? = nil){
         
+//        let EarnItApp_PARENT_IMAGE_FOLDER = "/parents/profile/images"
+//        let EarnItApp_CHILD_IMAGE_FOLDER = "/childrens/profile/images"
+
+//        let imageData = UIImageJPEGRepresentation(profileImage, 1)
+//        let imageData: NSData = UIImagePNGRepresentation(self.userImage!)! as NSData
+        
+        let imageData = UIImagePNGRepresentation(profileImage)
+        if(imageData == nil)  { return; }
+        
+        let url = "\(EarnItApp_BASE_URL)\(EarnItApp_PARENT_IMAGE_FOLDER)"
+        let headers: HTTPHeaders = [
+//            "Content-Type": "application/json",
+            "accept": "application/json",
+            "Authorization": "Basic \(keychain.get("user_auth")!)",
+//            "Content-type": "multipart/form-data"
+        ]
+        Alamofire.upload(multipartFormData: { (multipartFormData) in
+            if let data = imageData{
+                multipartFormData.append(data, withName: "file", fileName: "profileimage.png", mimeType: "image/png")
+            }
+        }, usingThreshold: UInt64.init(), to: url, method: .post, headers: headers) { (result) in
+            switch result{
+            case .success(let upload, _, _):
+                 upload.responseString { response in
+                    print("Succesfully uploaded")
+                    if let err = response.error{
+                        onError?(err)
+                        print(err)
+                        self.view.makeToast("Failed to Upload Image")
+                        return
+                    }
+                    self.userImageUrl = String("\(String(describing: response.value!))")
+                    EarnItAccount.currentUser.avatar! = self.userImageUrl!
+                    var contactNumber = String()
+                    if (self.contactNumber.text?.characters.count)! > 0{
+                        contactNumber = "\(self.countryCodeLabel.text!)\(self.contactNumber.text!)"
+                    }
+                    else {
+                        contactNumber = ""
+                    }
+                    callUpdateProfileImageApiForParent(firstName: self.firstName.text!, lastName: self.lastName.text!, phoneNumber: contactNumber, updatedPassword: EarnItAccount.currentUser.password,userAvatar: self.userImageUrl!, success: {
+                        (earnItTask) ->() in
+                        
+                        let keychain = KeychainSwift()
+                        guard  let _ = keychain.get("email") else  {
+                            print(" /n Unable to fetch user credentials from keychain \n")
+                            return
+                        }
+                        let email : String = (keychain.get("email")!)
+                        let password : String = (keychain.get("password")!)
+                        checkUserAuthentication(email: email, password: password, success: {
+                            (responseJSON) ->() in
+                            if (responseJSON["email"].string == nil || responseJSON["email"].stringValue == ""){
+                                self.dismissScreenToLogin()
+                            }
+                            else {
+                                EarnItAccount.currentUser.setAttribute(json: responseJSON)
+                                keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
+                            }
+                        }) { (error) -> () in
+                            self.dismissScreenToLogin()
+                        }
+                    }) { (error) -> () in
+                        self.view.makeToast("Update Profile Failed")
+                    }
+                    onCompletion?(nil)
+                }
+            case .failure(let error):
+                print("Error in upload: \(error.localizedDescription)")
+                self.view.makeToast("Update Profile Failed")
+                onError?(error)
+            }
+        }
+    }
+    
+    func prepareUserImageForUpload(){
+        self.requestToUploadImage(profileImage: self.userImage!, parameters: ["":""])
+        return
+            
         print("Inside prepareUserImageForUpload")
         let date = NSDate()
-        let hashableString = NSString(format: "%f",
-                                      date.timeIntervalSinceReferenceDate)
+        let hashableString = NSString(format: "%f", date.timeIntervalSinceReferenceDate)
         let s3BucketName = EarnItApp_AWS_BUCKET_NAME
         let imageData: NSData = UIImagePNGRepresentation(self.userImage!)! as NSData
         let hashStr = changePasswordToHexcode(hashableString as String)
@@ -946,9 +1030,7 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
         uploadRequest.body = fileURL
         let transferManager:AWSS3TransferManager =
             AWSS3TransferManager.default()
-        
             transferManager.upload(uploadRequest).continue({ (task) -> AnyObject! in
-            
             if task.error != nil {
                 print("Image Uploading to AWS server failed..")
                 print(task.error!.localizedDescription)
@@ -960,21 +1042,16 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
 //                    self.present(alert, animated: true, completion: nil)
                 }
                 else if(task.error!._code == -1004){
-                    
                     print("error in uploading with error code\(task.error!._code)")
-                    
                     self.view.makeToast("Couldn't connect to server")
 //                    let alert = showAlert(title: "Opps", message: "Couldn't connect to server")
-//                    
 //                    self.present(alert, animated: true, completion: nil)
                 }
                 else if(task.error!._code == -1001){
                     print("error in uploading with error code\(task.error!._code)")
-                    
                     self.view.makeToast("Request timed out")
 //                    let alert = showAlert(title: "Opps", message: "Request timed out")
 //                    self.present(alert, animated: true, completion: nil)
-                    
                 }
                 else{
                     print("error in uploading with error code\(task.error!._code)")
@@ -1002,7 +1079,7 @@ class ParentProfilePage : UIViewController,UIImagePickerControllerDelegate,UITab
                 callUpdateProfileImageApiForParent(firstName: self.firstName.text!, lastName: self.lastName.text!, phoneNumber: contactNumber, updatedPassword: EarnItAccount.currentUser.password,userAvatar: self.userImageUrl!, success: {
                     
                     (earnItTask) ->() in
-                    
+                    self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + EarnItAccount.currentUser.avatar!)
                     let keychain = KeychainSwift()
                     guard  let _ = keychain.get("email") else  {
                         print(" /n Unable to fetch user credentials from keychain \n")

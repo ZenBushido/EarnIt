@@ -72,8 +72,8 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
         super.viewWillAppear(true)
+        self.childUserTable.reloadData()
     }
     
     override func viewDidAppear(_ animated: Bool) {

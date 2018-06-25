@@ -11,6 +11,8 @@ import KeychainSwift
 import AWSS3
 import AVFoundation
 import ALCameraViewController
+import SwiftyJSON
+import Alamofire
 
 class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDelegate,UITextFieldDelegate,UIGestureRecognizerDelegate,UIPickerViewDataSource,UIPickerViewDelegate {
 
@@ -210,91 +212,62 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
 //            actionSheet.popoverPresentationController?.sourceRect = ActionSheetFrame
 //
 //            self.present(actionSheet, animated: true, completion: nil)
-            
-            
         }
         
     
     @IBAction func cancelButtonDidTapped(_ sender: Any) {
-        
         self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func saveButtonDidTapped(_ sender: Any) {
-        
-        
         EarnItAccount.currentUser.firstName = self.firstNameField.text
         EarnItAccount.currentUser.lastName = self.lastNameField.text
         
         var contactNumber = String()
         if (self.phoneField.text?.characters.count)! > 0{
-            
             contactNumber = "\(self.countryCodeLabel.text!)\(self.phoneField.text!)"
-        }else {
-            
+        }
+        else {
             contactNumber = ""
         }
         EarnItAccount.currentUser.phoneNumber = contactNumber
         
         print("SaveButtonClicked ")
-      
-
         if (self.firstNameField.text?.characters.count == 0 && self.phoneField.text?.characters.count == 0 && self.lastNameField.text?.characters.count == 0){
             
             self.view.makeToast("Please complete all fields")
-           
         }
-        
-        
         if (self.firstNameField.text?.characters.count == 0 || self.phoneField.text?.characters.count == 0 || self.lastNameField.text?.characters.count == 0){
             
             var errorFields = "\(self.firstNameField.text?.characters.count == 0 ? "First name and":"")\(self.lastNameField.text?.characters.count == 0 ? " Last name and":"")\(self.phoneField.text?.characters.count == 0 ? " Phone":"")"
             
             let last3 = errorFields.substring(from:errorFields.index(errorFields.endIndex, offsetBy: -3))
-            
-            
             if last3 == "and" {
                 errorFields = errorFields.substring(to: errorFields.index(errorFields.endIndex, offsetBy: -3))
             }
-            
             self.view.makeToast("Please complete \(errorFields) field")
-            
         }
-            
         else if  (self.phoneField.text?.characters.count)! < 10 {
-            
             self.view.makeToast("Please enter valid phone number")
         }
-
        else {
-            
-            
             var contactNumber = String()
             if (self.phoneField.text?.characters.count)! > 0{
-                
                 contactNumber = "\(self.countryCodeLabel.text!)\(self.phoneField.text!)"
-            }else {
-                
+            }
+            else {
                 contactNumber = ""
             }
             EarnItAccount.currentUser.phoneNumber = contactNumber
-            
             if self.isImageChanged == true {
-                
                 print("User has picked Image from device")
-                
                 DispatchQueue.global().async {
-                    
                     self.prepareUserImageForUpload()
-                    
                     DispatchQueue.main.async {
-                        
                         print("Done with image Upload and updated to backend!")
                     }
                 }
-                
             }
-            
             self.showLoadingView()
             let keychain = KeychainSwift()
             let fcmToken : String? = keychain.get("token")
@@ -338,85 +311,137 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
                         
                         self.present(slideMenuController, animated:false, completion:nil)
                     }
-                    
                 }) { (error) -> () in
                     self.hideLoadingView()
                     self.view.makeToast("Update Profile Failed")
                 }
-                
             }) { (error) -> () in
-            
                 self.hideLoadingView()
                 self.view.makeToast("Update Profile Failed")
-            
             }
-            
         }
-        
-        
     }
-    
-    
     
     //MARK: -Custom Methods
     
     func creatLeftPadding(textField:UITextField) {
-        
         let leftPadding = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: textField.frame.size.height))
         textField.leftView = leftPadding
         textField.leftViewMode = UITextFieldViewMode.always
-        
     }
     
-    
-    
     func showLoadingView(){
-        
         self.view.alpha = 0.7
         self.view.isUserInteractionEnabled = false
         self.activityIndicator.startAnimating()
-        
     }
     
     func hideLoadingView(){
-        
         self.view.alpha = 1
         self.view.isUserInteractionEnabled = true
         self.activityIndicator.stopAnimating()
     }
     
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool
-    {
-        
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if  textField == firstNameField {
             lastNameField.becomeFirstResponder()
         }
-            
-       else if  textField == lastNameField {
+        else if  textField == lastNameField {
             phoneField.becomeFirstResponder()
         }
         else {
-            
             textField.resignFirstResponder()
         }
         
         return true
     }
     
-    
     @IBAction func openSideMenu(_ sender: Any) {
-        
         self.openLeft()
     }
     
+    func requestToUploadImage(profileImage:UIImage, onCompletion: ((JSON?) -> Void)? = nil, onError: ((Error?) -> Void)? = nil){
+        let imageData = UIImagePNGRepresentation(profileImage)
+        if(imageData == nil)  { return; }
+        let keychain = KeychainSwift()
+        let url = "\(EarnItApp_BASE_URL)\(EarnItApp_PARENT_IMAGE_FOLDER)"
+        guard  let _ = keychain.get("email") else  {
+            print(" /n Unable to fetch user auth from keychain \n")
+            return
+        }
+        guard  let _ = keychain.get("user_auth") else  {
+            print(" /n Unable to fetch user credentials from keychain \n")
+            return
+        }
+        let headers: HTTPHeaders = [
+            "accept": "application/json",
+            "Authorization": "Basic \(keychain.get("user_auth")!)",
+        ]
+        Alamofire.upload(multipartFormData: { (multipartFormData) in
+            if let data = imageData{
+                multipartFormData.append(data, withName: "file", fileName: "profileimage.png", mimeType: "image/png")
+            }
+        }, usingThreshold: UInt64.init(), to: url, method: .post, headers: headers) { (result) in
+            switch result{
+            case .success(let upload, _, _):
+                upload.responseString { response in
+                    print("Succesfully uploaded")
+                    if let err = response.error{
+                        onError?(err)
+                        print(err)
+                        self.view.makeToast("Failed to Upload Image")
+                        return
+                    }
+//                    print("\(response.description)")
+                    self.userImageUrl = String("\(String(describing: response.value!))")
+                    var contactNumber = String()
+                    if (self.phoneField.text?.characters.count)! > 0 {
+                        contactNumber = "\(self.countryCodeLabel.text!)\(self.phoneField.text!)"
+                    }
+                    else {
+                        contactNumber = ""
+                    }
+                    callUpdateProfileImageApiForParent(firstName: self.firstNameField.text!, lastName: self.lastNameField.text! , phoneNumber: contactNumber, updatedPassword: EarnItAccount.currentUser.password,userAvatar: self.userImageUrl!, success: {
+                        
+                        (earnItTask) ->() in
+                        
+                        let keychain = KeychainSwift()
+                        guard  let _ = keychain.get("email") else  {
+                            print(" /n Unable to fetch user credentials from keychain \n")
+                            return
+                        }
+                        let email : String = (keychain.get("email")!)
+                        let password : String = (keychain.get("password")!)
+                        
+                        checkUserAuthentication(email: email, password: password, success: {
+                            (responseJSON) ->() in
+                            if (responseJSON["email"].string == nil || responseJSON["email"].stringValue == "") {
+                                return
+                            }
+                            EarnItAccount.currentUser.setAttribute(json: responseJSON)
+                            keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
+                        }) { (error) -> () in
+                        }
+                    }) { (error) -> () in
+                        self.view.makeToast("Update Profile Failed")
+                    }
+                }
+            case .failure(let error):
+                print("Error in upload: \(error.localizedDescription)")
+                self.view.makeToast("Failed to Upload Image")
+                onError?(error)
+            }
+        }
+    }
     
     func prepareUserImageForUpload(){
-        
+        self.requestToUploadImage(profileImage: self.userImage!)
+        return
+
         print("Inside prepareUserImageForUpload")
         let date = NSDate()
-        let hashableString = NSString(format: "%f",
-                                      date.timeIntervalSinceReferenceDate)
+        let hashableString = NSString(format: "%f", date.timeIntervalSinceReferenceDate)
         let s3BucketName = EarnItApp_AWS_BUCKET_NAME
         let imageData: NSData = UIImagePNGRepresentation(self.userImage!)! as NSData
         let hashStr = changePasswordToHexcode(hashableString as String)
@@ -437,9 +462,7 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
             AWSS3TransferManager.default()
         
         transferManager.upload(uploadRequest).continue({ (task) -> AnyObject! in
-            
             if task.error != nil {
-                
                 print("Image Uploading to AWS server failed..")
                 if(task.error!._code == -1009){
                     
@@ -458,9 +481,6 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
                     //                    let alert = showAlert(title: "Opps", message: "Couldn't connect to server")
                     //
                     //                    self.present(alert, animated: true, completion: nil)
-                    
-                    
-                    
                 }else if(task.error!._code == -1001){
                     
                     
@@ -477,29 +497,21 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
                     //                    let alert = showAlert(title: "Opps", message: "Something went wrong")
                     //
                     //                    self.present(alert, animated: true, completion: nil)
-                    
                 }
-                
             }
             if task.exception != nil {
-                
                 self.view.makeToast("Failed to Upload Image")
                 //                let alert = showAlert(title: "Opps", message: "Failed to Upload Image")
                 //                self.present(alert, animated: true, completion: nil)
-                
             }
             if task.result != nil {
-                
-                
                 self.userImageUrl = String("\(AWS_URL)\(s3BucketName)/\(uploadRequest.key!)")
-                
                 print("ImageUrl for earnITuser \(self.userImageUrl)")
                 var contactNumber = String()
                 if (self.phoneField.text?.characters.count)! > 0{
-                    
                     contactNumber = "\(self.countryCodeLabel.text!)\(self.phoneField.text!)"
-                }else {
-                    
+                }
+                else {
                     contactNumber = ""
                 }
                 callUpdateProfileImageApiForParent(firstName: self.firstNameField.text!, lastName: self.lastNameField.text! , phoneNumber: contactNumber, updatedPassword: EarnItAccount.currentUser.password,userAvatar: self.userImageUrl!, success: {

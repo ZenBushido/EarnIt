@@ -111,7 +111,11 @@ class EarnItImage {
     static func setEarnItGoalIcon() -> UIImage {
         return UIImage.fontAwesomeIcon(name: FontAwesome.star, textColor: UIColor.earnItAppCheckInColor(), size: CGSize(25, 25), backgroundColor: UIColor.clear)
     }
-    
+
+    static func setEarnItChangeProifleImageIcon() -> UIImage {
+        return UIImage.fontAwesomeIcon(name: FontAwesome.user, textColor: UIColor.earnItAppCheckInColor(), size: CGSize(25, 25), backgroundColor: UIColor.clear)
+    }
+
     static func setEarnItLogoutIcon() -> UIImage {
         return UIImage.fontAwesomeIcon(name: FontAwesome.signOut, textColor: UIColor.earnItAppCheckInColor(), size: CGSize(25, 25), backgroundColor: UIColor.clear)
     }

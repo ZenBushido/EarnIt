@@ -64,7 +64,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate , SlideMenuControllerDeleg
                     (responseJSON) ->() in
                     print("Reponse json after login - \(responseJSON)")
                     if (responseJSON["email"].string == nil || responseJSON["email"].stringValue == "") {
-                        
                         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                         let loginPage = storyBoard.instantiateViewController(withIdentifier: "LoginController") as! LoginPageController
                         self.window?.rootViewController = loginPage
@@ -140,9 +139,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate , SlideMenuControllerDeleg
             let loginPage = storyBoard.instantiateViewController(withIdentifier: "LoginController") as! LoginPageController
             self.window?.rootViewController = loginPage
         }
-        
-        
-        
         return true
     }
     
@@ -248,24 +244,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate , SlideMenuControllerDeleg
             }
         }
     }
-    
-  
     func configureAWSForImageUpload(){
         //Creating  default service configuration for AWS
         let credentialsProvider = AWSStaticCredentialsProvider.init(accessKey: AWS_ACCESS_ID, secretKey: AWS_SECRET_KEY)
         let defaultServiceConfiguration = AWSServiceConfiguration(
             region: AWSRegionType.usWest2, credentialsProvider: credentialsProvider)
         AWSServiceManager.default().defaultServiceConfiguration = defaultServiceConfiguration
-        
     }
-    
 }
 
 @available(iOS 10, *)
 extension AppDelegate : UNUserNotificationCenterDelegate {
     
     // Receive displayed notifications for iOS 10 devices.
-    
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         
         completionHandler([.alert, .badge, .sound])
@@ -279,19 +270,13 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         var body = ""
         var title = ""
         var msgUrl = ""
-        
         guard let aps = userInfo["aps"] as? [String : AnyObject] else {
-            
             print("Error while parsing aps")
             return
         }
-        
         if let  alert =  aps["alert"] as? String {
-            
             body = alert
-            
         }else if let alert =  aps["alert"] as? [String: String] {
-            
             body = alert["body"]!
             title = alert["title"]!
         }
@@ -299,27 +284,19 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
             
             msgUrl = category
         }
-        
-        
         print("alert body \(body)")
         print("alert title \(title)")
-        
         let center =  UNUserNotificationCenter.current()
         center.removeAllPendingNotificationRequests()
         center.delegate = self
         
         center.requestAuthorization(options: [ .alert, .badge, .sound]) { (granted, error) in
-            
             if granted {
-                
                 print("notificaiton granted")
             } else {
-                
                 print("notificaiton not granted")
             }
-            
         }
-        
         let date = Date()
         let calendar =  Calendar.current
         var components  = calendar.dateComponents([.day, .month, .year, .hour, .minute], from: date as Date)
@@ -332,20 +309,13 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         let request = UNNotificationRequest(identifier: "alertNotification", content: content, trigger: trigger)
         
         center.removeAllPendingNotificationRequests()
-        
         center.add(request, withCompletionHandler: {(error) in
-            
             if error != nil{
-                
                 print("Error occured for notification")
-                
             }else{
-                
                 print("got notification")
             }
         })
-        
-        
     }
 }
 

@@ -17,12 +17,13 @@ class ChildOptionView : UIView {
     @IBOutlet var secondOption: UIButton!
     @IBOutlet var thirdOption: UIButton!
     @IBOutlet var fourthOption: UIButton!
+    @IBOutlet var fifthOption: UIButton!
 
-    
     var doActionForFirstOption: (() -> Void)?
     var doActionForSecondOption: (() -> Void)?
     var doActionForThirdOption: (() -> Void)?
     var doActionForFourthOption: (() -> Void)?
+    var doActionForFifthOption: (() -> Void)?
 
     class func instanceFromNib() -> UIView {
         return UINib(nibName: "ChildOptionView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! UIView
@@ -42,5 +43,9 @@ class ChildOptionView : UIView {
     
     @IBAction func fourthOptionClicked(_ sender: Any) {
         self.doActionForFourthOption!()
+    }
+    
+    @IBAction func fifthOptionClicked(_ sender: Any) {
+        self.doActionForFifthOption!()
     }
 }

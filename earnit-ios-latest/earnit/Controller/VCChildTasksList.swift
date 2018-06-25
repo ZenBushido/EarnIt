@@ -9,9 +9,13 @@
 import Foundation
 import UIKit
 import KeychainSwift
+import SwiftyJSON
+import Alamofire
+import ALCameraViewController
+import AssetsLibrary
+import AVFoundation
 
-
-class VCChildTasksList : UIViewController ,UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
+class VCChildTasksList : UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UINavigationControllerDelegate {
     
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     @IBOutlet var childUserTable: UITableView!
@@ -877,14 +881,16 @@ class VCChildTasksList : UIViewController ,UITableViewDelegate, UITableViewDataS
         optionView.firstOption.setImage(EarnItImage.setEarnItPageIcon(), for: .normal)
         optionView.secondOption.setImage(EarnItImage.setEarnItAppBalanceIcon(), for: .normal)
         optionView.thirdOption.setImage(EarnItImage.setEarnItAppCalendarIcon(), for: .normal)
-        optionView.fourthOption.setImage(EarnItImage.setEarnItLogoutIcon(), for: .normal)
+        optionView.fourthOption.setImage(EarnItImage.setEarnItChangeProifleImageIcon(), for: .normal)
+        optionView.fifthOption.setImage(EarnItImage.setEarnItLogoutIcon(), for: .normal)
 
         //optionView.sixthOption.setImage(EarnItImage.setEarnItCommentIcon(), for: .normal)
         
         optionView.firstOption.setTitle("View Tasks", for: .normal)
         optionView.secondOption.setTitle("Balances", for: .normal)
         optionView.thirdOption.setTitle("Calendar", for: .normal)
-        optionView.fourthOption.setTitle("Logout", for: .normal)
+        optionView.fourthOption.setTitle("Change My Pic", for: .normal)
+        optionView.fifthOption.setTitle("Logout", for: .normal)
 
         self.actionView.addSubview(optionView)
         self.actionView.backgroundColor = UIColor.clear
@@ -906,6 +912,10 @@ class VCChildTasksList : UIViewController ,UITableViewDelegate, UITableViewDataS
             self.present(childCalendarController, animated: false, completion: nil)
         }
         optionView.doActionForFourthOption = {
+            self.removeActionView()
+//            self.requestToUploadImage(profileImage: self.userImage!)
+        }
+        optionView.doActionForFifthOption = {
             self.removeActionView()
             let keychain = KeychainSwift()
             keychain.delete("isActiveUser")
@@ -967,6 +977,75 @@ class VCChildTasksList : UIViewController ,UITableViewDelegate, UITableViewDataS
         else {
             self.present(balanceScreen, animated:true, completion:nil)
         }
+    }
+    
+    //MARK: Change Child Pic Method
+    
+    func requestToUploadImage(profileImage:UIImage, onCompletion: ((JSON?) -> Void)? = nil, onError: ((Error?) -> Void)? = nil){
+        let imageData = UIImagePNGRepresentation(profileImage)
+        if(imageData == nil)  { return; }
+        let keychain = KeychainSwift()
+        let url = "\(EarnItApp_BASE_URL)\(EarnItApp_CHILD_IMAGE_FOLDER)"
+        print("Basic \(keychain.get("user_auth")!)")
+        let headers: HTTPHeaders = [
+            "accept": "application/json",
+            "Authorization": "Basic \(keychain.get("user_auth")!)",
+        ]
+        Alamofire.upload(multipartFormData: { (multipartFormData) in
+            if let data = imageData{
+                multipartFormData.append(data, withName: "file", fileName: "profileimage.png", mimeType: "image/png")
+            }
+        }, usingThreshold: UInt64.init(), to: url, method: .post, headers: headers) { (result) in
+            switch result{
+            case .success(let upload, _, _):
+                upload.responseString { response in
+                    print("Succesfully uploaded")
+                    if let err = response.error{
+                        onError?(err)
+                        print(err)
+                        self.view.makeToast("Failed to Upload Image")
+                        return
+                    }
+                    EarnItChildUser.currentUser.childUserImageUrl = String("\(String(describing: response.value!))")
+                    self.userImageVieqw.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + EarnItChildUser.currentUser.childUserImageUrl!)
+                }
+            case .failure(let error):
+                print("Error in upload: \(error.localizedDescription)")
+                self.view.makeToast("Failed to Upload Image")
+                onError?(error)
+            }
+        }
+    }
+    
+    //MARK: Open Image Picker
+    
+    func profileImageChangeOptionTapped() {
+        var libraryEnabled: Bool = true
+        var croppingEnabled: Bool = true
+        var allowResizing: Bool = true
+        var allowMoving: Bool = true
+        var minimumSize: CGSize = CGSize(width: 200, height: 200)
+        var croppingParameters: CroppingParameters {
+            return CroppingParameters(isEnabled: croppingEnabled, allowResizing: allowResizing, allowMoving: allowMoving, minimumSize: minimumSize)
+        }
+        let cameraViewController = CameraViewController(croppingParameters: croppingParameters, allowsLibraryAccess: libraryEnabled) { [weak self] image, asset in
+            if image != nil {
+                let resizedImage = self?.resizeImage(image!, newWidth: 300)
+                self?.requestToUploadImage(profileImage: resizedImage!)
+            }
+            self?.dismiss(animated: true, completion: nil)
+        }
+        present(cameraViewController, animated: true, completion: nil)
+    }
+    
+    func resizeImage(_ image: UIImage, newWidth: CGFloat) -> UIImage {
+        let scale = newWidth / image.size.width
+        let newHeight = image.size.height * scale
+        UIGraphicsBeginImageContext(CGSize(newWidth, newHeight))
+        image.draw(in: CGRect(0, 0, newWidth, newHeight))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage!
     }
 }
 

@@ -13,6 +13,8 @@ import AVFoundation
 import AWSS3
 import KeychainSwift
 import ALCameraViewController
+import SwiftyJSON
+import Alamofire
 
 class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate{
     
@@ -288,19 +290,13 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
             (earnItTask) ->() in
             
             createEarnItAppChildUser( success: {
-                
                 (earnItChildUsers) -> () in
-                
                 for user in earnItChildUsers {
-                    
                     for task in user.earnItTasks {
-                        
                         print(task.taskId)
                         print(task.taskName)
                     }
-                    
                     for task in user.earnItTopThreePendingApprovalTask{
-                        
                         print("task.taskName \(task.taskName)")
                     }
                 }
@@ -312,14 +308,9 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
 //                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: self.dismissScreen))
 //                self.present(alert, animated: true, completion: nil)
                 self.hideLoadingView()
-                
-                
             }) {  (error) -> () in
-                
                 print("error")
-                
             }
-            
             
         }) { (error) -> () in
             self.hideLoadingView()
@@ -328,7 +319,6 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
 //            self.present(alert, animated: true, completion: nil)
             print(" Set status completed failed")
         }
-
     }
     
     @IBAction func viewDidTapped(_ sender: Any) {
@@ -341,11 +331,9 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
         self.dismiss(animated: true, completion: nil)
     }
     
-    
     @IBAction func userImageViewGotTapped(_ sender: UITapGestureRecognizer) {
         
         print("ImageView got tapped")
-        
         var libraryEnabled: Bool = true
         var croppingEnabled: Bool = true
         var allowResizing: Bool = true
@@ -356,36 +344,18 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
             return CroppingParameters(isEnabled: croppingEnabled, allowResizing: allowResizing, allowMoving: allowMoving, minimumSize: minimumSize)
         }
         
-        
-        
-        
         let cameraViewController = CameraViewController(croppingParameters: croppingParameters, allowsLibraryAccess: libraryEnabled) { [weak self] image, asset in
-            
-            if image != nil
-            {
+            if image != nil {
                 let resizedImage = self?.resizeImage(image!, newWidth: 300)
                 self?.userImage = resizedImage
                 self?.userImageView.image = resizedImage
                 self?.isImageChanged = true
             }
             self?.dismiss(animated: true, completion: nil)
-            
         }
         present(cameraViewController, animated: true, completion: nil)
         
-        
-        
         return
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         
 //        let actionSheet = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
 //        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
@@ -465,7 +435,6 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
 //
 //
     func resizeImage(_ image: UIImage, newWidth: CGFloat) -> UIImage {
-
         let scale = newWidth / image.size.width
         let newHeight = image.size.height * scale
         UIGraphicsBeginImageContext(CGSize(newWidth, newHeight))
@@ -473,7 +442,6 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return newImage!
-
     }
     
     // MARK: - NonSpecific User Functions
@@ -482,14 +450,61 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
      method send user image to aws
      
      */
-    
+
+    func requestToUploadImage(profileImage:UIImage, onCompletion: ((JSON?) -> Void)? = nil, onError: ((Error?) -> Void)? = nil){
+        let imageData = UIImagePNGRepresentation(profileImage)
+        if(imageData == nil)  { return; }
+        let keychain = KeychainSwift()
+//        let url = "\(EarnItApp_BASE_URL)\(EarnItApp_CHILD_IMAGE_FOLDER)"
+        let url = "\(EarnItApp_BASE_URL)/parents/children/\(self.earnItChildUser.childUserId)/profile/images"
+        print(self.earnItChildUser.childUserId)
+        print("Basic \(keychain.get("user_auth")!)")
+        let headers: HTTPHeaders = [
+            "accept": "application/json",
+            "Authorization": "Basic \(keychain.get("user_auth")!)",
+        ]
+        Alamofire.upload(multipartFormData: { (multipartFormData) in
+            if let data = imageData{
+                multipartFormData.append(data, withName: "file", fileName: "profileimage.png", mimeType: "image/png")
+            }
+        }, usingThreshold: UInt64.init(), to: url, method: .post, headers: headers) { (result) in
+            switch result{
+            case .success(let upload, _, _):
+                upload.responseString { response in
+                    print("Succesfully uploaded")
+                    if let err = response.error{
+                        onError?(err)
+                        print(err)
+                        self.view.makeToast("Failed to Upload Image")
+                        return
+                    }
+                    print(response.description)
+                    print(response.value)
+                    self.childImageUrl = String("\(String(describing: response.value!))")
+                    self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.childImageUrl!)
+                    let contactNumber = "\(self.countryCodeLabel.text!)\(self.phone.text!)"
+                    if self.isInEditingMode == true{
+                        self.callUpdateForChild(firstName: self.firstName.text!,email: self.email.text!,password: self.password.text!,childAvatar: self.childImageUrl, phoneNumber: contactNumber)
+                    }
+                    else {
+                        self.callUpdateForChild(firstName: self.firstName.text!,email: self.email.text!,password: self.password.text!,childAvatar: self.childImageUrl, phoneNumber: contactNumber)
+                    }
+                }
+            case .failure(let error):
+                print("Error in upload: \(error.localizedDescription)")
+                self.view.makeToast("Failed to Upload Image")
+                onError?(error)
+            }
+        }
+    }
     
     func prepareUserImageForUpload(){
-        
+        self.requestToUploadImage(profileImage: self.userImage!)
+        return
+
         print("Inside prepareUserImageForUpload")
         let date = NSDate()
-        let hashableString = NSString(format: "%f",
-                                      date.timeIntervalSinceReferenceDate)
+        let hashableString = NSString(format: "%f", date.timeIntervalSinceReferenceDate)
         let s3BucketName = EarnItApp_AWS_BUCKET_NAME
         let imageData: NSData = UIImagePNGRepresentation(self.userImage!)! as NSData
         let hashStr = changePasswordToHexcode(hashableString as String)
@@ -508,99 +523,61 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
         uploadRequest.body = fileURL
         let transferManager:AWSS3TransferManager =
             AWSS3TransferManager.default()
-        
         transferManager.upload(uploadRequest).continue({ (task) -> AnyObject! in
-            
             if task.error != nil {
-                
                 print("Image Uploading to AWS server failed..")
                 if(task.error!._code == -1009){
-                    
                     print("error in uploading with error code\(task.error!._code)")
                     self.view.makeToast("You seem to be offline")
-                    
 //                    let alert = showAlert(title: "Opps", message: "You seem to be offline")
 //                    
 //                    self.present(alert, animated: true, completion: nil)
-                    
-                    
-                    
-                }else if(task.error!._code == -1004){
-                    
+                }
+                else if(task.error!._code == -1004){
                     print("error in uploading with error code\(task.error!._code)")
                     self.view.makeToast("Couldn't connect to server")
-                    
 //                    let alert = showAlert(title: "Opps", message: "Couldn't connect to server")
-//                    
 //                    self.present(alert, animated: true, completion: nil)
-                    
-                    
-                    
-                }else if(task.error!._code == -1001){
-                    
-                    
+                }
+                else if(task.error!._code == -1001){
                     print("error in uploading with error code\(task.error!._code)")
-                    
                     self.view.makeToast("Request timed out")
-                    
 //                    let alert = showAlert(title: "Opps", message: "Request timed out")
 //                    self.present(alert, animated: true, completion: nil)
-                    
-                }else{
-                    
+                }
+                else{
                     print("error in uploading with error code\(task.error!._code)")
                     self.view.makeToast("Something went wrong")
                     
 //                    let alert = showAlert(title: "Opps", message: "Something went wrong")
 //                    
 //                    self.present(alert, animated: true, completion: nil)
-                    
                 }
-                
-                
             }
             if task.exception != nil {
-                
                 self.view.makeToast("Failed to Upload Image")
 //                let alert = showAlert(title: "Opps", message: "Failed to Upload Image")
 //                self.present(alert, animated: true, completion: nil)
-                
             }
             if task.result != nil {
-                
-                
                 self.childImageUrl = String("\(AWS_URL)\(s3BucketName)/\(uploadRequest.key!)")
-                
                 let contactNumber = "\(self.countryCodeLabel.text!)\(self.phone.text!)"
-                
                     if self.isInEditingMode == true{
-                        
                          self.callUpdateForChild(firstName: self.firstName.text!,email: self.email.text!,password: self.password.text!,childAvatar: self.childImageUrl, phoneNumber: contactNumber)
-                        
-                    }else {
-                        
-                        
-                        self.callUpdateForChild(firstName: self.firstName.text!,email: self.email.text!,password: self.password.text!,childAvatar: self.childImageUrl, phoneNumber: contactNumber)
-                       
                     }
-
-                
+                    else {
+                        self.callUpdateForChild(firstName: self.firstName.text!,email: self.email.text!,password: self.password.text!,childAvatar: self.childImageUrl, phoneNumber: contactNumber)
+                    }
             }
-                
             else {
-                
                 self.view.makeToast("Failed to Upload Image")
 //                let alert = showAlert(title: "Opps", message: "Failed to Upload Image")
 //                self.present(alert, animated: true, completion: nil)
                 
                 return nil
-                
             }
-            
             return nil
-            
         })
-        
     }
     
     //Change passwordToHexcode method

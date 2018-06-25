@@ -69,9 +69,10 @@ class OptionViewController: UIViewController, OptionMenuProtocol {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
         self.imageViewHeader.userProfileImageView.image = EarnItImage.defaultUserImage()
-        self.imageViewHeader.userProfileImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + EarnItAccount.currentUser.avatar!)
+        DispatchQueue.main.async {
+            self.imageViewHeader.userProfileImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + EarnItAccount.currentUser.avatar!)
+        }
         self.imageViewHeader.userName.text = EarnItAccount.currentUser.firstName
         self.imageViewHeader.email.text = EarnItAccount.currentUser.email
     }

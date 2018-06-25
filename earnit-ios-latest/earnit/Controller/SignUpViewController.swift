@@ -83,7 +83,6 @@ class SignUpViewController : UIViewController {
     
     
     @IBAction func CheckValidityAndCallSignUpApi(_ sender: Any) {
-        
         self.view.endEditing(true)
         print("Inside CheckValidityAndCallSignUpApi")
         if (self.email.text?.characters.count)! == 0 || (self.password.text?.characters.count)! == 0 || (self.confirmPassword.text?.characters.count)! == 0  {
@@ -91,42 +90,37 @@ class SignUpViewController : UIViewController {
 //            self.present(alert, animated: true, completion: nil)
             self.view.makeToast("Please complete all the fields")
 
-        }else if self.isEmailValid == false{
-            
+        }
+        else if self.isEmailValid == false{
             self.view.makeToast("Invalid Email")
             //let alert = showAlert(title: "", message: "Invalid Email")
             self.password.text = ""
             self.confirmPassword.text = ""
             //self.present(alert, animated: true, completion: nil)
-        }else if self.isPasswordMatchesWithConfirmPassword == false{
-            
+        }
+        else if self.isPasswordMatchesWithConfirmPassword == false{
             self.view.makeToast("Confirm password doesn't match with password")
             //let alert = showAlert(title: "", message: "Confirm password doesn't match with password")
             self.password.text = ""
             self.confirmPassword.text = ""
             //self.present(alert, animated: true, completion: nil)
-
-        }else {
-            
+        }
+        else {
             self.showLoadingView()
             callSignUpApiForParent(email: self.email.text!, password: self.password.text!, success: {
-                
                 (responseJSON,errorCode) ->() in
-                
                 self.hideLoadingView()
-                
                 if (errorCode == "9000"){
-                    
                   self.view.makeToast("A user with this email already exist")
                   //let alert = showAlert(title: "", message: "A user with this email already exist")
                   //self.present(alert, animated: true, completion: nil)
                   self.email.text = ""
                   self.password.text = ""
                   self.confirmPassword.text = ""
-                    
+                    let keychain = KeychainSwift()
+                    keychain.delete("user_auth")
                 }else {
                     let keychain = KeychainSwift()
-                    
                     keychain.set(responseJSON["email"].stringValue, forKey: "email")
 //                    keychain.set(responseJSON["password"].stringValue, forKey: "password")
                     keychain.set(self.password.text!, forKey: "password")
@@ -142,17 +136,14 @@ class SignUpViewController : UIViewController {
                         callUpdateProfileApiForParentt(firstName: EarnItAccount.currentUser.firstName, lastName: EarnItAccount.currentUser.lastName, phoneNumber: EarnItAccount.currentUser.phoneNumber!, updatedPassword: EarnItAccount.currentUser.password,imageUrl: EarnItAccount.currentUser.avatar!,fcmKey : fcmToken,success: {
                             
                             (earnItParentInfo) ->() in
-                            
                             EarnItAccount.currentUser.fcmToken = fcmToken
                             
                         }) { (error) -> () in
-                            
                             let alert = showAlert(title: "Error", message: "Update Profile Failed")
                             self.present(alert, animated: true, completion: nil)
                             print(" Set status completed failed")
                         }
                     }
-                    
                     let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                     let profilePage  = storyBoard.instantiateViewController(withIdentifier: "FirstTimeLoginProfileUpdateScreen") as! FirstTimeLoginProfileScreen
                  //   profilePage.shouldGoBackToLandingPage = true

@@ -30,12 +30,10 @@ extension UIImageView {
         //self.contentMode = UIViewContentMode.center
         
         if let url = URL(string: urlString!){
-       
-    
         // check cached image
-        if let cachedImage = imageCache.object(forKey: urlString as! NSString) as? UIImage {
+            if let cachedImage = imageCache.object(forKey: urlString! as NSString) as? UIImage {
             self.image = cachedImage
-            return
+            //return
         }
         
         // if not, download image from url
@@ -47,8 +45,7 @@ extension UIImageView {
             
             DispatchQueue.main.async {
                 if let image = UIImage(data: data!) {
-                    imageCache.setObject(image, forKey: urlString as! NSString)
-
+                    imageCache.setObject(image, forKey: urlString! as NSString)
                     self.image = image
                 }
                 else{
