@@ -112,11 +112,11 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
         for daytask in earnItChildUserForParent.earnItTasks{
             let currentDate = Date()
             let formatter = DateFormatter()
-            formatter.timeZone = TimeZone.ReferenceType.local
+            formatter.timeZone = TimeZone.ReferenceType.local//TimeZone.current
             formatter.dateFormat = "M/dd"
             let currentDay = formatter.string(from: currentDate as Date)
             if  currentDay != daytask.dateMonthString {
-                if currentDate < daytask.dueDate {
+                if currentDate > daytask.dueDate {
                     tasks.remove(at: tasks.index(of: daytask)!)
                 }
             }

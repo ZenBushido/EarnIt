@@ -569,7 +569,6 @@ func addTaskForChild(childId: Int, earnItTask: EarnItTask,earnItSelectedGoal: Ea
         ]
     }
     if  earnItTask.repeatMode != .None {
-        
         let repeatModeDic = ["repeat" : earnItTask.repeatMode.rawValue]
         param.updateValue(repeatModeDic, forKey: "repititionSchedule")
     }

@@ -91,7 +91,7 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
             formatter.dateFormat = "M/dd"
             let currentDay = formatter.string(from: currentDate as Date)
             if  currentDay != daytask.dateMonthString  {
-                if currentDate < daytask.dueDate {
+                if currentDate > daytask.dueDate {
                     tasks.remove(at: tasks.index(of: daytask)!)
                 }
             }

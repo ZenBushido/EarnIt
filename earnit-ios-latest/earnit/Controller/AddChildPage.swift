@@ -457,8 +457,8 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
         let keychain = KeychainSwift()
 //        let url = "\(EarnItApp_BASE_URL)\(EarnItApp_CHILD_IMAGE_FOLDER)"
         let url = "\(EarnItApp_BASE_URL)/parents/children/\(self.earnItChildUser.childUserId)/profile/images"
-        print(self.earnItChildUser.childUserId)
-        print("Basic \(keychain.get("user_auth")!)")
+//        print(self.earnItChildUser.childUserId)
+//        print("Basic \(keychain.get("user_auth")!)")
         let headers: HTTPHeaders = [
             "accept": "application/json",
             "Authorization": "Basic \(keychain.get("user_auth")!)",
@@ -478,8 +478,8 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
                         self.view.makeToast("Failed to Upload Image")
                         return
                     }
-                    print(response.description)
-                    print(response.value)
+//                    print(response.description)
+//                    print(response.value)
                     self.childImageUrl = String("\(String(describing: response.value!))")
                     self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.childImageUrl!)
                     let contactNumber = "\(self.countryCodeLabel.text!)\(self.phone.text!)"
