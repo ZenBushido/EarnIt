@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import AssetsLibrary
 import AVFoundation
-import AWSS3
+//import AWSS3
 import KeychainSwift
 import ALCameraViewController
 import SwiftyJSON
@@ -476,8 +476,8 @@ class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextF
     
     func prepareUserImageForUpload(){
         self.requestToUploadImage(profileImage: self.userImage!)
-        return
-        
+        //return
+        /*
         let date = NSDate()
         let hashableString = NSString(format: "%f", date.timeIntervalSinceReferenceDate)
         let s3BucketName = EarnItApp_AWS_BUCKET_NAME
@@ -550,6 +550,7 @@ class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextF
             }
             return nil
         })
+         */
     }
     
     //Change passwordToHexcode method

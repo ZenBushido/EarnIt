@@ -330,9 +330,9 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
                     self.selectedChildUser.earnItGoal = earnItGoal
                 }
             })
-                
             { (error) -> () in
                 //self.view.makeToast("Get goal list failed")
+                print(error.description)
             }
             
             optionView.doActionForFirstOption = {

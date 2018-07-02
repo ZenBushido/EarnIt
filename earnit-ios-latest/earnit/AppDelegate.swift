@@ -9,8 +9,8 @@
 import UIKit
 import CoreData
 import SlideMenuControllerSwift
-import AWSCore
-import AWSS3
+//import AWSCore
+//import AWSS3
 import Firebase
 import FirebaseMessaging
 import UserNotifications
@@ -22,7 +22,6 @@ import Fabric
 class AppDelegate: UIResponder, UIApplicationDelegate , SlideMenuControllerDelegate{
     
     var window: UIWindow?
-    
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
@@ -246,10 +245,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate , SlideMenuControllerDeleg
     }
     func configureAWSForImageUpload(){
         //Creating  default service configuration for AWS
-        let credentialsProvider = AWSStaticCredentialsProvider.init(accessKey: AWS_ACCESS_ID, secretKey: AWS_SECRET_KEY)
+        /*let credentialsProvider = AWSStaticCredentialsProvider.init(accessKey: AWS_ACCESS_ID, secretKey: AWS_SECRET_KEY)
         let defaultServiceConfiguration = AWSServiceConfiguration(
             region: AWSRegionType.usWest2, credentialsProvider: credentialsProvider)
         AWSServiceManager.default().defaultServiceConfiguration = defaultServiceConfiguration
+ */
     }
 }
 

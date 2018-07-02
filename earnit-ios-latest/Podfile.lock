@@ -1,9 +1,6 @@
 PODS:
   - Alamofire (4.7.1)
   - ALCameraViewController (2.0.3)
-  - AWSCore (2.4.16)
-  - AWSS3 (2.4.16):
-    - AWSCore (= 2.4.16)
   - CircleMenu (2.0.5)
   - Crashlytics (3.10.1):
     - Fabric (~> 1.7.5)
@@ -55,8 +52,6 @@ PODS:
 DEPENDENCIES:
   - Alamofire (~> 4.4)
   - ALCameraViewController (~> 2.0.3)
-  - AWSCore (~> 2.4.15)
-  - AWSS3
   - CircleMenu (~> 2.0.1)
   - Crashlytics
   - Fabric
@@ -76,8 +71,6 @@ SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - Alamofire
     - ALCameraViewController
-    - AWSCore
-    - AWSS3
     - CircleMenu
     - Crashlytics
     - Fabric
@@ -102,8 +95,6 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: 68d7d521118d49c615a8d2214d87cdf525599d30
   ALCameraViewController: 7b86c2888df0e63f53a801e9d96fe194f51157ec
-  AWSCore: 7c3c129991e6387bcbad7132bc3661e7135754db
-  AWSS3: fef6aa8f8f625df8f67f1b6574fe761f3a4ddc99
   CircleMenu: 7cef16b4401de5b545e5f06d720cb202ec64800d
   Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
   Fabric: f8d42c893bb187326a7968b62abe55c36a987a46
@@ -125,6 +116,6 @@ SPEC CHECKSUMS:
   SnapKit: 1ca44df72cfa543218d177cb8aab029d10d86ea7
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: 03dd2151ded2db849413b7d5b3a53711c9478657
+PODFILE CHECKSUM: 877a650484292ea3ccfec219759578c2db4710e7
 
 COCOAPODS: 1.5.0

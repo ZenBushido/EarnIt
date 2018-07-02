@@ -590,7 +590,6 @@ func addTaskForChild(childId: Int, earnItTask: EarnItTask,earnItSelectedGoal: Ea
 func getGoalsForChild(childId : Int,success: @escaping([EarnItChildGoal])-> (),failure: @escaping(Bool)-> ()){
     
     let keychain = KeychainSwift()
-    
     guard  let _ = keychain.get("email") else  {
         print(" /n Unable to fetch user credentials from keychain \n")
         return
@@ -601,7 +600,7 @@ func getGoalsForChild(childId : Int,success: @escaping([EarnItChildGoal])-> (),f
     if let authorizationHeader = Request.authorizationHeader(user: user, password: password){
         headers = [
             "Accept": "application/json",
-            //            "Authorization": authorizationHeader.value,
+//            "Authorization": authorizationHeader.value,
             "Content-Type": "application/json",
             "Authorization": "Basic \(keychain.get("user_auth")!)"
         ]
@@ -609,22 +608,17 @@ func getGoalsForChild(childId : Int,success: @escaping([EarnItChildGoal])-> (),f
     Alamofire.request("\(EarnItApp_BASE_URL)/goals/\(childId)",method: .get,parameters: nil, encoding: JSONEncoding.default,  headers: headers).responseJSON{ response in
         switch(response.result){
         case .success:
-            print("response.result.value  getGoals,\(response.result.value)")
+            print("response.result.value  getGoals,\(String(describing: response.result.value))")
             let responseJSON = JSON(response.result.value)
-            
             var earnItChildGoalList = [EarnItChildGoal]()
-            
             for (_,value) in responseJSON {
-                
                 let earnItGoal = EarnItChildGoal()
                 print("value \(value["name"])")
                 earnItGoal.setAttribute(json: value)
                 earnItChildGoalList.append(earnItGoal)
             }
             success(earnItChildGoalList)
-            
         case .failure(_):
-            
             print(response.result.error)
         }
     }

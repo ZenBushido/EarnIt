@@ -8,7 +8,7 @@
 
 import UIKit
 import KeychainSwift
-import AWSS3
+//import AWSS3
 import AVFoundation
 import ALCameraViewController
 import SwiftyJSON
@@ -437,8 +437,8 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
     
     func prepareUserImageForUpload(){
         self.requestToUploadImage(profileImage: self.userImage!)
-        return
-
+        //return
+        /*
         print("Inside prepareUserImageForUpload")
         let date = NSDate()
         let hashableString = NSString(format: "%f", date.timeIntervalSinceReferenceDate)
@@ -560,6 +560,7 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
             }
             return nil
         })
+    */
     }
     
 

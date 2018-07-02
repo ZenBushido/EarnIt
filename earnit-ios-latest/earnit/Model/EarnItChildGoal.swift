@@ -64,6 +64,7 @@ class EarnItChildGoal : NSObject {
     }
     
     func setAttribute(json: JSON){
+        print(json)
         self.id = json["id"].intValue
         self.createdDate = json["createdDate"].stringValue
         self.updateDate = json["updateDate"].stringValue

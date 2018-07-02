@@ -11,7 +11,7 @@ import UIKit
 import KeychainSwift
 import AssetsLibrary
 import AVFoundation
-import AWSS3
+//import AWSS3
 import ALCameraViewController
 import SwiftyJSON
 import Alamofire
@@ -1007,8 +1007,8 @@ class ParentProfilePage : UIViewController, UIImagePickerControllerDelegate, UIT
     
     func prepareUserImageForUpload(){
         self.requestToUploadImage(profileImage: self.userImage!, parameters: ["":""])
-        return
-            
+        //return
+        /*
         print("Inside prepareUserImageForUpload")
         let date = NSDate()
         let hashableString = NSString(format: "%f", date.timeIntervalSinceReferenceDate)
@@ -1121,6 +1121,7 @@ class ParentProfilePage : UIViewController, UIImagePickerControllerDelegate, UIT
             }
             return nil
         })
+*/
     }
     
     //Change passwordToHexcode method

@@ -10,10 +10,11 @@ import Foundation
 import UIKit
 import AssetsLibrary
 import AVFoundation
-import AWSS3
+//import AWSS3
 import KeychainSwift
 import ALCameraViewController
-
+import SwiftyJSON
+import Alamofire
 
 class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImagePickerControllerDelegate ,
     UINavigationControllerDelegate,
@@ -113,77 +114,51 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
     }
     
     func setImagePicker(){
-        
         self.imagePicker = UIImagePickerController()
         self.imagePicker.delegate = self
-        
     }
     
     @IBAction func submitButtonClicked(_ sender: Any) {
-        
         print("task submit clicked...")
         self.view.endEditing(true)
-       
-        
         if self.isPictureRequired == 1 {
-            
             if self.isImageChanged == true{
-                
                 print("self.isImageChanged \(self.isImageChanged)")
-                
-                
-                DispatchQueue.global().async {
-                    
+                DispatchQueue.main.async {
+                    print("Done with image Upload and updated to backend!")
+                    self.callControllerForDoneTask()
+                }
+                /*DispatchQueue.global().async {
                     self.prepareTaskImageForUpload()
-                    
                     DispatchQueue.main.async {
-                        
                         print("Done with image Upload and updated to backend!")
                         self.callControllerForDoneTask()
-
                     }
-                }
-            
-                
-            }else {
-                
+                }*/
+            }
+            else {
                 self.hideLoadingView()
-           
                 self.view.makeToast("Please upload an image to set this task complete")
 //                let alert = showAlert(title: "", message: "Please upload an image to set this task complete")
-//                
 //                self.present(alert, animated: true, completion: nil)
-                
             }
-            
         }
         else{
             self.callControllerForDoneTask()
         }
-        
     }
+    
     @IBAction func taskImageViewDidTap(_ sender: Any) {
-
-        
-
-        
         var libraryEnabled: Bool = true
         var croppingEnabled: Bool = true
         var allowResizing: Bool = true
         var allowMoving: Bool = true
         var minimumSize: CGSize = CGSize(width: 200, height: 200)
-        
         var croppingParameters: CroppingParameters {
             return CroppingParameters(isEnabled: croppingEnabled, allowResizing: allowResizing, allowMoving: allowMoving, minimumSize: minimumSize)
         }
-        
-        
-      
-        
         let cameraViewController = CameraViewController(croppingParameters: croppingParameters, allowsLibraryAccess: libraryEnabled) { [weak self] image, asset in
-       
-            if image != nil
-            {
+            if image != nil {
                 let resizedImage = self?.resizeImage(image!, newWidth: 300)
                 self?.taskImage = resizedImage
                 self?.isImageChanged = true
@@ -195,11 +170,7 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
             }
             self?.dismiss(animated: true, completion: nil)
         }
-        
         present(cameraViewController, animated: true, completion: nil)
-        
-
-        
         return
         
         
@@ -208,38 +179,27 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
         let actionSheet = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
             let cameraAction = UIAlertAction(title: "Camera", style: .default) { (action) -> Void in
-                
-                if AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) ==  AVAuthorizationStatus.authorized
-                {
+                if AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) ==  AVAuthorizationStatus.authorized {
                     self.imagePicker.sourceType = UIImagePickerControllerSourceType.camera
                     self.present(self.imagePicker, animated: true, completion: nil)
                     
                 }
-                else
-                {
+                else {
                     AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo, completionHandler: { (granted :Bool) -> Void in
-                        if granted == true
-                        {
+                        if granted == true {
                             self.imagePicker.sourceType = UIImagePickerControllerSourceType.camera
                             self.present(self.imagePicker, animated: true, completion: nil)
-                            
                         }
-                        else
-                        {
+                        else {
                             self.view.makeToast("You don't have permission to access camera")
 //                            let alert = showAlert(title: "Not allowed", message: "You don't have permission to access camera")
-//                            
 //                            self.present(alert, animated: true, completion: nil)
-                            
                         }
-                    });
+                    })
                 }
-                
-                
             }
             actionSheet.addAction(cameraAction)
         }
-        
         let albumAction = UIAlertAction(title: "Photo Library", style: .default) { (action) -> Void in
             self.imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
             self.present(self.imagePicker, animated: true, completion: nil)
@@ -255,7 +215,6 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
         actionSheet.popoverPresentationController?.sourceRect = ActionSheetFrame
 
         self.present(actionSheet, animated: true, completion: nil)
-
     }
     
     
@@ -279,14 +238,10 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
     
     
     func showImageCropper(image:UIImage)  {
-        
-        
-        
         let cameraViewController = CameraViewController { [weak self] image, asset in
             // Do something with your image here.
             self?.dismiss(animated: true, completion: nil)
         }
-        
         self.present(cameraViewController, animated: true, completion: nil)
         
 //        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
@@ -298,13 +253,10 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
     
     // *Overide
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        
         self.dismiss(animated: true, completion: nil)
     }
     
-    
     func resizeImage(_ image: UIImage, newWidth: CGFloat) -> UIImage {
-        
         let scale = newWidth / image.size.width
         let newHeight = image.size.height * scale
         UIGraphicsBeginImageContext(CGSize(newWidth, newHeight))
@@ -312,7 +264,6 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return newImage!
-        
     }
     
     // MARK: - NonSpecific User Functions
@@ -321,14 +272,82 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
      method send user image to aws
      
      */
+    //MARK: Image upload Method
     
+    func requestToUploadImage(profileImage:UIImage, earnItTaskObj: EarnItTask, onCompletion: ((JSON?) -> Void)? = nil, onError: ((Error?) -> Void)? = nil){
+        /*
+        let imageData = UIImagePNGRepresentation(profileImage)
+        if(imageData == nil)  { return; }
+        let keychain = KeychainSwift()
+        let url = "\(EarnItApp_BASE_URL)/tasks/\(earnItTaskObj)/images"
+        let headers: HTTPHeaders = [
+            "accept": "application/json",
+            "Authorization": "Basic \(keychain.get("user_auth")!)",
+        ]
+        Alamofire.upload(multipartFormData: { (multipartFormData) in
+            if let data = imageData{
+                multipartFormData.append(data, withName: "file", fileName: "profileimage.png", mimeType: "image/png")
+            }
+        }, usingThreshold: UInt64.init(), to: url, method: .post, headers: headers) { (result) in
+            switch result{
+            case .success(let upload, _, _):
+                upload.responseString { response in
+                    print("Succesfully uploaded")
+                    if let err = response.error{
+                        onError?(err)
+                        print(err)
+                        self.view.makeToast("Failed to Upload Image")
+                        return
+                    }
+                    self.userImageUrl = String("\(String(describing: response.value!))")
+                    EarnItAccount.currentUser.avatar! = self.userImageUrl!
+                    var contactNumber = String()
+                    if (self.contactNumber.text?.characters.count)! > 0{
+                        contactNumber = "\(self.countryCodeLabel.text!)\(self.contactNumber.text!)"
+                    }
+                    else {
+                        contactNumber = ""
+                    }
+                    callUpdateProfileImageApiForParent(firstName: self.firstName.text!, lastName: self.lastName.text!, phoneNumber: contactNumber, updatedPassword: EarnItAccount.currentUser.password,userAvatar: self.userImageUrl!, success: {
+                        (earnItTask) ->() in
+                        
+                        let keychain = KeychainSwift()
+                        guard  let _ = keychain.get("email") else  {
+                            print(" /n Unable to fetch user credentials from keychain \n")
+                            return
+                        }
+                        let email : String = (keychain.get("email")!)
+                        let password : String = (keychain.get("password")!)
+                        checkUserAuthentication(email: email, password: password, success: {
+                            (responseJSON) ->() in
+                            if (responseJSON["email"].string == nil || responseJSON["email"].stringValue == ""){
+                                self.dismissScreenToLogin()
+                            }
+                            else {
+                                EarnItAccount.currentUser.setAttribute(json: responseJSON)
+                                keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
+                            }
+                        }) { (error) -> () in
+                            self.dismissScreenToLogin()
+                        }
+                    }) { (error) -> () in
+                        self.view.makeToast("Update Profile Failed")
+                    }
+                    onCompletion?(nil)
+                }
+            case .failure(let error):
+                print("Error in upload: \(error.localizedDescription)")
+                self.view.makeToast("Update Profile Failed")
+                onError?(error)
+            }
+        }*/
+    }
     
     func prepareTaskImageForUpload(){
-        
-        print("Inside prepareUserImageForUpload")
+        //return
+        /*print("Inside prepareUserImageForUpload")
         let date = NSDate()
-        let hashableString = NSString(format: "%f",
-                                      date.timeIntervalSinceReferenceDate)
+        let hashableString = NSString(format: "%f", date.timeIntervalSinceReferenceDate)
         let s3BucketName = EarnItApp_AWS_BUCKET_NAME
         let imageData: NSData = UIImagePNGRepresentation(self.taskImage!)! as NSData
         let hashStr = changePasswordToHexcode(hashableString as String)
@@ -347,106 +366,65 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
         uploadRequest.body = fileURL
         let transferManager:AWSS3TransferManager =
             AWSS3TransferManager.default()
-        
         transferManager.upload(uploadRequest).continue({ (task) -> AnyObject! in
-            
             if task.error != nil {
-                
                 print("Image Uploading to AWS server failed..")
                 if(task.error!._code == -1009){
-                    
                     print("error in uploading with error code\(task.error!._code)")
-                    
                     self.view.makeToast("You seem to be offline")
 //                    let alert = showAlert(title: "Opps", message: "You seem to be offline")
-//                    
 //                    self.present(alert, animated: true, completion: nil)
-                    
-                    
-                    
-                }else if(task.error!._code == -1004){
-                    
+                }
+                else if(task.error!._code == -1004){
                     print("error in uploading with error code\(task.error!._code)")
                     self.view.makeToast("Couldn't connect to server")
-                    
 //                    let alert = showAlert(title: "Opps", message: "Couldn't connect to server")
-//                    
 //                    self.present(alert, animated: true, completion: nil)
-                    
-                    
-                    
-                }else if(task.error!._code == -1001){
-                    
-                    
+                }
+                else if(task.error!._code == -1001){
                     print("error in uploading with error code\(task.error!._code)")
                     self.view.makeToast("Request timed out")
-                    
 //                    let alert = showAlert(title: "Opps", message: "Request timed out")
 //                    self.present(alert, animated: true, completion: nil)
-                    
-                }else{
-                    
+                }
+                else{
                     print("error in uploading with error code\(task.error!._code)")
                     self.view.makeToast("Something went wrong")
-                    
-                    
 //                    let alert = showAlert(title: "Opps", message: "Something went wrong")
-//                    
 //                    self.present(alert, animated: true, completion: nil)
-                    
                 }
-                
-                
             }
             if task.exception != nil {
-                
                 self.view.makeToast("Failed to Upload Image")
 //                let alert = showAlert(title: "Opps", message: "Failed to Upload Image")
 //                self.present(alert, animated: true, completion: nil)
-                
             }
             if task.result != nil {
-                
-                
                 self.taskImageUrl = String("\(AWS_URL)\(s3BucketName)/\(uploadRequest.key!)")
-                
                 print("ImageUrl for earnITuser \(self.taskImageUrl)")
                 self.callControllerForDoneTask()
-                
-
             }
-                
             else {
-                
-                
                 self.view.makeToast("Failed to Upload Image")
 //                let alert = showAlert(title: "Opps", message: "Failed to Upload Image")
 //                self.present(alert, animated: true, completion: nil)
-                
                 return nil
-                
             }
-            
             return nil
-            
         })
-        
+        */
     }
     
     
     //Change passwordToHexcode method
     
     func changePasswordToHexcode(_ string: String) -> String {
-        
         let data = string.data(using: .utf8)!
         let hexString = data.map{ String(format:"%02x", $0) }.joined()
         return hexString
-        
     }
     
-    
     @IBAction func goBackButtonClicked(_ sender: Any) {
-        
         self.view.endEditing(true)
         self.dismiss(animated: true, completion: nil)
     }
@@ -475,8 +453,24 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
         self.earnItTask.status = TaskStatus.completed
         self.earnItTask.taskComments.append(taskComment)
         //self.earnItTask.taskComments.append(self.taskComments.text)
-        callApiForUpdateTask(earnItTaskChildId: EarnItChildUser.currentUser.childUserId,earnItTask: self.earnItTask, success: {
-            (earnItTask) ->() in            
+        callApiForUpdateTask(earnItTaskChildId: EarnItChildUser.currentUser.childUserId, earnItTask: self.earnItTask, success: {
+            (earnItTask) ->() in
+            
+            if self.isPictureRequired == 1 {
+                if self.isImageChanged == true{
+                    print("self.isImageChanged \(self.isImageChanged)")
+                    DispatchQueue.main.async {
+                        print("Done with image Upload and updated to backend!")
+                        self.callControllerForDoneTask()
+                    }
+                }
+            }
+
+                    
+                    
+            DispatchQueue.global().async {
+                self.requestToUploadImage(profileImage: self.taskImage!, earnItTaskObj: earnItTask)
+            }
             let keychain = KeychainSwift()
             //let _ : Int = Int(keychain.get("userId")!)!
             guard  let _ = keychain.get("email") else  {
