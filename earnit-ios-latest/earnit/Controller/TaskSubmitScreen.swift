@@ -63,31 +63,21 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
         self.taskComments.delegate = self
         self.taskComments.autocorrectionType = .no
         self.taskNameLabel.text = self.earnItTask.taskName
-    
         print(self.earnItTask)
-        
         if(self.earnItTask.taskDescription == ""){
-            
-              self.taskDescription.text  = "No description available"
+            self.taskDescription.text  = "No description available"
             self.taskDescription.alpha = 0.5
-            
-        }else{
-            
-              self.taskDescription.text = self.earnItTask.taskDescription
-            self.taskDescription.alpha = 1.0
-
         }
-        
-        
+        else{
+            self.taskDescription.text = self.earnItTask.taskDescription
+            self.taskDescription.alpha = 1.0
+        }
         if self.earnItTask.repeatMode == .None {
-            
             self.repeatsLabel.text = colonSpace + "No"
         }
         else {
-             self.repeatsLabel.text = colonSpace + self.earnItTask.repeatMode.rawValue.capitalized
+            self.repeatsLabel.text = colonSpace + self.earnItTask.repeatMode.rawValue.capitalized
         }
-      
-        
         self.allowance.text = colonSpace + "$" + String(self.earnItTask.allowance)
         self.dueDate.text = colonSpace + self.earnItTask.dateMonthString + " @ " + self.earnItTask.dueTime
         
@@ -126,15 +116,8 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
                 print("self.isImageChanged \(self.isImageChanged)")
                 DispatchQueue.main.async {
                     print("Done with image Upload and updated to backend!")
-                    self.callControllerForDoneTask()
-                }
-                /*DispatchQueue.global().async {
                     self.prepareTaskImageForUpload()
-                    DispatchQueue.main.async {
-                        print("Done with image Upload and updated to backend!")
-                        self.callControllerForDoneTask()
-                    }
-                }*/
+                }
             }
             else {
                 self.hideLoadingView()
@@ -274,19 +257,19 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
      */
     //MARK: Image upload Method
     
-    func requestToUploadImage(profileImage:UIImage, earnItTaskObj: EarnItTask, onCompletion: ((JSON?) -> Void)? = nil, onError: ((Error?) -> Void)? = nil){
-        /*
+    func requestToUploadImage(profileImage:UIImage, onCompletion: ((JSON?) -> Void)? = nil, onError: ((Error?) -> Void)? = nil){
+        
         let imageData = UIImagePNGRepresentation(profileImage)
         if(imageData == nil)  { return; }
         let keychain = KeychainSwift()
-        let url = "\(EarnItApp_BASE_URL)/tasks/\(earnItTaskObj)/images"
+        let url = "\(EarnItApp_BASE_URL)/tasks/\(self.earnItTask.taskId!)/images"
         let headers: HTTPHeaders = [
             "accept": "application/json",
             "Authorization": "Basic \(keychain.get("user_auth")!)",
         ]
         Alamofire.upload(multipartFormData: { (multipartFormData) in
             if let data = imageData{
-                multipartFormData.append(data, withName: "file", fileName: "profileimage.png", mimeType: "image/png")
+                multipartFormData.append(data, withName: "file", fileName: "taskimage.png", mimeType: "image/png")
             }
         }, usingThreshold: UInt64.init(), to: url, method: .post, headers: headers) { (result) in
             switch result{
@@ -299,39 +282,14 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
                         self.view.makeToast("Failed to Upload Image")
                         return
                     }
-                    self.userImageUrl = String("\(String(describing: response.value!))")
-                    EarnItAccount.currentUser.avatar! = self.userImageUrl!
-                    var contactNumber = String()
-                    if (self.contactNumber.text?.characters.count)! > 0{
-                        contactNumber = "\(self.countryCodeLabel.text!)\(self.contactNumber.text!)"
-                    }
-                    else {
-                        contactNumber = ""
-                    }
-                    callUpdateProfileImageApiForParent(firstName: self.firstName.text!, lastName: self.lastName.text!, phoneNumber: contactNumber, updatedPassword: EarnItAccount.currentUser.password,userAvatar: self.userImageUrl!, success: {
-                        (earnItTask) ->() in
-                        
-                        let keychain = KeychainSwift()
-                        guard  let _ = keychain.get("email") else  {
-                            print(" /n Unable to fetch user credentials from keychain \n")
-                            return
+                    //            DispatchQueue.global().async {
+                    self.taskImageUrl = String("\(String(describing: response.value!))")
+//                    print(self.taskImageUrl!)
+                    DispatchQueue.global().async {
+                        DispatchQueue.main.async {
+                            print("Done with image Upload and updated to backend!")
+                            self.callControllerForDoneTask()
                         }
-                        let email : String = (keychain.get("email")!)
-                        let password : String = (keychain.get("password")!)
-                        checkUserAuthentication(email: email, password: password, success: {
-                            (responseJSON) ->() in
-                            if (responseJSON["email"].string == nil || responseJSON["email"].stringValue == ""){
-                                self.dismissScreenToLogin()
-                            }
-                            else {
-                                EarnItAccount.currentUser.setAttribute(json: responseJSON)
-                                keychain.set(String(EarnItAccount.currentUser.accountId), forKey: "userId")
-                            }
-                        }) { (error) -> () in
-                            self.dismissScreenToLogin()
-                        }
-                    }) { (error) -> () in
-                        self.view.makeToast("Update Profile Failed")
                     }
                     onCompletion?(nil)
                 }
@@ -340,10 +298,12 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
                 self.view.makeToast("Update Profile Failed")
                 onError?(error)
             }
-        }*/
+        }
     }
     
     func prepareTaskImageForUpload(){
+        self.requestToUploadImage(profileImage: self.taskImage!)
+        
         //return
         /*print("Inside prepareUserImageForUpload")
         let date = NSDate()
@@ -455,22 +415,6 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
         //self.earnItTask.taskComments.append(self.taskComments.text)
         callApiForUpdateTask(earnItTaskChildId: EarnItChildUser.currentUser.childUserId, earnItTask: self.earnItTask, success: {
             (earnItTask) ->() in
-            
-            if self.isPictureRequired == 1 {
-                if self.isImageChanged == true{
-                    print("self.isImageChanged \(self.isImageChanged)")
-                    DispatchQueue.main.async {
-                        print("Done with image Upload and updated to backend!")
-                        self.callControllerForDoneTask()
-                    }
-                }
-            }
-
-                    
-                    
-            DispatchQueue.global().async {
-                self.requestToUploadImage(profileImage: self.taskImage!, earnItTaskObj: earnItTask)
-            }
             let keychain = KeychainSwift()
             //let _ : Int = Int(keychain.get("userId")!)!
             guard  let _ = keychain.get("email") else  {
@@ -492,9 +436,6 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
                         
                         self.view.makeToast("Task submitted")
                         self.dismissscreen()
-                        //                    let alert = showAlertWithOption(title: "", message: "Task submitted")
-                        //                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: self.dismissscreen))
-                        //                    self.present(alert, animated: true, completion: nil)
                     }
                     else {
                     }

@@ -185,86 +185,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "earnit/Controller/TaskViewController.swift"
-            timestampString = "551771291.161106"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "901"
-            endingLineNumber = "901"
-            landmarkName = "callAddTask(earnItTask:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "earnit/Helper/CreateEarnItUser.swift"
-            timestampString = "552194966.681529"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "575"
-            endingLineNumber = "575"
-            landmarkName = "addTaskForChild(childId:earnItTask:earnItSelectedGoal:success:failure:)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "earnit/Helper/CreateEarnItUser.swift"
-            timestampString = "552194966.681751"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "581"
-            endingLineNumber = "581"
-            landmarkName = "addTaskForChild(childId:earnItTask:earnItSelectedGoal:success:failure:)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "earnit/Helper/CreateEarnItUser.swift"
-            timestampString = "552194966.681802"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "585"
-            endingLineNumber = "585"
-            landmarkName = "addTaskForChild(childId:earnItTask:earnItSelectedGoal:success:failure:)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "earnit/Controller/ChildDashBoard.swift"
-            timestampString = "551774584.099377"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "949"
-            endingLineNumber = "949"
-            landmarkName = "userImageDidTapped(gesture:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "earnit/Controller/PendingTasksScreen.swift"
             timestampString = "551775739.186421"
             startingColumnNumber = "9223372036854775807"
@@ -313,109 +233,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "earnit/Controller/ParentLandingPage.swift"
-            timestampString = "552194966.681936"
+            filePath = "earnit/Controller/TaskSubmitScreen.swift"
+            timestampString = "552286745.464909"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "599"
-            endingLineNumber = "599"
-            landmarkName = "goToAddGoalPage()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "earnit_Dev.ParentLandingPage.goToAddGoalPage() -&gt; ()"
-                  moduleName = "earnit-Dev"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/gaurav/Documents/my_projects_own/Earnit_Apps_Main/earnit-ios-latest/earnit/Controller/ParentLandingPage.swift"
-                  timestampString = "552194967.0769531"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "599"
-                  endingLineNumber = "599"
-                  offsetFromSymbolStart = "359">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Array&lt;earnit_Dev.EarnItChildGoal&gt;) -&gt; () in earnit_Dev.ParentLandingPage.goToAddGoalPage() -&gt; ()"
-                  moduleName = "earnit-Dev"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/gaurav/Documents/my_projects_own/Earnit_Apps_Main/earnit-ios-latest/earnit/Controller/ParentLandingPage.swift"
-                  timestampString = "552194967.079931"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "603"
-                  endingLineNumber = "603"
-                  offsetFromSymbolStart = "21">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "earnit/Controller/ParentLandingPage.swift"
-            timestampString = "552194966.682173"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "327"
-            endingLineNumber = "327"
-            landmarkName = "tableView(_:viewForHeaderInSection:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in earnit_Dev.ParentLandingPage.tableView(__ObjC.UITableView, viewForHeaderInSection: Swift.Int) -&gt; Swift.Optional&lt;__ObjC.UIView&gt;"
-                  moduleName = "earnit-Dev"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/gaurav/Documents/my_projects_own/Earnit_Apps_Main/earnit-ios-latest/earnit/Controller/ParentLandingPage.swift"
-                  timestampString = "552194967.087567"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "327"
-                  endingLineNumber = "327"
-                  offsetFromSymbolStart = "9516">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Array&lt;earnit_Dev.EarnItChildGoal&gt;) -&gt; () in closure #1 () -&gt; () in earnit_Dev.ParentLandingPage.tableView(__ObjC.UITableView, viewForHeaderInSection: Swift.Int) -&gt; Swift.Optional&lt;__ObjC.UIView&gt;"
-                  moduleName = "earnit-Dev"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/gaurav/Documents/my_projects_own/Earnit_Apps_Main/earnit-ios-latest/earnit/Controller/ParentLandingPage.swift"
-                  timestampString = "552194967.091007"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "329"
-                  endingLineNumber = "329"
-                  offsetFromSymbolStart = "25">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "earnit/Controller/ParentLandingPage.swift"
-            timestampString = "552194966.682227"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "329"
-            endingLineNumber = "329"
-            landmarkName = "tableView(_:viewForHeaderInSection:)"
+            startingLineNumber = "412"
+            endingLineNumber = "412"
+            landmarkName = "callControllerForDoneTask()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -425,62 +249,14 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "earnit/Controller/ParentLandingPage.swift"
-            timestampString = "552194966.682274"
+            filePath = "earnit/Controller/TaskSubmitScreen.swift"
+            timestampString = "552286745.464991"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "335"
-            endingLineNumber = "335"
-            landmarkName = "tableView(_:viewForHeaderInSection:)"
+            startingLineNumber = "418"
+            endingLineNumber = "418"
+            landmarkName = "callControllerForDoneTask()"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "earnit/Helper/CreateEarnItUser.swift"
-            timestampString = "552194966.682317"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "611"
-            endingLineNumber = "611"
-            landmarkName = "getGoalsForChild(childId:success:failure:)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "earnit/Helper/CreateEarnItUser.swift"
-            timestampString = "552194966.68239"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "622"
-            endingLineNumber = "622"
-            landmarkName = "getGoalsForChild(childId:success:failure:)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "earnit/Helper/CreateEarnItUser.swift"
-            timestampString = "552194966.682453"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "618"
-            endingLineNumber = "618"
-            landmarkName = "getGoalsForChild(childId:success:failure:)"
-            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

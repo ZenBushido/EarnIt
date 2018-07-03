@@ -65,7 +65,7 @@ class LoginPageController : UIViewController , UITextFieldDelegate , UIGestureRe
         self.signUpButton.alpha = 1
         
         //self.getAppsUsedMemory()
-//        self.emailTextField.text = "tracy@tracy.com"//"cheryl@cheryl.com"//"ssgappz@gmail.com"////"Tracyliv@gmail.com"//"zzz@zzz.com"//"ccv@ccv@gmail.com"//"fessn14@gmail.com"//"dadch4@gmail.com"//"mah@gmail.com "//"bbb@bbb.com"
+//        self.emailTextField.text = "tracy@tracy.com"//"Cheryl@tracy.com"////"ssgappz@gmail.com"////"Tracyliv@gmail.com"//"zzz@zzz.com"//"ccv@ccv@gmail.com"//"fessn14@gmail.com"//"dadch4@gmail.com"//"mah@gmail.com "//"bbb@bbb.com"
 //        self.passwordTextField.text = "test123"//"dingo1987"//"qqq123" //"dingo1987" //"test123"//"123456"//"qqq123"//"test123"
     }
 
