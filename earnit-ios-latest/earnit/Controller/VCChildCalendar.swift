@@ -350,8 +350,8 @@ class VCChildCalendar: UIViewController, FSCalendarDataSource, FSCalendarDelegat
         dateFormatter.locale = Locale(identifier: "en_US")
         var taskCount = Int()
         var selectedDateTasks = [EarnItTask]()
-//        for task in  self.earnItChildUser.earnItTasks {
-        for task in self.tasksForTheMonth {
+        for task in  self.earnItChildUser.earnItTasks {
+//        for task in self.tasksForTheMonth {
             if(dateFormatter.string(from: date) == dateFormatter.string(from: task.dueDate)) {
                 taskCount = taskCount+1
                 selectedDateTasks.append(task)

@@ -150,7 +150,7 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
         if self.overdueTasks.count > 0{
             if (indexPath.section == 0 ){
                 taskCell.taskName.text = self.overdueTasks[indexPath.row].taskName
-                taskCell.taskDescription.text = self.self.overdueTasks[indexPath.row].dateMonthString + " @ " + self.overdueTasks[indexPath.row].dueTime
+                taskCell.taskDescription.text = self.overdueTasks[indexPath.row].dateMonthString + " @ " + self.overdueTasks[indexPath.row].dueTime
                 
                 taskCell.statusImage.backgroundColor = getColorStatusForTaskForParentDashBoard(earnItTask: self.overdueTasks[indexPath.row])
                 
@@ -227,7 +227,7 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
     //override
     func numberOfSections(in tableView: UITableView) -> Int {
         var numberOfSectiontoReturn  = 0
-        if showAll == false{
+        if showAll == true{
             if self.overdueTasks.count > 0 || self.dayTasks.count > 0 {
                 numberOfSectiontoReturn = 1
             }
