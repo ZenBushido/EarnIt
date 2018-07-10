@@ -83,7 +83,6 @@ class OptionViewController: UIViewController, OptionMenuProtocol {
         //self.imageViewHeader.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 160)
         self.imageViewHeader.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 175)
         self.view.layoutIfNeeded()
-        
     }
 }
 

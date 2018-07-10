@@ -455,10 +455,10 @@
                                                 </connections>
                                             </tableView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="byy-vf-Wo5">
-                                                <rect key="frame" x="30" y="443" width="315" height="35"/>
+                                                <rect key="frame" x="30" y="443" width="315" height="32"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dRe-4M-3QG">
-                                                        <rect key="frame" x="0.0" y="0.0" width="132.5" height="35"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="132.5" height="32"/>
                                                         <color key="backgroundColor" red="0.85490196080000003" green="0.2784313725" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
                                                         <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="17"/>
                                                         <state key="normal" title="Cancel">
@@ -480,7 +480,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vhy-vb-Led">
-                                                        <rect key="frame" x="182.5" y="0.0" width="132.5" height="35"/>
+                                                        <rect key="frame" x="182.5" y="0.0" width="132.5" height="32"/>
                                                         <color key="backgroundColor" red="0.85490196080000003" green="0.2784313725" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
                                                         <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="17"/>
                                                         <state key="normal" title="Save">
@@ -788,10 +788,10 @@
                                                 </connections>
                                             </textField>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="adX-zO-09Z">
-                                                <rect key="frame" x="30" y="269" width="315" height="35"/>
+                                                <rect key="frame" x="30" y="269" width="315" height="32"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WNa-0a-RtT">
-                                                        <rect key="frame" x="0.0" y="0.0" width="132.5" height="35"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="132.5" height="32"/>
                                                         <color key="backgroundColor" red="0.85490196080000003" green="0.2784313725" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
                                                         <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="17"/>
                                                         <state key="normal" title="Cancel">
@@ -813,7 +813,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WFz-Fg-4aK">
-                                                        <rect key="frame" x="182.5" y="0.0" width="132.5" height="35"/>
+                                                        <rect key="frame" x="182.5" y="0.0" width="132.5" height="32"/>
                                                         <color key="backgroundColor" red="0.85490196080000003" green="0.2784313725" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
                                                         <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="17"/>
                                                         <state key="normal" title="Save">
@@ -4021,7 +4021,7 @@
                                                 </connections>
                                             </textField>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="VDi-za-yc7">
-                                                <rect key="frame" x="143" y="395" width="18" height="21"/>
+                                                <rect key="frame" x="143" y="353" width="18" height="21"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <nil key="textColor"/>
@@ -4038,7 +4038,7 @@
                                                 </connections>
                                             </textField>
                                             <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar" translatesAutoresizingMaskIntoConstraints="NO" id="q9F-rw-ML6">
-                                                <rect key="frame" x="143" y="395" width="18" height="21"/>
+                                                <rect key="frame" x="143" y="353" width="18" height="21"/>
                                                 <gestureRecognizers/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="21" id="bXy-Md-GhX"/>
@@ -4049,7 +4049,7 @@
                                                 </connections>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Due Date:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V5J-3K-wqb">
-                                                <rect key="frame" x="20" y="393" width="100" height="25"/>
+                                                <rect key="frame" x="20" y="351" width="100" height="25"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
@@ -4086,7 +4086,7 @@
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Eh-Fw-a1f">
-                                                <rect key="frame" x="182" y="393" width="181" height="24"/>
+                                                <rect key="frame" x="182" y="351" width="181" height="24"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
@@ -4128,7 +4128,7 @@
                                             <constraint firstItem="5xZ-RK-qjT" firstAttribute="trailing" secondItem="khE-Sp-hDN" secondAttribute="trailing" id="UvH-e9-KSM"/>
                                             <constraint firstItem="Sgx-i8-PLR" firstAttribute="top" secondItem="5xZ-RK-qjT" secondAttribute="bottom" constant="12" id="Ym2-QG-967"/>
                                             <constraint firstItem="pcI-KL-eHR" firstAttribute="top" secondItem="Sgx-i8-PLR" secondAttribute="bottom" constant="18" id="Zo9-Sq-ZxP"/>
-                                            <constraint firstItem="V5J-3K-wqb" firstAttribute="top" secondItem="Sgx-i8-PLR" secondAttribute="bottom" constant="60" id="a8Q-un-ntd"/>
+                                            <constraint firstItem="V5J-3K-wqb" firstAttribute="top" secondItem="Sgx-i8-PLR" secondAttribute="bottom" constant="18" id="a8Q-un-ntd"/>
                                             <constraint firstItem="qxs-ZA-PbJ" firstAttribute="leading" secondItem="dod-4R-Ze6" secondAttribute="leading" constant="20" id="agq-BV-aFn"/>
                                             <constraint firstItem="pcI-KL-eHR" firstAttribute="height" secondItem="oXt-9I-vrr" secondAttribute="height" id="cCZ-hx-Rnw"/>
                                             <constraint firstItem="JPl-Be-Iea" firstAttribute="top" secondItem="LiB-H2-wSV" secondAttribute="bottom" constant="20" id="cXM-aJ-Nfg"/>
@@ -4156,7 +4156,7 @@
                                             <constraint firstAttribute="trailing" secondItem="cl2-JG-TVM" secondAttribute="trailing" constant="20" id="wv1-Eo-xNE"/>
                                             <constraint firstItem="VDi-za-yc7" firstAttribute="height" secondItem="q9F-rw-ML6" secondAttribute="height" id="ycK-md-Kvk"/>
                                             <constraint firstItem="oXt-9I-vrr" firstAttribute="top" secondItem="JPl-Be-Iea" secondAttribute="bottom" constant="21" id="zEO-SA-ecl"/>
-                                            <constraint firstItem="cl2-JG-TVM" firstAttribute="top" secondItem="V5J-3K-wqb" secondAttribute="bottom" constant="30" id="zep-nd-5Ha"/>
+                                            <constraint firstItem="cl2-JG-TVM" firstAttribute="top" secondItem="V5J-3K-wqb" secondAttribute="bottom" constant="72" id="zep-nd-5Ha"/>
                                         </constraints>
                                     </view>
                                 </subviews>

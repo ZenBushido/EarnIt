@@ -115,8 +115,8 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
         self.completedTask = self.earnItTaskToEdit
         self.lblRepeats.isHidden = true
         self.repeatsField.isHidden = true
-        self.lblRepeats.isHidden = false
-        self.repeatsField.isHidden = false
+//        self.lblRepeats.isHidden = false
+//        self.repeatsField.isHidden = false
         self.repeatsField.isUserInteractionEnabled = false
         self.ivDropDownRepeat.isHidden = true
         self.btnApprovalTick.isHidden = true
