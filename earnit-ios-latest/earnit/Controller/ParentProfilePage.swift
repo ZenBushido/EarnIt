@@ -194,24 +194,13 @@ class ParentProfilePage : UIViewController, UIImagePickerControllerDelegate, UIT
             let tapLocation = recognizer.location(in: self.childUserTable)
             if let tapIndexPath = self.childUserTable.indexPathForRow(at: tapLocation) {
                 if let tapCell = self.childUserTable.cellForRow(at: tapIndexPath) {
-                    
                     print("child user got tapped")
-                    
                     let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
                     let addChildPage = storyBoard.instantiateViewController(withIdentifier: "AddChildPage") as! AddChildPage
                     addChildPage.earnItChildUser = self.earnItChildUsers[tapIndexPath.row]
                     addChildPage.isInEditingMode = true
                     self.didShownImagePicker = false
-                    
-//                    let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
-//
-//                    let slideMenuController  = SlideMenuViewController(mainViewController: addChildPage, leftMenuViewController: optionViewController)
-//
-//                    slideMenuController.automaticallyAdjustsScrollViewInsets = true
                     self.present(addChildPage, animated:false, completion:nil)
-                   // slideMenuController.delegate = addChildPage as! SlideMenuControllerDelegate
-
-                    
                 }
             }
         }
@@ -525,43 +514,34 @@ class ParentProfilePage : UIViewController, UIImagePickerControllerDelegate, UIT
     
     @IBAction func openChangePasswordDialog(_ sender: Any) {
         
-        
     }
     
     @IBAction func goToAddChildUserPage(_ sender: Any) {
-        
         print("add child clicked ")
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
         let addChildPage = storyBoard.instantiateViewController(withIdentifier: "AddChildPage") as! AddChildPage
         self.didShownImagePicker = false
         
         let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
-        
         let slideMenuController  = SlideMenuViewController(mainViewController: addChildPage, leftMenuViewController: optionViewController)
-        
         slideMenuController.automaticallyAdjustsScrollViewInsets = true
         self.present(slideMenuController, animated:false, completion:nil)
-
     }
     
     @IBAction func goBack(_ sender: UIButton) {
-        
         if self.shouldGoBackToLandingPage == true{
+            let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+             let parentLandingPage  = storyBoard.instantiateViewController(withIdentifier: "ParentLandingPage") as! ParentLandingPage
+             let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
+             let slideMenuController  = SlideMenuViewController(mainViewController: parentLandingPage, leftMenuViewController: optionViewController)
+             slideMenuController.automaticallyAdjustsScrollViewInsets = true
+             slideMenuController.delegate = parentLandingPage
+             self.present(slideMenuController, animated:false, completion:nil)
             
-            let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
-            let parentLandingPage  = storyBoard.instantiateViewController(withIdentifier: "ParentLandingPage") as! ParentLandingPage
-            
-            let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
-            
-            let slideMenuController  = SlideMenuViewController(mainViewController: parentLandingPage, leftMenuViewController: optionViewController)
-            
-            slideMenuController.automaticallyAdjustsScrollViewInsets = true
-            slideMenuController.delegate = parentLandingPage
-            
-            self.present(slideMenuController, animated:false, completion:nil)
-            
-        }else {
-            NotificationCenter.default.post(name: Notification.Name("getEarntit_UserData"), object: nil)
+//            self.dismiss(animated: true, completion: nil)
+        }
+        else {
+//            NotificationCenter.default.post(name: Notification.Name("getEarntit_UserData"), object: nil)
             self.dismiss(animated: true, completion: nil)
         }
     }
@@ -659,14 +639,10 @@ class ParentProfilePage : UIViewController, UIImagePickerControllerDelegate, UIT
         self.view.endEditing(true)
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
         let parentLandingPage  = storyBoard.instantiateViewController(withIdentifier: "ParentLandingPage") as! ParentLandingPage
-        
         let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
-        
         let slideMenuController  = SlideMenuViewController(mainViewController: parentLandingPage, leftMenuViewController: optionViewController)
-        
         slideMenuController.automaticallyAdjustsScrollViewInsets = true
         slideMenuController.delegate = parentLandingPage
-        
         self.present(slideMenuController, animated:false, completion:nil)
     }
     

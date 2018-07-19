@@ -1073,13 +1073,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     @IBAction func goBackToParentLandingPage(_ sender: Any) {
         self.view.endEditing(true)
         dismiss(animated: true, completion: nil)
-        /* let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-         let parentLandingPage  = storyBoard.instantiateViewController(withIdentifier: "ParentLandingPage") as! ParentLandingPage
-         let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
-         let slideMenuController  = SlideMenuViewController(mainViewController: parentLandingPage, rightMenuViewController: optionViewController)
-         slideMenuController.automaticallyAdjustsScrollViewInsets = true
-         slideMenuController.delegate = parentLandingPage
-         self.present(slideMenuController, animated: true, completion:nil)*/
     }
     
     @IBAction func backButtonTapped(_ sender: Any) {

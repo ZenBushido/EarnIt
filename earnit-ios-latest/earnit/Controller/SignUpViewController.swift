@@ -146,15 +146,6 @@ class SignUpViewController : UIViewController {
                     }
                     let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                     let profilePage  = storyBoard.instantiateViewController(withIdentifier: "FirstTimeLoginProfileUpdateScreen") as! FirstTimeLoginProfileScreen
-                 //   profilePage.shouldGoBackToLandingPage = true
-                    
-                   // let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
-                    
-                   // let slideMenuController  = SlideMenuViewController(mainViewController: profilePage, leftMenuViewController: optionViewController)
-                    
-                 //   slideMenuController.automaticallyAdjustsScrollViewInsets = true
-                    //slideMenuController.delegate = profilePage
-                    
                     self.present(profilePage, animated:false, completion:nil)
                 }
                 

@@ -85,19 +85,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate , SlideMenuControllerDeleg
                     }else {
                         let isProfileUpdaet =  keychain.getBool("isProfileUpdated")
                         if  isProfileUpdaet == true {
-                            
                             print("App delegate  going to Landing Page")
                             EarnItAccount.currentUser.setAttribute(json: responseJSON)
                             
                             let parentLandingPage  = storyBoard.instantiateViewController(withIdentifier: "ParentLandingPage") as! ParentLandingPage
-                            
                             let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
-                            
                             let slideMenuController  = SlideMenuViewController(mainViewController: parentLandingPage, leftMenuViewController: optionViewController)
-                            
                             slideMenuController.automaticallyAdjustsScrollViewInsets = true
                             slideMenuController.delegate = parentLandingPage
-                            
                             self.window?.rootViewController = slideMenuController
                         }
                         else {

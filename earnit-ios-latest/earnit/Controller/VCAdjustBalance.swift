@@ -266,11 +266,11 @@ class VCAdjustBalance : UIViewController, UITextViewDelegate, UIGestureRecognize
             let parentLandingPage  = storyBoard.instantiateViewController(withIdentifier: "ParentLandingPage") as! ParentLandingPage
             let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
             let slideMenuController  = SlideMenuViewController(mainViewController: parentLandingPage, leftMenuViewController: optionViewController)
-            
             slideMenuController.automaticallyAdjustsScrollViewInsets = true
             slideMenuController.delegate = parentLandingPage
-            
             self.present(slideMenuController, animated:false, completion:nil)
+            
+//            self.dismiss(animated: true, completion: nil)
         }
     }
     

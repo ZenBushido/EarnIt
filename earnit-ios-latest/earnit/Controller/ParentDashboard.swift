@@ -501,7 +501,6 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
         
         self.dayTasks = getDayTaskListForParentDashBoard(earnItTasks: tasks)
         self.overdueTasks = getOverDueTaskListForParentDashBoard(earnItTasks: self.earnItChildUserForParent.earnItTasks)
-
         self.childTableForTodayTask.reloadData()
     }
   

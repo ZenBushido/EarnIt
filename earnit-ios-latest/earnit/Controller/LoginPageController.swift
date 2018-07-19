@@ -65,8 +65,8 @@ class LoginPageController : UIViewController , UITextFieldDelegate , UIGestureRe
         self.signUpButton.alpha = 1
         
         //self.getAppsUsedMemory()
-//        self.emailTextField.text = "tracy@tracy.com"//"ssgappz@gmail.com"////"Tracyliv@gmail.com"//"zzz@zzz.com"//"ccv@ccv@gmail.com"//"fessn14@gmail.com"//"dadch4@gmail.com"//"mah@gmail.com "//"bbb@bbb.com"
-//        self.passwordTextField.text = "test123"//"dingo1987"//"qqq123" //"dingo1987"//"123456"//"qqq123"
+        self.emailTextField.text = "tracy@tracy.com" //"pap@pap.com"//"ssgappz@gmail.com"////"Tracyliv@gmail.com"//"zzz@zzz.com"//"ccv@ccv@gmail.com"//"fessn14@gmail.com"//"dadch4@gmail.com"//"mah@gmail.com "//"bbb@bbb.com"
+        self.passwordTextField.text = "test123" //"pppppp"//"dingo1987"//"qqq123" //"dingo1987"//"123456"//"qqq123"
     }
 
     //MARK: Get Apps Usage
@@ -466,44 +466,12 @@ class LoginPageController : UIViewController , UITextFieldDelegate , UIGestureRe
                         self.present(alert, animated: true, completion: nil)
                         print(" Set status completed failed")
                     }
-                }
-                
-                /*if (EarnItAccount.currentUser.earnItChildUsers.count == 0) {
-                    let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                    let parentLandingPage  = storyBoard.instantiateViewController(withIdentifier: "VCHomeAddChild") as! VCHomeAddChild
-                    let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
-                    let slideMenuController  = SlideMenuViewController(mainViewController: parentLandingPage, leftMenuViewController: optionViewController)
-                    slideMenuController.automaticallyAdjustsScrollViewInsets = true
-                    //            slideMenuController.delegate = parentLandingPage
-                    self.present(slideMenuController, animated:false, completion:nil)
-                    
-                    //                self.present(parentLandingPage, animated:false, completion:nil)
-                    
-                    //                self.navigationController?.pushViewController(parentLandingPage, animated: false)
-                }
-                else {
-                    
-                    let parentLandingPage  = storyBoard.instantiateViewController(withIdentifier: "ParentLandingPage") as! ParentLandingPage
-                    
-                    let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
-                    
-                    let slideMenuController  = SlideMenuViewController(mainViewController: parentLandingPage, leftMenuViewController: optionViewController)
-                    
-                    slideMenuController.automaticallyAdjustsScrollViewInsets = true
-                    slideMenuController.delegate = parentLandingPage
-                    
-                    self.present(slideMenuController, animated:false, completion:nil)
-                }*/
-                
+                }                
                 let parentLandingPage  = storyBoard.instantiateViewController(withIdentifier: "ParentLandingPage") as! ParentLandingPage
-                
                 let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
-                
                 let slideMenuController  = SlideMenuViewController(mainViewController: parentLandingPage, leftMenuViewController: optionViewController)
-                
                 slideMenuController.automaticallyAdjustsScrollViewInsets = true
                 slideMenuController.delegate = parentLandingPage
-                
                 self.present(slideMenuController, animated:false, completion:nil)
             }
             

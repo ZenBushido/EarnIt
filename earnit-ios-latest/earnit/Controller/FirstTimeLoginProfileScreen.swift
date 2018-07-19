@@ -298,17 +298,12 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
                         keychain.set(true, forKey: "isProfileUpdated")
                         self.hideLoadingView()
                         // success(true)
-                        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                        
+                        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)                        
                         let parentLandingPage  = storyBoard.instantiateViewController(withIdentifier: "ParentLandingPage") as! ParentLandingPage
-                        
                         let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
-                        
                         let slideMenuController  = SlideMenuViewController(mainViewController: parentLandingPage, leftMenuViewController: optionViewController)
-                        
                         slideMenuController.automaticallyAdjustsScrollViewInsets = true
                         slideMenuController.delegate = parentLandingPage
-                        
                         self.present(slideMenuController, animated:false, completion:nil)
                     }
                 }) { (error) -> () in

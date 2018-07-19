@@ -127,17 +127,14 @@ class VCAppsMonitor : UIViewController,UITextViewDelegate,UIGestureRecognizerDel
             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let childDashBoard = storyBoard.instantiateViewController(withIdentifier: "childDashBoard") as! ChildDashBoard
             self.present(childDashBoard, animated: true, completion: nil)
-            
-        }else {
-            
+        }
+        else {
             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let parentLandingPage  = storyBoard.instantiateViewController(withIdentifier: "ParentLandingPage") as! ParentLandingPage
             let optionViewController = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
             let slideMenuController  = SlideMenuViewController(mainViewController: parentLandingPage, leftMenuViewController: optionViewController)
-            
             slideMenuController.automaticallyAdjustsScrollViewInsets = true
             slideMenuController.delegate = parentLandingPage
-            
             self.present(slideMenuController, animated:false, completion:nil)
         }
     }

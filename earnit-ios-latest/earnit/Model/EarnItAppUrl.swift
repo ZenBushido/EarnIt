@@ -32,17 +32,16 @@ let EarnItApp_CHILD_IMAGE_FOLDER = "/childrens/profile/images"
 
 #if DEVELOPMENT
 let EarnItApp_BASE_URL = "http://159.65.239.6:8080/earnit-api" //"http://35.162.48.144:8080/earnit-api"
-//let EarnItApp_BASE_URL = "http://159.65.239.6:8080/earnit_dev_v1-api" //"http://35.162.48.144:8080/earnit-api"
-    
+
 let EarnItApp_AWS_BUCKET_NAME = "earnitapp-dev"
 //let EarnItApp_Image_BASE_URL_PREFIX = "https://s3-us-west-2.amazonaws.com/earnitapp-dev/new/"
 let EarnItApp_Image_BASE_URL_PREFIX = "http://159.65.239.6:8080/earnit-api/" //"https://s3-us-west-2.amazonaws.com/earnitapp-dev/new"//"https://s3-us-west-2.amazonaws.com/earnitapp"
     
 #else
-    
-let EarnItApp_BASE_URL = "https://api.myearnitapp.com:8443/earnit-api"
+
+let EarnItApp_BASE_URL = "http://206.189.225.198:8080/earnit-api/"//"https://api.myearnitapp.com:8443/earnit-api"
 let EarnItApp_AWS_BUCKET_NAME = "earnitapp"
-let EarnItApp_Image_BASE_URL_PREFIX = "https://api.myearnitapp.com:8443/earnit-api/"//"https://s3-us-west-2.amazonaws.com/earnitapp"//"https://s3-us-west-2.amazonaws.com/earnitapp/new/"
+let EarnItApp_Image_BASE_URL_PREFIX = "http://206.189.225.198:8080/earnit-api/"//"https://api.myearnitapp.com:8443/earnit-api/"//"https://s3-us-west-2.amazonaws.com/earnitapp"//"https://s3-us-west-2.amazonaws.com/earnitapp/new/"
 
 #endif
 

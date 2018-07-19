@@ -129,10 +129,6 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
                 slideMenuController.automaticallyAdjustsScrollViewInsets = true
                 //            slideMenuController.delegate = parentLandingPage
                 self.present(slideMenuController, animated:false, completion:nil)
-                
-                //                self.present(parentLandingPage, animated:false, completion:nil)
-                
-                //                self.navigationController?.pushViewController(parentLandingPage, animated: false)
             }
             else {
                 self.dismiss(animated: true, completion: nil)
