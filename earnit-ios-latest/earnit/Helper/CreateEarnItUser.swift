@@ -236,9 +236,7 @@ func callForDeleteGoal(goal_id: Int, success: @escaping(String)-> (),failure: @e
             "Content-Type": "application/json",
             "Authorization": "Basic \(keychain.get("user_auth")!)"
         ]
-    }
-    //    http://localhost:9191/childrens/{CHILDREN_ID}
-    
+    }    
     Alamofire.request("\(EarnItApp_BASE_URL)/goals/\(goal_id)", method: .delete, encoding: JSONEncoding.default, headers: headers).responseJSON{ response in
         
         switch(response.result){

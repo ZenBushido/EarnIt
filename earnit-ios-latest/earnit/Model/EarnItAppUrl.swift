@@ -36,7 +36,7 @@ let EarnItApp_BASE_URL = "http://159.65.239.6:8080/earnit-api" //"http://35.162.
 let EarnItApp_AWS_BUCKET_NAME = "earnitapp-dev"
 //let EarnItApp_Image_BASE_URL_PREFIX = "https://s3-us-west-2.amazonaws.com/earnitapp-dev/new/"
 let EarnItApp_Image_BASE_URL_PREFIX = "http://159.65.239.6:8080/earnit-api/" //"https://s3-us-west-2.amazonaws.com/earnitapp-dev/new"//"https://s3-us-west-2.amazonaws.com/earnitapp"
-    
+    //get http://159.65.239.6:8080/earnit-api/childrens/
 #else
 
 let EarnItApp_BASE_URL = "http://206.189.225.198:8080/earnit-api/"//"https://api.myearnitapp.com:8443/earnit-api"

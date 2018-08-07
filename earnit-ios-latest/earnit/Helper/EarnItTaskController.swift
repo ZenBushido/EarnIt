@@ -530,10 +530,10 @@ func getOverDueTaskListForParentDashBoard(earnItTasks: [EarnItTask]) -> [EarnItT
             }
         }
     }
-    for task in overDueTaskList {
-        print("overdue taskName \(task.taskName)")
-        print("overdue taskName \(task.status)")
-    }
+//    for task in overDueTaskList {
+//        print("overdue taskName \(task.taskName)")
+//        print("overdue taskName \(task.status)")
+//    }
     return overDueTaskList
 }
 

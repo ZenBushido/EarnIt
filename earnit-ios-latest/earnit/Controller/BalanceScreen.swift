@@ -34,6 +34,8 @@ class BalanceScreeen : UIViewController,UITextViewDelegate,UIGestureRecognizerDe
     var earnItChildGoalList = [EarnItChildGoal]()
     @IBOutlet var lblTitle: UILabel!
     @IBOutlet var btnAdjust: UIButton!
+    @IBOutlet var btnHome: UIButton!
+
     var cashAmount:Int = 0
     var goalsAmount:Int = 0
 
@@ -50,6 +52,10 @@ class BalanceScreeen : UIViewController,UITextViewDelegate,UIGestureRecognizerDe
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.actionViewDidTapped(_:)))
         self.actionView.addGestureRecognizer(tapGesture)
 //        self.btnAdjust.isHidden = true
+//        self.btnHome.titleLabel?.textAlignment = NSTextAlignment.center
+        self.btnHome.isHidden = true
+        self.btnHome.contentHorizontalAlignment = .center
+        self.btnHome.setTitle("Home", for:UIControlState.normal)
         NotificationCenter.default.addObserver(self, selector: #selector(self.getGoalListForCurrentUser), name: NSNotification.Name(rawValue: "getGoalList_UserData"), object: nil)
         self.messageView = (Bundle.main.loadNibNamed("MessageView", owner: self, options: nil)?[0] as? MessageView)!
         self.messageView.center = CGPoint(x: self.view.center.x,y :self.view.center.y-80)

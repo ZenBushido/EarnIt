@@ -41,10 +41,13 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
     var overdueTasks = [EarnItTask]()
     var pendingApprovalTasks = [EarnItTask]()
     var actionView = UIView()
+    var childsTaskObjectList = [EarnItTask]()
     
     //keyboardOffset
     var currentKeyboardOffset : CGFloat = 0.0
-    
+    let oneDay : CGFloat = (60.0 * 60.0 * 24)
+    let oneWeek : CGFloat = (60.0 * 60.0 * 24 * 7)
+
     struct TappedSectionDetails {
         var sectionNo = 0
         var isCollapsed = false
@@ -108,6 +111,8 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
     }
 
     func loadRefreshedTasks()  {
+        //self.createRepeatTaskArray()
+        
         var tasks = earnItChildUserForParent.earnItTasks
         for daytask in earnItChildUserForParent.earnItTasks{
             let currentDate = Date()
@@ -115,6 +120,7 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
             formatter.timeZone = TimeZone.ReferenceType.local//TimeZone.current
             formatter.dateFormat = "M/dd"
             let currentDay = formatter.string(from: currentDate as Date)
+            print(daytask.repeatScheduleDic as Any)
             if  currentDay != daytask.dateMonthString {
                 if currentDate > daytask.dueDate {
                     tasks.remove(at: tasks.index(of: daytask)!)
@@ -128,6 +134,122 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
         self.childTableForTodayTask.reloadData()
     }
     
+    func createRepeatTaskArray() {
+        var tasks = earnItChildUserForParent.earnItTasks
+//        let childsTaskObjectList = tasks
+//        var childsTaskObjectList = [EarnItTask]()
+//        print(earnItChildUserForParent.earnItTasks.count)
+        self.childsTaskObjectList.removeAll()
+        for daytask in earnItChildUserForParent.earnItTasks {
+            let currentDate = Date()
+            let formatter = DateFormatter()
+            formatter.timeZone = TimeZone.ReferenceType.local//TimeZone.current
+            formatter.dateFormat = "M/dd"
+            let currentDay = formatter.string(from: currentDate as Date)
+            //print(daytask.repeatScheduleDic as Any)
+            
+//            if  currentDay != daytask.dateMonthString {
+//                if currentDate > daytask.dueDate {
+////                    tasks.remove(at: tasks.index(of: daytask)!)
+//                }
+//            }
+//            if daytask.status != TaskStatus.closed  {
+//                if daytask.status != TaskStatus.completed{
+//
+//                }
+//            }
+//            var objEarnItTasks = EarnItTask() //[EarnItTask]()
+//            objEarnItTasks = [daytask]
+            if daytask.repeatMode == .Daily {
+                var dateComponent = DateComponents()
+                dateComponent.day = 1
+                let futureDate = Calendar.current.date(byAdding: dateComponent, to: daytask.dueDate)
+                daytask.dueDate = futureDate!
+                self.setMonthDateStringFromTaskDueDate(daytask)
+//                tasks.insert(daytask, at: tasks.index(of: daytask)!)
+                tasks.append(daytask)
+            }
+            else if daytask.repeatMode == .Weekly  {
+                let todayDate = Date()
+                let formatter = DateComponentsFormatter()
+                formatter.allowedUnits = [.weekOfMonth]//[.day, .weekOfMonth]
+                formatter.unitsStyle = .full
+                let endDate = todayDate.addingTimeInterval(TimeInterval((oneDay * 7 * 7) + oneDay))
+                let string = formatter.string(from: daytask.dueDate, to: endDate)!
+                print(string) // 2 weeks, 3 days
+                let diffInDays = Calendar.current.dateComponents([.day], from: daytask.dueDate, to: endDate).day
+                //print(diffInDays!)
+                let weeksCount = diffInDays!/7
+                for i in 0 ..< weeksCount {
+//                    var objEarnItTasks = EarnItTask() //.init()
+//                    objEarnItTasks = daytask
+                    if (i == 0) {
+                        daytask.dueDate = daytask.dueDate.addingTimeInterval(TimeInterval(0))
+//                        objEarnItTasks.dueDate = objEarnItTasks.dueDate.addingTimeInterval(TimeInterval(0))
+                    }
+                    else {
+                        daytask.dueDate = daytask.dueDate.addingTimeInterval(TimeInterval(oneWeek)) //(oneWeek * CGFloat(i))
+//                        objEarnItTasks.dueDate = objEarnItTasks.dueDate.addingTimeInterval(TimeInterval(oneWeek)) //(oneWeek * CGFloat(i))
+                    }
+                    var objEarnItTasks = EarnItTask() //.init()
+                    objEarnItTasks = daytask
+                    self.setMonthDateStringFromTaskDueDate(objEarnItTasks)
+//                    tasks.insert(daytask, at: tasks.index(of: daytask)!)
+//                    objEarnItTasks = daytask
+                    
+//                    var objEarnItTasks = EarnItTask() //.init()
+//                    objEarnItTasks = daytask
+                    self.childsTaskObjectList.append(objEarnItTasks)
+//                    self.childsTaskObjectList.insert(objEarnItTasks, at: childsTaskObjectList.count)
+                    for taskObj in self.childsTaskObjectList {
+                        print(taskObj.dueDate)
+                        print(taskObj.dateMonthString!)
+                    }
+                    
+                    
+//                    self.childsTaskObjectList.insert(daytask, at: childsTaskObjectList.count)
+//                    if (i == 2) {
+//                        break
+//                    }
+//                    tasks.append(daytask)
+                }
+            }
+            else if daytask.repeatMode == .Monthly  {
+                var dateComponent = DateComponents()
+                dateComponent.month = 1
+                let futureDate = Calendar.current.date(byAdding: dateComponent, to: daytask.dueDate)
+                daytask.dueDate = futureDate!
+                self.setMonthDateStringFromTaskDueDate(daytask)
+//                tasks.insert(daytask, at: tasks.index(of: daytask)!)
+                tasks.append(daytask)
+            }
+            else if daytask.repeatMode == .None  {
+                if  currentDay != daytask.dateMonthString {
+                    if currentDate > daytask.dueDate {
+                        tasks.remove(at: tasks.index(of: daytask)!)
+                    }
+                }
+            }
+        }
+        self.dayTasks = getDayTaskListForParentDashBoard(earnItTasks: tasks)
+        self.overdueTasks = getOverDueTaskListForParentDashBoard(earnItTasks: childsTaskObjectList)
+        self.pendingApprovalTasks = getPendingApprovalTasks(earnItTasks:childsTaskObjectList)
+        //self.sendMessageButton.setTitle("Send a message to  " + self.earnItChildUserForParent.firstName, for: .normal)
+        self.childTableForTodayTask.reloadData()
+    }
+    
+    func setMonthDateStringFromTaskDueDate(_ sender: EarnItTask) {
+        //print("fetchDateFromSelectedDate....")
+        let formatter = DateFormatter()
+        formatter.timeZone = TimeZone.ReferenceType.local
+        formatter.dateFormat = "h:mm a"
+        formatter.amSymbol = "AM"
+        formatter.pmSymbol = "PM"
+//        let dueTime = formatter.string(from: sender.dueDate as Date)
+        formatter.dateFormat = "M/dd"
+        let dateMonthString = formatter.string(from: sender.dueDate as Date)
+        sender.dateMonthString = dateMonthString
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

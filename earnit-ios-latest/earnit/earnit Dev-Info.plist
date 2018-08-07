@@ -15,11 +15,26 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.6</string>
+	<string>1.0.12</string>
 	<key>CFBundleVersion</key>
-	<string>64</string>
+	<string>69</string>
 	<key>FIRAnalyticsDebugEnabled</key>
 	<true/>
+	<key>Fabric</key>
+	<dict>
+		<key>APIKey</key>
+		<string>c3e5650f51470bf66bc04e193f3c0e0445303228</string>
+		<key>Kits</key>
+		<array>
+			<dict>
+				<key>KitInfo</key>
+				<dict>
+					<key>KitName</key>
+					<string>Crashlytics</string>
+				</dict>
+			</dict>
+		</array>
+	</dict>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<false/>
 	<key>ITSAppUsesNonExemptEncryption</key>
@@ -68,21 +83,6 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>Fabric</key>
-	<dict>
-		<key>Kits</key>
-		<array>
-			<dict>
-				<key>KitInfo</key>
-				<dict>
-					<key>KitName</key>
-					<string>Crashlytics</string>
-				</dict>
-			</dict>
-		</array>
-		<key>APIKey</key>
-		<string>c3e5650f51470bf66bc04e193f3c0e0445303228</string>
-	</dict>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 </dict>
