@@ -17,7 +17,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0.12</string>
 	<key>CFBundleVersion</key>
-	<string>69</string>
+	<string>70</string>
 	<key>FIRAnalyticsDebugEnabled</key>
 	<true/>
 	<key>Fabric</key>
@@ -51,13 +51,13 @@
 	<key>NSCalendarsUsageDescription</key>
 	<string>Earnit would like to create a calendar event.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>App would like to store a photo.</string>
+	<string>Earnit app would like to store and share photos related to tasks. It&apos;s required to create task with photos.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>App needs location service for stuff</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>App needs location service for stuff</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Earnit would like to store a photo.</string>
+	<string>Earnit app would like to store and share photos related to tasks. It&apos;s required to create task with photos.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Roboto-Bold.ttf</string>
