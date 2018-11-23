@@ -46,8 +46,10 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         self.isImageChanged = false
-
-        profileImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + EarnItAccount.currentUser.avatar!)
+        if  ((EarnItAccount.currentUser.avatar) != nil){
+            profileImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + EarnItAccount.currentUser.avatar!)
+        }
+        
         self.creatLeftPadding(textField: firstNameField)
         self.creatLeftPadding(textField: lastNameField)
         self.creatLeftPadding(textField: phoneField)
@@ -224,7 +226,7 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
         EarnItAccount.currentUser.lastName = self.lastNameField.text
         
         var contactNumber = String()
-        if (self.phoneField.text?.characters.count)! > 0{
+        if (self.phoneField.text?.count)! > 0{
             contactNumber = "\(self.countryCodeLabel.text!)\(self.phoneField.text!)"
         }
         else {
@@ -233,13 +235,13 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
         EarnItAccount.currentUser.phoneNumber = contactNumber
         
         print("SaveButtonClicked ")
-        if (self.firstNameField.text?.characters.count == 0 && self.phoneField.text?.characters.count == 0 && self.lastNameField.text?.characters.count == 0){
+        if (self.firstNameField.text?.count == 0 && self.phoneField.text?.count == 0 && self.lastNameField.text?.count == 0){
             
             self.view.makeToast("Please complete all fields")
         }
-        if (self.firstNameField.text?.characters.count == 0 || self.phoneField.text?.characters.count == 0 || self.lastNameField.text?.characters.count == 0){
+        if (self.firstNameField.text?.count == 0 || self.phoneField.text?.count == 0 || self.lastNameField.text?.count == 0){
             
-            var errorFields = "\(self.firstNameField.text?.characters.count == 0 ? "First name and":"")\(self.lastNameField.text?.characters.count == 0 ? " Last name and":"")\(self.phoneField.text?.characters.count == 0 ? " Phone":"")"
+            var errorFields = "\(self.firstNameField.text?.count == 0 ? "First name and":"")\(self.lastNameField.text?.count == 0 ? " Last name and":"")\(self.phoneField.text?.count == 0 ? " Phone":"")"
             
             let last3 = errorFields.substring(from:errorFields.index(errorFields.endIndex, offsetBy: -3))
             if last3 == "and" {
@@ -247,12 +249,12 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
             }
             self.view.makeToast("Please complete \(errorFields) field")
         }
-        else if  (self.phoneField.text?.characters.count)! < 10 {
+        else if  (self.phoneField.text?.count)! < 10 {
             self.view.makeToast("Please enter valid phone number")
         }
        else {
             var contactNumber = String()
-            if (self.phoneField.text?.characters.count)! > 0{
+            if (self.phoneField.text?.count)! > 0{
                 contactNumber = "\(self.countryCodeLabel.text!)\(self.phoneField.text!)"
             }
             else {
@@ -391,7 +393,7 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
 //                    print("\(response.description)")
                     self.userImageUrl = String("\(String(describing: response.value!))")
                     var contactNumber = String()
-                    if (self.phoneField.text?.characters.count)! > 0 {
+                    if (self.phoneField.text?.count)! > 0 {
                         contactNumber = "\(self.countryCodeLabel.text!)\(self.phoneField.text!)"
                     }
                     else {
@@ -503,7 +505,7 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
                 self.userImageUrl = String("\(AWS_URL)\(s3BucketName)/\(uploadRequest.key!)")
                 print("ImageUrl for earnITuser \(self.userImageUrl)")
                 var contactNumber = String()
-                if (self.phoneField.text?.characters.count)! > 0{
+                if (self.phoneField.text?.count)! > 0{
                     contactNumber = "\(self.countryCodeLabel.text!)\(self.phoneField.text!)"
                 }
                 else {
@@ -647,8 +649,8 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
         else if (textField==phoneField) {
             
             let charsLimit = 10
-            let startingLength = textField.text?.characters.count ?? 0
-            let lengthToAdd = string.characters.count
+            let startingLength = textField.text?.count ?? 0
+            let lengthToAdd = string.count
             let lengthToReplace =  range.length
             let newLength = startingLength + lengthToAdd - lengthToReplace
             return newLength <= charsLimit

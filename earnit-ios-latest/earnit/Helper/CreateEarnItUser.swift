@@ -82,7 +82,7 @@ func callUpdateProfileApiForParentt(firstName: String, lastName: String, phoneNu
             print("response.result.value EarnIt Parent User,\(responseJSON)")
             success(true)
         case .failure(_):
-            print(response.result.error)
+            print(response.result.error ?? "Error Got")
         }
     }
 }

@@ -1,3 +1,5 @@
+# DEPRECATED
+No longer maintaing it.
 # NextResponderTextField
 [![Swift Version](https://img.shields.io/badge/Swift-4.0+-orange.svg)](https://swift.org)
 
@@ -29,9 +31,9 @@ Password.nextResponderField -> Sign In
 
 ## Requirements
 
-- iOS 7.0+ / Mac OS X 10.9+
-- Xcode 8.0
-- Swift 3.0
+- iOS 8.0+
+- Xcode 10.0
+- Swift 4.0
 
 ## Usage
 

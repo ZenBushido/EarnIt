@@ -457,7 +457,11 @@ class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextF
                         return
                     }
                     self.childImageUrl = String("\(String(describing: response.value!))")
-                    self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.childImageUrl!)
+                    if (self.childImageUrl != nil){
+                        self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.childImageUrl!)
+                        
+                    }
+                    
                     let contactNumber = "\(self.countryCodeLabel.text!)\(self.phone.text!)"
                     if self.isInEditingMode == true{
                         self.callUpdateForChild(firstName: self.firstName.text!,email: self.email.text!,password: self.password.text!,childAvatar: self.childImageUrl, phoneNumber: contactNumber)
@@ -475,7 +479,8 @@ class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextF
     }
     
     func prepareUserImageForUpload(){
-        self.requestToUploadImage(profileImage: self.userImage!)
+        
+        self.requestToUploadImage(profileImage: self.userImageView.image ?? EarnItImage.defaultUserImage())
         //return
         /*
         let date = NSDate()
@@ -642,7 +647,9 @@ class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextF
             self.confirmPassword.text = self.earnItChildUser.password
             
             self.phone.text = self.getPhoneNumber()
+            if (self.earnItChildUser.childUserImageUrl != nil ){
             self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUser.childUserImageUrl!)
+            }
             self.saveButton.setTitle("Update", for: .normal)
             self.childImageUrl = self.earnItChildUser.childUserImageUrl?.replacingOccurrences(of: "\"", with:  " ")
             self.isConfirmPasswordCorrect = true

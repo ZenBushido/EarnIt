@@ -481,7 +481,12 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
 //                    print(response.description)
 //                    print(response.value)
                     self.childImageUrl = String("\(String(describing: response.value!))")
+                    if (self.childImageUrl != nil) {
                     self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.childImageUrl!)
+                    }else
+                    {
+                        self.userImageView.image = EarnItImage.defaultUserImage()
+                    }
                     let contactNumber = "\(self.countryCodeLabel.text!)\(self.phone.text!)"
                     if self.isInEditingMode == true{
                         self.callUpdateForChild(firstName: self.firstName.text!,email: self.email.text!,password: self.password.text!,childAvatar: self.childImageUrl, phoneNumber: contactNumber)
@@ -672,7 +677,14 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
             self.confirmPassword.text = self.earnItChildUser.password
             
             self.phone.text = self.getPhoneNumber()
+            
+            if self.earnItChildUser.childUserImageUrl != nil{
             self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUser.childUserImageUrl!)
+            }else
+            {
+                self.userImageView.image = EarnItImage.defaultUserImage()
+            }
+            
             self.saveButton.setTitle("Update", for: .normal)
             self.childImageUrl = self.earnItChildUser.childUserImageUrl?.replacingOccurrences(of: "\"", with:  " ")
             self.isConfirmPasswordCorrect = true

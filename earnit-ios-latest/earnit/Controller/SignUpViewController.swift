@@ -130,7 +130,7 @@ class SignUpViewController : UIViewController {
                     let fcmToken : String? = keychain.get("token")
                     EarnItAccount.currentUser.setAttribute(json: responseJSON)
                     
-                    if responseJSON["fcmToken"].stringValue != keychain.get("token") || responseJSON["fcmToken"].stringValue == nil || responseJSON["fcmToken"].stringValue == ""{
+                    if (responseJSON["fcmToken"].stringValue != keychain.get("token") || responseJSON["fcmToken"].stringValue == nil || responseJSON["fcmToken"].stringValue == ""){
                         
                         print("fcm token is null")
                         callUpdateProfileApiForParentt(firstName: EarnItAccount.currentUser.firstName, lastName: EarnItAccount.currentUser.lastName, phoneNumber: EarnItAccount.currentUser.phoneNumber!, updatedPassword: EarnItAccount.currentUser.password,imageUrl: EarnItAccount.currentUser.avatar!,fcmKey : fcmToken,success: {

@@ -454,8 +454,8 @@ class VCChildCalendar: UIViewController, FSCalendarDataSource, FSCalendarDelegat
     }
     
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
-        let currentMonth = calendar.month(of: calendar.currentPage)
-        print("this is the current Month \(currentMonth)")
+       // let currentMonth = calendar.month(of: calendar.currentPage)
+        //print("this is the current Month \(currentMonth)")
 //        self.setupTasksArrayForChildCalendar()
     }
     
