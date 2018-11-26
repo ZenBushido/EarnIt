@@ -283,9 +283,17 @@ class VCChildTasksList : UIViewController, UITableViewDelegate, UITableViewDataS
         detailView = (Bundle.main.loadNibNamed("DetailView", owner: self, options: nil)?[0] as? DetailView)!
         
         detailView.TaskName.text = task.taskName
-        detailView.Allowance.text = "$" + String(task.allowance)
-        detailView.expiryDate.text = task.dateMonthString + " @ " + task.dueTime
-        detailView.createdDate.text = task.createdDateMonthString + " @ " + task.createdDateTime
+        
+        if let allowanceA = task.allowance {
+        detailView.Allowance.text = "$" + String(allowanceA)
+        }
+        
+        if let dueTime = task.dueTime, let dateM = task.dateMonthString {
+        detailView.expiryDate.text = dateM + " @ " + dueTime
+        }
+        if let dueTime = task.createdDateMonthString , let cdateTime = task.createdDateTime{
+        detailView.createdDate.text = dueTime + " @ " + cdateTime
+         }
         
         detailView.close.addTarget(self, action: #selector(self.closeDetailView), for: UIControlEvents.touchUpInside)
         
@@ -443,7 +451,12 @@ class VCChildTasksList : UIViewController, UITableViewDelegate, UITableViewDataS
     func configureTableCell(taskCell:ChildTaskDetailCell, type:String, indexPath:NSIndexPath ) -> ChildTaskDetailCell {
         if type == "PendingApproval" {
             taskCell.taskName.text = self.pendingApprovalTasks[indexPath.row].taskName
-            taskCell.taskDescription.text = self.pendingApprovalTasks[indexPath.row].dateMonthString + " @ " + self.pendingApprovalTasks[indexPath.row].dueTime
+            
+            if let dateM = self.pendingApprovalTasks[indexPath.row].dateMonthString, let dueTime = self.pendingApprovalTasks[indexPath.row].dueTime {
+            
+            taskCell.taskDescription.text = dateM + " @ " + dueTime
+            }
+            
             
             taskCell.statusImage.backgroundColor = getColorStatusForTaskForChildDashBoard(earnItTask: self.pendingApprovalTasks[indexPath.row])
             
@@ -469,7 +482,9 @@ class VCChildTasksList : UIViewController, UITableViewDelegate, UITableViewDataS
         else if type == "OverDue" {
             
             taskCell.taskName.text = self.overDueTasks[indexPath.row].taskName
-            taskCell.taskDescription.text = self.overDueTasks[indexPath.row].dateMonthString + " @ " + self.overDueTasks[indexPath.row].dueTime
+            if let dateM = self.overDueTasks[indexPath.row].dateMonthString, let dueTime = self.overDueTasks[indexPath.row].dueTime {
+            taskCell.taskDescription.text = dateM + " @ " + dueTime
+            }
             
             taskCell.statusImage.backgroundColor = getColorStatusForTaskForChildDashBoard(earnItTask: self.overDueTasks[indexPath.row])
             
@@ -496,8 +511,10 @@ class VCChildTasksList : UIViewController, UITableViewDelegate, UITableViewDataS
             
         else if type == "DayTask" {
             taskCell.taskName.text = self.dayTasks[indexPath.section].earnItTasks[indexPath.row].taskName
-            taskCell.taskDescription.text = self.dayTasks[indexPath.section].earnItTasks[indexPath.row].dateMonthString + " @ " + self.dayTasks[indexPath.section].earnItTasks[indexPath.row].dueTime
+            if let dateM = self.dayTasks[indexPath.section].earnItTasks[indexPath.row].dateMonthString , let dueDate = self.dayTasks[indexPath.section].earnItTasks[indexPath.row].dueTime {
             
+            taskCell.taskDescription.text = dateM + " @ " +  dueDate
+            }
             taskCell.statusImage.backgroundColor = getColorStatusForTaskForChildDashBoard(earnItTask: self.dayTasks[indexPath.section].earnItTasks[indexPath.row])
             
             //taskCell.checkButton.setImage(nil, for: .normal)

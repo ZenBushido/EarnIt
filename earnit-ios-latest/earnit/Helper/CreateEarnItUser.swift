@@ -527,46 +527,166 @@ func addTaskForChild(childId: Int, earnItTask: EarnItTask,earnItSelectedGoal: Ea
         
         headers = [
             "Accept": "application/json",
-//            "Authorization": authorizationHeader.value,
+            //            "Authorization": authorizationHeader.value,
             "Content-Type": "application/json",
             "Authorization": "Basic \(keychain.get("user_auth")!)"
         ]
     }
     var param = [String: Any]()
-    if earnItSelectedGoal.name != "None"{
-      
+    var status = ""
+    var str_id = ""
+    var taskName = ""
+    var allowance = 0.00
+    var updateDateTimeStamp : Int64 = 0
+    var dueDateTimeStamp : Int64 = 0
+    var createdDateTimeStamp : Int64 = 0
+    var isPictureRequired : Int = 0
+    
+    if let isPictureRequiredTemp = earnItTask.isPictureRequired {
+        isPictureRequired = isPictureRequiredTemp
+    }
+    if let statusTemp = earnItTask.status {
+        status = statusTemp
+    }
+    if let idTemp = earnItSelectedGoal.id {
+        str_id = idTemp.description
+    }
+    
+    if let taskNameTemp = earnItTask.taskName {
+        taskName = taskNameTemp
+    }
+    if let allowanceTemp = earnItTask.allowance {
+        allowance = allowanceTemp
+    }
+    if let dueDateTimeStampTemp = earnItTask.dueDateTimeStamp {
+        dueDateTimeStamp = dueDateTimeStampTemp
+    }
+    if let updateDateTimeStampTemp = earnItTask.updateDateTimeStamp {
+        updateDateTimeStamp = updateDateTimeStampTemp
+    }
+    if let createdDateTimeStampTemp = earnItTask.createdDateTimeStamp {
+        createdDateTimeStamp = createdDateTimeStampTemp
+    }
+    
+
+    if earnItTask.repeatMode.rawValue == "none"{
+        
         print("selected goal for Api \(earnItSelectedGoal.id)")
+        if earnItSelectedGoal.name != "None"{
+            param = [
+                
+                "children": ["id": childId],
+                "allowance": allowance,
+                "createDate": createdDateTimeStamp,
+                "dueDate": dueDateTimeStamp,
+                "name": taskName,
+                "pictureRequired": isPictureRequired,
+                "status": status,
+                "updateDate": updateDateTimeStamp,
+                "taskComments": [],
+                "description" : earnItTask.taskDescription!,
+                "goal" : ["id": earnItSelectedGoal.id!]
+            ]
+            
+        }else {
+            
+            param = [
+                "children": ["id": childId],
+                "allowance": allowance,
+                "createDate": createdDateTimeStamp,
+                "dueDate": dueDateTimeStamp,
+                "name": taskName,
+                "pictureRequired": isPictureRequired,
+                "status": status,
+                "updateDate": updateDateTimeStamp,
+                "taskComments": [],
+                "description" : earnItTask.taskDescription!
+            ]
+        }
+        
+    }
+    else if earnItTask.repeatMode.rawValue == "daily"{
+        
+        
         param = [
             
             "children": ["id": childId],
-            "allowance": earnItTask.allowance,
-            "createDate": earnItTask.createdDateTimeStamp,
-            "dueDate": earnItTask.dueDateTimeStamp,
-            "name": earnItTask.taskName,
-            "pictureRequired": earnItTask.isPictureRequired,
-            "status": earnItTask.status,
-            "updateDate": earnItTask.updateDateTimeStamp,
+            "allowance": allowance,
+            "createDate":createdDateTimeStamp,
+            "dueDate": dueDateTimeStamp,
+            "name": taskName,
+            "pictureRequired": isPictureRequired,
+            "status": status,
+            "updateDate": updateDateTimeStamp,
             "taskComments": [],
             "description" : earnItTask.taskDescription!,
-            "goal" : ["id": earnItSelectedGoal.id!]
-            ]
+            "goal" : ["id": str_id],
+            "repititionSchedule":["startTime":"10:00", "endTime" : "11:00","repeated": "daily"]
+            
+            
+        ]
         
-    }else {
-    
+    }
+    else if earnItTask.repeatMode.rawValue == "weekly"{
+        param = [
+            
+            "children": ["id": childId],
+            "allowance": allowance,
+            "createDate":createdDateTimeStamp,
+            "dueDate": dueDateTimeStamp,
+            "name": taskName,
+            "pictureRequired": isPictureRequired,
+            "status": status,
+            "updateDate": updateDateTimeStamp,
+            "taskComments": [],
+            "description" : earnItTask.taskDescription!,
+            "goal" : ["id": str_id],
+            "repititionSchedule":["startTime":"00:00", "endTime" : "23:59","repeated": "weekly","specificDays":earnItTask.specificDays]
+            
+            
+        ]
+        
+    }
+    else if earnItTask.repeatMode.rawValue == "monthly"{
+        param = [
+            
+            "children": ["id": childId],
+            "allowance": allowance,
+            "createDate": createdDateTimeStamp,
+            "dueDate": dueDateTimeStamp,
+            "name": taskName,
+            "pictureRequired": isPictureRequired,
+            "status": status,
+            "updateDate": updateDateTimeStamp,
+            "taskComments": [],
+            "description" : earnItTask.taskDescription!,
+            "goal" : ["id": str_id],
+            "repititionSchedule":["startTime":"10:30", "endTime" : "11:45","repeated": "monthly","specificDays":earnItTask.specificDays]
+        ]
+        
+    }
+    else {
+        
         param = [
             "children": ["id": childId],
-            "allowance": earnItTask.allowance,
-            "createDate": earnItTask.createdDateTimeStamp,
-            "dueDate": earnItTask.dueDateTimeStamp,
-            "name": earnItTask.taskName,
-            "pictureRequired": earnItTask.isPictureRequired,
-            "status": earnItTask.status,
-            "updateDate": earnItTask.updateDateTimeStamp,
+            "allowance": allowance,
+            "createDate": createdDateTimeStamp,
+            "dueDate": dueDateTimeStamp,
+            "name": taskName,
+            "pictureRequired": isPictureRequired,
+            "status": status,
+            "updateDate": updateDateTimeStamp,
             "taskComments": [],
             "description" : earnItTask.taskDescription!
         ]
     }
-    if  earnItTask.repeatMode != .None {
+    if earnItTask.repeatMode == .Weekly {
+        
+    }
+    else if earnItTask.repeatMode == .Monthly {
+        
+    }
+    else if  earnItTask.repeatMode != .None {
         let repeatModeDic = ["repeat" : earnItTask.repeatMode.rawValue]
         param.updateValue(repeatModeDic, forKey: "repititionSchedule")
     }

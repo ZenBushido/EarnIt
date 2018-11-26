@@ -327,7 +327,12 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
     func configureTableCell(taskCell:ChildTaskDetailApprovalCell, type:String, indexPath:NSIndexPath ) -> ChildTaskDetailApprovalCell {
         if type == "PendingApproval" {
             taskCell.taskName.text = self.pendingApprovalTasks[indexPath.row].taskName
-            taskCell.taskDescription.text = self.pendingApprovalTasks[indexPath.row].dateMonthString + " @ " + self.pendingApprovalTasks[indexPath.row].dueTime
+            
+            if let dateM = self.pendingApprovalTasks[indexPath.row].dateMonthString, let dueTime = self.pendingApprovalTasks[indexPath.row].dueTime {
+            taskCell.taskDescription.text = dateM + " @ " + dueTime
+            }
+            
+            
             taskCell.statusImage.backgroundColor = getColorStatusForTaskForParentDashBoard(earnItTask: self.pendingApprovalTasks[indexPath.row])
             
             taskCell.approveButton.isHidden = false
@@ -343,7 +348,13 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
         }
         else if type == "OverDue" {
             taskCell.taskName.text = self.overdueTasks[indexPath.row].taskName
-            taskCell.taskDescription.text = self.self.overdueTasks[indexPath.row].dateMonthString + " @ " + self.overdueTasks[indexPath.row].dueTime
+            
+            if let dateM = self.pendingApprovalTasks[indexPath.row].dateMonthString, let dueTime = self.pendingApprovalTasks[indexPath.row].dueTime {
+            taskCell.taskDescription.text = dateM + " @ " + dueTime
+                
+            }
+            
+            
             taskCell.statusImage.backgroundColor = getColorStatusForTaskForParentDashBoard(earnItTask: self.overdueTasks[indexPath.row])
             
             taskCell.approveButton.isHidden = true
@@ -351,7 +362,11 @@ class ParentDashBoard : UIViewController, UITableViewDelegate, UITableViewDataSo
         }
         else if type == "DayTask" {
             taskCell.taskName.text = self.dayTasks[indexPath.section].earnItTasks[indexPath.row].taskName
-            taskCell.taskDescription.text = self.dayTasks[indexPath.section].earnItTasks[indexPath.row].dateMonthString + " @ " + self.dayTasks[indexPath.section].earnItTasks[indexPath.row].dueTime
+            
+            if let dateM = self.pendingApprovalTasks[indexPath.row].dateMonthString, let dueTime = self.pendingApprovalTasks[indexPath.row].dueTime {
+            taskCell.taskDescription.text = dateM + " @ " + dueTime
+            }
+                
             taskCell.statusImage.backgroundColor = getColorStatusForTaskForParentDashBoard(earnItTask: self.dayTasks[indexPath.section].earnItTasks[indexPath.row])
             
             taskCell.approveButton.isHidden = true

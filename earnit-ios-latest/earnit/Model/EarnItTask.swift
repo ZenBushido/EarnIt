@@ -25,40 +25,40 @@ class EarnItTask : NSObject {
     var taskId : Int!
     
     //taskName
-    var taskName : String!
+    var taskName : String?
     
     //allowance 
-    var allowance : Double!
+    var allowance : Double?
     
     //dueDate
-    var dueTime : String!
+    var dueTime : String?
     
     //createdDateTime
-    var createdDateTime : String!
+    var createdDateTime : String?
     
     //isPictureRequired
-    var isPictureRequired : Int!
+    var isPictureRequired : Int?
     
     //dueDate
     var dueDate = Date()
     
     //dateMonth
-    var dateMonthString : String!
+    var dateMonthString : String?
     
     //createdDateMonthString
-    var createdDateMonthString : String!
+    var createdDateMonthString : String?
     
     //createdDate
-    var createdDateTimeStamp : Int64!
+    var createdDateTimeStamp : Int64?
     
     //dueDate
-    var dueDateTimeStamp : Int64!
+    var dueDateTimeStamp : Int64?
     
     //updateDate
-    var updateDateTimeStamp : Int64!
+    var updateDateTimeStamp : Int64?
     
     //status
-    var status : String!
+    var status : String?
     
     //taskComments
     var taskComments = [TaskComment]()
@@ -74,6 +74,11 @@ class EarnItTask : NSObject {
     
     var repeatScheduleDic : [String: AnyObject]?
     var taskImage = UIImage()
+    
+    var startTime : String?
+    var endTime : String?
+    var specificDays = [String]()
+    
     
     override init(){
         super.init()

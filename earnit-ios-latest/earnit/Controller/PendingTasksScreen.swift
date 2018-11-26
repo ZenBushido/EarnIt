@@ -150,7 +150,10 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
         if self.overdueTasks.count > 0{
             if (indexPath.section == 0 ){
                 taskCell.taskName.text = self.overdueTasks[indexPath.row].taskName
-                taskCell.taskDescription.text = self.overdueTasks[indexPath.row].dateMonthString + " @ " + self.overdueTasks[indexPath.row].dueTime
+                
+                if let datM = self.overdueTasks[indexPath.row].dateMonthString, let dueT = self.overdueTasks[indexPath.row].dueTime {
+                taskCell.taskDescription.text = datM + " @ " + dueT
+                }
                 
                 taskCell.statusImage.backgroundColor = getColorStatusForTaskForParentDashBoard(earnItTask: self.overdueTasks[indexPath.row])
                 
@@ -173,7 +176,12 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
             }
             else {
                 taskCell.taskName.text = self.dayTasks[indexPath.section - 1].earnItTasks[indexPath.row].taskName
-                taskCell.taskDescription.text = self.dayTasks[indexPath.section - 1].earnItTasks[indexPath.row].dateMonthString + " @ " + self.dayTasks[indexPath.section - 1].earnItTasks[indexPath.row].dueTime
+                
+                if let dateM = self.dayTasks[indexPath.section - 1].earnItTasks[indexPath.row].dateMonthString , let dueTime = self.dayTasks[indexPath.section - 1].earnItTasks[indexPath.row].dueTime {
+                
+                taskCell.taskDescription.text = dateM  + " @ " + dueTime
+                }
+                
                 taskCell.statusImage.backgroundColor = getColorStatusForTaskForParentDashBoard(earnItTask: self.dayTasks[indexPath.section - 1].earnItTasks[indexPath.row])
                 
                 if (self.dayTasks[indexPath.section - 1 ].earnItTasks[indexPath.row].status == TaskStatus.completed){
@@ -199,8 +207,12 @@ class PendingTasksScreen : UIViewController, UITableViewDelegate, UITableViewDat
         }
         else {
             taskCell.taskName.text = self.dayTasks[indexPath.section].earnItTasks[indexPath.row].taskName
-            taskCell.taskDescription.text = self.dayTasks[indexPath.section].earnItTasks[indexPath.row].dateMonthString + " @ " + self.dayTasks[indexPath.section].earnItTasks[indexPath.row].dueTime
             
+            if let dateM = self.dayTasks[indexPath.section].earnItTasks[indexPath.row].dateMonthString, let dueTime = self.dayTasks[indexPath.section].earnItTasks[indexPath.row].dueTime {
+            
+            taskCell.taskDescription.text = dateM + " @ " + dueTime
+                
+            }
             taskCell.statusImage.backgroundColor = getColorStatusForTaskForParentDashBoard(earnItTask: self.dayTasks[indexPath.section].earnItTasks[indexPath.row])
             
             if (self.dayTasks[indexPath.section].earnItTasks[indexPath.row].status == TaskStatus.completed){

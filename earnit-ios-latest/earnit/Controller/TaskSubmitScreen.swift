@@ -78,10 +78,16 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
         else {
             self.repeatsLabel.text = colonSpace + self.earnItTask.repeatMode.rawValue.capitalized
         }
-        self.allowance.text = colonSpace + "$" + String(self.earnItTask.allowance)
-        self.dueDate.text = colonSpace + self.earnItTask.dateMonthString + " @ " + self.earnItTask.dueTime
+        if let allowanceA = self.earnItTask.allowance {
+        self.allowance.text = colonSpace + "$" + String(allowanceA)
+       }
         
-        self.isPictureRequired = self.earnItTask.isPictureRequired
+        if let dateM = self.earnItTask.dateMonthString, let dueDate = self.earnItTask.dueTime {
+        self.dueDate.text = colonSpace + dateM + " @ " + dueDate
+        }
+        if let isPictureRequired = self.earnItTask.isPictureRequired {
+        self.isPictureRequired = isPictureRequired
+        }
         
         if self.isPictureRequired == 1{
             

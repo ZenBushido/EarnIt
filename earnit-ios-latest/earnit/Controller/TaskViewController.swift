@@ -23,6 +23,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     @IBOutlet var taskDetailField: UITextView!
     
     @IBOutlet var requiresPhotoOption: UIButton!
+    @IBOutlet var requiresScreenLockOption: UIButton!
     
     @IBOutlet var repeatsField: UITextField!
     
@@ -81,6 +82,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     var ammountIsValid : Bool = true
     
     var isPhotoRequired = 0
+    var isScreenLocked = 0
    
     var selectedGoal =  EarnItChildGoal()
     @IBOutlet var lblSubtitle: UILabel!
@@ -107,18 +109,18 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
 
     @IBOutlet var lblRepeats: UILabel!
     @IBOutlet var ivDropDownRepeat: UIImageView!
-
+   var dataSelectedArray: [String] = []
     //MARK: View Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.completedTask = self.earnItTaskToEdit
-        self.lblRepeats.isHidden = true
-        self.repeatsField.isHidden = true
+      //  self.lblRepeats.isHidden = true
+       // self.repeatsField.isHidden = true
 //        self.lblRepeats.isHidden = false
 //        self.repeatsField.isHidden = false
-        self.repeatsField.isUserInteractionEnabled = false
-        self.ivDropDownRepeat.isHidden = true
+      //  self.repeatsField.isUserInteractionEnabled = false
+       // self.ivDropDownRepeat.isHidden = true
         self.btnApprovalTick.isHidden = true
         self.btnDelete.isHidden = true
 
@@ -199,6 +201,55 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
    
     func repeatTaskDoneButtonClicked() {
         activeField?.resignFirstResponder()
+        
+        
+        
+        if activeField == repeatsField {
+            if repeatsField.text == "Monthly" {
+                
+                let story = UIStoryboard(name: "Main", bundle: nil)
+                
+                let obj = story.instantiateViewController(withIdentifier: "MonthlytaskVC") as! MonthlytaskVC
+                
+                obj.delegate = self
+                
+                self.present(obj, animated: true) {
+                    
+                }
+                
+                
+            }
+            else if repeatsField.text == "Weekly" {
+                
+                let story = UIStoryboard(name: "Main", bundle: nil)
+                
+                let obj = story.instantiateViewController(withIdentifier: "WeeklyTaskVC") as! WeeklyTaskVC
+                
+                obj.delegate = self
+                
+                self.present(obj, animated: true) {
+                    
+                }
+                
+                
+            }
+            else if repeatsField.text == "Daily" {
+                
+                let story = UIStoryboard(name: "Main", bundle: nil)
+                
+                let obj = story.instantiateViewController(withIdentifier: "DailyTaskVC") as! DailyTaskVC
+                
+                obj.delegate = self
+                
+                self.present(obj, animated: true) {
+                    
+                }
+                
+                
+            }
+        }
+        
+        activeField = nil
     }
     
     @IBAction func amountValueDidChange(_ sender: UITextField) {
@@ -228,7 +279,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     }
 
     func textFieldDidEndEditing(_ textField: UITextField){
-        activeField = nil
+       // activeField = nil
         //        if textField == repeatsField  {
         //            self.hideRepeatTasksTable()
         //        }
@@ -258,7 +309,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        activeTextView = nil
+       // activeTextView = nil
     }
     
     //MARK: -UIPickerView Datasource & Delegate
@@ -287,11 +338,15 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        //repeatTasks
         if activeField == repeatsField {
             repeatsField.text = repeatTasks[row]
+            
         }
         else  {
-            applyToGoalField.text = earnItChildGoalList[row].name
+            if let name = earnItChildGoalList[row].name {
+            applyToGoalField.text = name
+            }
             self.selectedGoal = earnItChildGoalList[row]
         }
     }
@@ -414,16 +469,24 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
                 self.applyToGoalField.text = "None"
             }else {
                 self.applyToGoalField.text = self.earnItTaskToEdit.goal.name
+            
             }
-            self.ammountField.text = String(Double(round(1000 * self.earnItTaskToEdit.allowance)/1000))
+            if let allowance = self.earnItTaskToEdit.allowance {
+            
+            self.ammountField.text = String(Double(round(1000 * allowance)/1000))
+                
+            }
+            
             self.taskDetailField.text = self.earnItTaskToEdit.taskDescription
             self.dueDateLabel.text = getDueDateAndTime(dueDate: self.earnItTaskToEdit.dueDate)
             self.saveButton.setTitle("Update", for: .normal)
             self.btnApprovalTick.isHidden = false
             self.btnDelete.isHidden = false
-            self.isPhotoRequired  = self.earnItTaskToEdit.isPictureRequired
+            if let isPictureRequired = self.earnItTaskToEdit.isPictureRequired {
+            self.isPhotoRequired  = isPictureRequired
+            }
             self.dueDate = self.earnItTaskToEdit.dueDate as NSDate
-            self.createdDate = Date(milliseconds: self.earnItTaskToEdit.createdDateTimeStamp)
+            self.createdDate = Date(milliseconds: self.earnItTaskToEdit.createdDateTimeStamp!)
             self.updatedDate = Date()
             if ( self.isPhotoRequired  == 0 ){
                 self.requiresPhotoOption.setImage(nil, for: .normal)
@@ -842,8 +905,10 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
             earnItTask.repeatMode = .Daily
         case "Weekly":
                 earnItTask.repeatMode = .Weekly
+            earnItTask.specificDays = dataSelectedArray
         case "Monthly":
             earnItTask.repeatMode = .Monthly
+            earnItTask.specificDays = dataSelectedArray
             
         default:
             earnItTask.repeatMode = .None
@@ -1069,6 +1134,21 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
             isPhotoRequired = 0
         }
     }
+    
+    @IBAction func screenLockedClicked(_ sender: UIButton) {
+        if ( isScreenLocked  == 0 ){
+            self.requiresScreenLockOption.setImage(Icon.check, for: .normal)
+            self.requiresScreenLockOption.backgroundColor = UIColor.white
+            isScreenLocked = 1
+            
+        }else if (isScreenLocked == 1){
+            self.requiresScreenLockOption.setImage(nil, for: .normal)
+            self.requiresScreenLockOption.backgroundColor = UIColor.clear
+            isScreenLocked = 0
+        }
+    }
+    
+    
 
     @IBAction func goBackToParentLandingPage(_ sender: Any) {
         self.view.endEditing(true)
@@ -1434,3 +1514,22 @@ class TaskViewController: UIViewController, UIPickerViewDelegate , UIPickerViewD
     
 }
 
+extension TaskViewController : MonthlyDelegate,WeeklyDelegate,DailyDelegate{
+    func saveDailyData(dic: NSDictionary) {
+        if let text = dic["repeats"] as? String {
+            
+        }
+    }
+    func saveWeaklyData(dic: NSDictionary) {
+        if let arr  = dic["dates"] {
+            dataSelectedArray = arr as! [String]
+        }
+        
+    }
+    func saveData(dic: NSDictionary) {
+        if let arr  = dic["dates"] {
+            dataSelectedArray = arr  as! [String]
+        }
+    }
+    
+}

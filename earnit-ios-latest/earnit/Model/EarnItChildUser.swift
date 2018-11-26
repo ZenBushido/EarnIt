@@ -194,8 +194,11 @@ class EarnItChildUser: NSObject {
             earnItTask.setAttribute(json: json)
             print("END earnItTask creation \(json["name"].stringValue)")
             print(Date().millisecondsSince1970)
-            let dueDateValue = Date(milliseconds : earnItTask.dueDateTimeStamp)
-            let createdDate = Date(milliseconds: earnItTask.createdDateTimeStamp)
+            
+            
+            let dueDateValue = Date(milliseconds : earnItTask.dueDateTimeStamp!)
+            
+            let createdDate = Date(milliseconds: earnItTask.createdDateTimeStamp!)
             
             let formatter = DateFormatter()
             formatter.timeZone = TimeZone.ReferenceType.local
