@@ -78,6 +78,7 @@ class EarnItTask : NSObject {
     var startTime : String?
     var endTime : String?
     var specificDays = [String]()
+    var everyNRepeat : String?
     
     
     override init(){
@@ -120,8 +121,9 @@ class EarnItTask : NSObject {
 //        self.createdDateTimeStamp = json["createDate"].int64Value
 //        self.updateDateTimeStamp = json["updateDate"].int64Value
         let formatter = DateFormatter()
-        formatter.timeZone = TimeZone.ReferenceType.local
-        formatter.dateFormat = "MMM dd, yyyy HH:mm:ss a" //"M/dd"
+        formatter.timeZone = TimeZone(identifier: "UTC")!
+       // formatter.timeZone = TimeZone.ReferenceType.local
+        formatter.dateFormat = "MMM dd, yyyy h:mm:ss a" //"M/dd"
         let date1 = formatter.date(from: json["dueDate"].stringValue)
         print(date1 ?? "") //Convert String
         self.dueDateTimeStamp = date1?.millisecondsSince1970

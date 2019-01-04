@@ -21,11 +21,17 @@ func callApiForUpdateTask(earnItTaskChildId : Int,earnItTask: EarnItTask!,succes
     let password : String = keychain.get("password") as! String
     var headers : HTTPHeaders = [:]
     if let authorizationHeader = Request.authorizationHeader(user: user, password: password){
+        var basic = ""
+        if let basicTemp = keychain.get("user_auth") {
+            basic = basicTemp
+        }
+        
+        
         headers = [
             "Accept": "application/json",
 //            "Authorization": authorizationHeader.value,
             "Content-Type": "application/json",
-            "Authorization": "Basic \(keychain.get("user_auth")!)"
+            "Authorization": "Basic \(basic)"
         ]
     }
     var taskCommentParam = [[String: Any]]()
@@ -110,11 +116,17 @@ func callApiForUpdateTaskByParent(earnItTaskChildId : Int,earnItTask: EarnItTask
     let password : String = keychain.get("password") as! String
     var headers : HTTPHeaders = [:]
     if let authorizationHeader = Request.authorizationHeader(user: user, password: password){
+        
+        var basic = ""
+        if let basicTemp = keychain.get("user_auth") {
+            basic = basicTemp
+        }
+        
         headers = [
             "Accept": "application/json",
             //"Authorization": authorizationHeader.value,
             "Content-Type": "application/json",
-            "Authorization": "Basic \(keychain.get("user_auth")!)"
+            "Authorization": "Basic \(basic)"
         ]
     }
     var param = [String:Any]()

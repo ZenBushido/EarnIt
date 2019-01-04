@@ -22,7 +22,18 @@ class MessageDisplayScreen  : UIViewController {
         self.childNameLabel.text = EarnItChildUser.currentUser.firstName + "'s" + "Task"
         self.newMessageView.text = EarnItChildUser.currentUser.childMessage
         self.newMessageView.isEditable = false
-        self.childUserImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX +  EarnItChildUser.currentUser.childUserImageUrl!)
+      //  self.childUserImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX +  EarnItChildUser.currentUser.childUserImageUrl!)
+        
+        if EarnItChildUser.currentUser.childUserImageUrl!.count > 1 {
+            
+            self.childUserImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + EarnItChildUser.currentUser.childUserImageUrl!)
+            
+        }
+        else {
+            
+            self.childUserImageView.image = UIImage(named: "user-pic")
+        }
+        
         
     }
     

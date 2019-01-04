@@ -18,7 +18,8 @@ class ChildUserHeaderView : UIView {
     @IBOutlet var childUserName: UILabel!
     
     @IBOutlet var checkInName: UILabel!
-    
+    @IBOutlet var checkInPendingApproval: UILabel!
+     @IBOutlet var checkInPastDue: UILabel!
     @IBOutlet var checkInImage: UIImageView!
     
     @IBOutlet var checkInButton: UIButton!

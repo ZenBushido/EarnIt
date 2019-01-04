@@ -46,13 +46,57 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         self.isImageChanged = false
-        if  ((EarnItAccount.currentUser.avatar) != nil){
-            profileImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + EarnItAccount.currentUser.avatar!)
+        if  let imgurl = EarnItAccount.currentUser.avatar{
+            if imgurl.count > 0 {
+            profileImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + imgurl)
+            }
+            else {
+                 self.profileImageView.image = UIImage(named: "user-pic")
+            }
+        }
+        else {
+          
+                
+                self.profileImageView.image = UIImage(named: "user-pic")
+            
         }
         
         self.creatLeftPadding(textField: firstNameField)
         self.creatLeftPadding(textField: lastNameField)
         self.creatLeftPadding(textField: phoneField)
+        
+        self.creatRightPadding(textField: firstNameField)
+        self.creatRightPadding(textField: lastNameField)
+        self.creatRightPadding(textField: phoneField)
+        
+        
+        
+        var rightViewBtn_fname: UIButton!
+        rightViewBtn_fname = UIButton.init(frame: CGRect(x: 0, y: 0, width: 41, height: 41))
+        rightViewBtn_fname.setImage(UIImage(named: "fnameBox") , for: .normal)
+        rightViewBtn_fname.setImage(UIImage(named: "fnameBox"), for: .selected)
+        
+        firstNameField.rightView = rightViewBtn_fname
+        firstNameField.rightViewMode =  .always
+        
+        var rightViewBtn_lname: UIButton!
+        rightViewBtn_lname = UIButton.init(frame: CGRect(x: 0, y: 0, width: 41, height: 41))
+        rightViewBtn_lname.setImage(UIImage(named: "fnameBox") , for: .normal)
+        rightViewBtn_lname.setImage(UIImage(named: "fnameBox"), for: .selected)
+        
+        lastNameField.rightView = rightViewBtn_lname
+        lastNameField.rightViewMode =  .always
+        
+        var rightViewBtn_mobile: UIButton!
+        rightViewBtn_mobile = UIButton.init(frame: CGRect(x: 0, y: 0, width: 41, height: 41))
+        rightViewBtn_mobile.setImage(UIImage(named: "phoneBox") , for: .normal)
+        rightViewBtn_mobile.setImage(UIImage(named: "phoneBox"), for: .selected)
+        
+        phoneField.rightView = rightViewBtn_mobile
+        phoneField.rightViewMode =  .always
+        
+        
+        
         self.userImageUrl = EarnItAccount.currentUser.avatar?.replacingOccurrences(of: "\"", with:  " ")
         self.requestObserver()
         self.hideLoadingView()
@@ -326,6 +370,11 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
         textField.leftView = leftPadding
         textField.leftViewMode = UITextFieldViewMode.always
     }
+    func creatRightPadding(textField:UITextField) {
+        let rightPadding = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: textField.frame.size.height))
+        textField.rightView = rightPadding
+        textField.leftViewMode = UITextFieldViewMode.always
+    }
     
     func showLoadingView(){
         self.view.alpha = 0.7
@@ -359,10 +408,18 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
     }
     
     func requestToUploadImage(profileImage:UIImage, onCompletion: ((JSON?) -> Void)? = nil, onError: ((Error?) -> Void)? = nil){
+        
+    
+        
         let imageData = UIImagePNGRepresentation(profileImage)
         if(imageData == nil)  { return; }
         let keychain = KeychainSwift()
         let url = "\(EarnItApp_BASE_URL)\(EarnItApp_PARENT_IMAGE_FOLDER)"
+        var basic = ""
+        if let basicTemp = keychain.get("user_auth") {
+            basic = basicTemp
+        }
+        
         guard  let _ = keychain.get("email") else  {
             print(" /n Unable to fetch user auth from keychain \n")
             return
@@ -373,7 +430,7 @@ class FirstTimeLoginProfileScreen: UIViewController, UINavigationControllerDeleg
         }
         let headers: HTTPHeaders = [
             "accept": "application/json",
-            "Authorization": "Basic \(keychain.get("user_auth")!)",
+            "Authorization": "Basic \(basic)",
         ]
         Alamofire.upload(multipartFormData: { (multipartFormData) in
             if let data = imageData{

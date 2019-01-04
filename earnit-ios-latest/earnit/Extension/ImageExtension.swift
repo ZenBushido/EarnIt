@@ -145,7 +145,7 @@ class EarnItImage {
     }
     
     static func setHome() -> UIImage{
-        return UIImage.fontAwesomeIcon(name: FontAwesome.home, textColor: UIColor.EarnItAppBackgroundColor(), size: CGSize(30, 30), backgroundColor: UIColor.clear)
+        return UIImage.fontAwesomeIcon(name: FontAwesome.home, textColor: UIColor.white, size: CGSize(30, 30), backgroundColor: UIColor.clear)
     }
 
     static func setLoadingImage() -> UIImage{

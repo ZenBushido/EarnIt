@@ -25,7 +25,7 @@ let imageCache = NSCache<NSString, AnyObject>()
 extension UIImageView {
     func loadImageUsingCache(withUrl urlString : String?) {
         
-        self.image = EarnItImage.setLoadingImage();
+      //  self.image = EarnItImage.setLoadingImage();
         //self.contentMode = UIViewContentMode.scaleAspectFill
         //self.contentMode = UIViewContentMode.center
         

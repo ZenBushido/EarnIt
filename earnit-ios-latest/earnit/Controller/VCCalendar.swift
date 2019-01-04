@@ -43,7 +43,20 @@ class VCCalendar: UIViewController, FSCalendarDataSource, FSCalendarDelegate, FS
         self.lblTitle.text = "\(EarnItAccount.currentUser.firstName!)"
         self.lblBarTitle.text = "Task Due Date"
         self.view.backgroundColor = UIColor.EarnItAppBackgroundColor()
-        self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUser.childUserImageUrl!)
+        
+        
+       
+        
+        if self.earnItChildUser.childUserImageUrl!.count > 1 {
+           self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUser.childUserImageUrl!)
+            
+        }
+        else {
+            
+            self.userImageView.image = UIImage(named: "user-pic")
+        }
+        
+        
         self.dateTextField?.attributedPlaceholder = NSAttributedString(string:"None", attributes: [NSForegroundColorAttributeName: UIColor.gray])
         self.dateTextField.text = "None"
         self.tfDay?.attributedPlaceholder = NSAttributedString(string:"None", attributes: [NSForegroundColorAttributeName: UIColor.gray])
@@ -75,8 +88,15 @@ class VCCalendar: UIViewController, FSCalendarDataSource, FSCalendarDelegate, FS
         self.calendar.appearance.headerTitleColor = UIColor.white
         self.calendar.appearance.titleDefaultColor = UIColor.white
         self.calendar.appearance.weekdayTextColor = UIColor.white
-        self.calendar.appearance.selectionColor = UIColor.earnItAppPinkColor()
-        self.calendar.appearance.todayColor = UIColor.earnItAppPinkColor()
+       // self.calendar.appearance.selectionColor = UIColor.earnItAppPinkColor()
+       
+        
+       // self.calendar.appearance.todayColor = UIColor.earnItAppPinkColor()
+        
+        self.calendar.appearance.selectionColor = UIColor.earnItAppLightGreenColorColor()
+        
+        
+        self.calendar.appearance.todayColor = UIColor.earnItAppLightGreenColorColor()
     }
 
     //MARK: Repeat View Methods

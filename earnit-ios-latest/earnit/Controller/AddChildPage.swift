@@ -37,7 +37,7 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
     @IBOutlet var welcomeLabel: UILabel!
     
     @IBOutlet var password: UITextField!
-    
+     @IBOutlet var topTextLabel: UILabel!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet var countryCodeField: UITextField!
     @IBOutlet var countryNameLabel: UILabel!
@@ -70,8 +70,8 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
         _ = Timer.scheduledTimer(timeInterval: 300.0, target: self, selector: #selector(self.fetchParentUserDetailFromBackground), userInfo: nil, repeats: true)
         self.readJson()
         self.childImageUrl = ""
-        self.userImageView.image = EarnItImage.defaultUserImage()
-        
+      //  self.userImageView.image = EarnItImage.defaultUserImage()
+         self.userImageView.image = UIImage(named: "user-pic")
         self.isImageChanged = false
         self.requestObserver()
         self.assignLeftPaddingForTF()
@@ -87,6 +87,59 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
         self.countryNameLabel.text = selectedCountryDetails["code"]
         self.countryCodeLabel.text = selectedCountryDetails["dial_code"]
         
+        
+        var rightViewBtn_email: UIButton!
+        rightViewBtn_email = UIButton.init(frame: CGRect(x: 0, y: 0, width: 41, height: 41))
+        rightViewBtn_email.setImage(UIImage(named: "emailBox") , for: .normal)
+        rightViewBtn_email.setImage(UIImage(named: "emailBox"), for: .selected)
+        
+        email.rightView = rightViewBtn_email
+        email.rightViewMode =  .always
+        
+        var rightViewBtn_fname: UIButton!
+        rightViewBtn_fname = UIButton.init(frame: CGRect(x: 0, y: 0, width: 41, height: 41))
+        rightViewBtn_fname.setImage(UIImage(named: "fnameBox") , for: .normal)
+        rightViewBtn_fname.setImage(UIImage(named: "fnameBox"), for: .selected)
+        
+        firstName.rightView = rightViewBtn_fname
+        firstName.rightViewMode =  .always
+        
+        var rightViewBtn_lname: UIButton!
+        rightViewBtn_lname = UIButton.init(frame: CGRect(x: 0, y: 0, width: 41, height: 41))
+        rightViewBtn_lname.setImage(UIImage(named: "fnameBox") , for: .normal)
+        rightViewBtn_lname.setImage(UIImage(named: "fnameBox"), for: .selected)
+        
+     //   lastName.rightView = rightViewBtn_lname
+      //  lastName.rightViewMode =  .always
+        
+        var rightViewBtn_mobile: UIButton!
+        rightViewBtn_mobile = UIButton.init(frame: CGRect(x: 0, y: 0, width: 41, height: 41))
+        rightViewBtn_mobile.setImage(UIImage(named: "phoneBox") , for: .normal)
+        rightViewBtn_mobile.setImage(UIImage(named: "phoneBox"), for: .selected)
+        
+        phone.rightView = rightViewBtn_mobile
+        phone.rightViewMode =  .always
+        
+        var rightViewBtn_pass: UIButton!
+        rightViewBtn_pass = UIButton.init(frame: CGRect(x: 0, y: 0, width: 41, height: 41))
+        rightViewBtn_pass.setImage(UIImage(named: "passBox") , for: .normal)
+        rightViewBtn_pass.setImage(UIImage(named: "passBox"), for: .selected)
+        
+        password.rightView = rightViewBtn_pass
+        password.rightViewMode =  .always
+        
+        
+        var rightViewBtn_cpass: UIButton!
+        rightViewBtn_cpass = UIButton.init(frame: CGRect(x: 0, y: 0, width: 41, height: 41))
+        rightViewBtn_cpass.setImage(UIImage(named: "passBox") , for: .normal)
+        rightViewBtn_cpass.setImage(UIImage(named: "passBox"), for: .selected)
+        
+        confirmPassword.rightView = rightViewBtn_cpass
+        confirmPassword.rightViewMode =  .always
+        
+        self.topTextLabel.text = "After adding your child's information, they will receive a text with a download link & the login information you enter below."
+         self.welcomeLabel.text = "Add Your Child to EarnIt!"
+          self.scrollView.isScrollEnabled = true
         self.setUpEditViewForChild()
     }
     
@@ -169,7 +222,7 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
             self.hideLoadingView()
         }
         else {
-            if self.isImageChanged == true{
+            if self.isImageChanged == true && self.isInEditingMode == true{
                 
                 DispatchQueue.global().async {
                     
@@ -188,7 +241,7 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
                     self.callUpdateForChild(firstName: self.firstName.text!,email: self.email.text!,password: self.password.text!,childAvatar: self.childImageUrl,phoneNumber: contactNumber)
                 }else {
                     
-                     self.callSignUpForChild(firstName: self.firstName.text!,email: self.email.text!,password: self.password.text!,childAvatar: "",phoneNumber: contactNumber)
+                     self.callSignUpForChild(firstName: self.firstName.text!,email: self.email.text!,password: self.password.text!,childAvatar: self.childImageUrl ,phoneNumber: contactNumber)
                 }
         }
     }
@@ -237,8 +290,8 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
                     
                     for task in user.earnItTasks {
                         
-                        print(task.taskId)
-                        print(task.taskName)
+                        print("task.taskId by farmood signup", task.taskId)
+                        print("task.taskName by farmood signup",task.taskName)
                     }
                     
                     for task in user.earnItTopThreePendingApprovalTask{
@@ -250,14 +303,38 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
                 EarnItAccount.currentUser.earnItChildUsers = earnItChildUsers
                 
                 print("EarnItAccount.currentUser.earnItChildUsers.count in profile page \(EarnItAccount.currentUser.earnItChildUsers.count )")
+                
+                if self.isImageChanged == true && self.isInEditingMode == false{
+                    
+                
+                    DispatchQueue.global().async {
+                        
+                        self.prepareUserImageForUpload()
+                        
+                        DispatchQueue.main.async {
+                            
+                            print("Done with image Upload and updated to backend!")
+                           EarnItAccount.currentUser.earnItChildUsers = earnItChildUsers
 
+                        }
+                    }
+                      //  self.prepareUserImageForUpload()
+            
+                }
+                    /*
+                }
+                else {
+                    */
+                
                 self.view.makeToast(" \(self.firstName.text!) added")
                 self.dismissScreen()
-//                let alert = showAlertWithOption(title: "", message: " \(self.firstName.text!) added")
-//                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: self.dismissScreen))
-//                self.present(alert, animated: true, completion: nil)
-
+              //  }
+                
                 self.hideLoadingView()
+                
+
+
+               
                 
                 
             }) {  (error) -> () in
@@ -293,11 +370,11 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
                 (earnItChildUsers) -> () in
                 for user in earnItChildUsers {
                     for task in user.earnItTasks {
-                        print(task.taskId)
-                        print(task.taskName)
+                        print("task.taskId by farmood",task.taskId!)
+                        print("task.taskName by farmood",task.taskName!)
                     }
                     for task in user.earnItTopThreePendingApprovalTask{
-                        print("task.taskName \(task.taskName)")
+                        print("task.taskName by farmood \(task.taskName)")
                     }
                 }
                 
@@ -329,6 +406,35 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
     func dismissScreen(){
         self.view.endEditing(true)
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func userImageViewBTNTapped(_ sender: UIButton) {
+        
+        print("ImageView got tapped")
+        var libraryEnabled: Bool = true
+        var croppingEnabled: Bool = true
+        var allowResizing: Bool = true
+        var allowMoving: Bool = true
+        var minimumSize: CGSize = CGSize(width: 200, height: 200)
+        
+        var croppingParameters: CroppingParameters {
+            return CroppingParameters(isEnabled: croppingEnabled, allowResizing: allowResizing, allowMoving: allowMoving, minimumSize: minimumSize)
+        }
+        
+        let cameraViewController = CameraViewController(croppingParameters: croppingParameters, allowsLibraryAccess: libraryEnabled) { [weak self] image, asset in
+            if image != nil {
+                let resizedImage = self?.resizeImage(image!, newWidth: 300)
+                self?.userImage = resizedImage
+                self?.userImageView.image = resizedImage
+                self?.isImageChanged = true
+            }
+            self?.dismiss(animated: true, completion: nil)
+        }
+        present(cameraViewController, animated: true, completion: nil)
+        
+        return
+ 
+        
     }
     
     @IBAction func userImageViewGotTapped(_ sender: UITapGestureRecognizer) {
@@ -459,9 +565,15 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
         let url = "\(EarnItApp_BASE_URL)/parents/children/\(self.earnItChildUser.childUserId)/profile/images"
 //        print(self.earnItChildUser.childUserId)
 //        print("Basic \(keychain.get("user_auth")!)")
+        
+        var basic = ""
+        if let basicTemp = keychain.get("user_auth") {
+            basic = basicTemp
+        }
+        
         let headers: HTTPHeaders = [
             "accept": "application/json",
-            "Authorization": "Basic \(keychain.get("user_auth")!)",
+            "Authorization": "Basic \(basic)",
         ]
         Alamofire.upload(multipartFormData: { (multipartFormData) in
             if let data = imageData{
@@ -482,7 +594,39 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
 //                    print(response.value)
                     self.childImageUrl = String("\(String(describing: response.value!))")
                     if (self.childImageUrl != nil) {
-                    self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.childImageUrl!)
+                    
+                     
+                        
+                        if self.childImageUrl!.count > 1 {
+                            self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.childImageUrl!)
+                            
+                          //  self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + userAvatarUrlString!)
+                            
+                        }
+                        else {
+                            
+                            self.userImageView.image = UIImage(named: "user-pic")
+                        }
+                        
+                        
+                        
+                     self.earnItChildUser.childUserImageUrl = EarnItApp_Image_BASE_URL_PREFIX + self.childImageUrl!
+                        
+                        for user in EarnItAccount.currentUser.earnItChildUsers {
+                            
+                            if user.childUserId == self.earnItChildUser.childUserId {
+                                
+                              
+                               user.childUserImageUrl = self.childImageUrl!
+                                  print("user.childUserImageUrl by farmood ==",user.childUserImageUrl!)
+                                print("user.childUserImageUrl by farmoodtt ==", self.childImageUrl!)
+                            }
+                        }
+                        if self.isImageChanged == true && self.isInEditingMode == false{
+                            NotificationCenter.default.post(name: Notification.Name("imageUploaded"), object: nil)
+                        }
+                        
+                        
                     }else
                     {
                         self.userImageView.image = EarnItImage.defaultUserImage()
@@ -494,6 +638,9 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
                     else {
                         self.callUpdateForChild(firstName: self.firstName.text!,email: self.email.text!,password: self.password.text!,childAvatar: self.childImageUrl, phoneNumber: contactNumber)
                     }
+                    
+                    
+                    
                 }
             case .failure(let error):
                 print("Error in upload: \(error.localizedDescription)")
@@ -669,8 +816,8 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
     
     func setUpEditViewForChild(){
         if self.isInEditingMode == true{
-            
-            self.welcomeLabel.text = "Edit" + " " + self.earnItChildUser.firstName
+            self.welcomeLabel.text = "Edit Child"
+           // self.welcomeLabel.text = "Edit" + " " + self.earnItChildUser.firstName
             self.firstName.text = self.earnItChildUser.firstName
             self.email.text = self.earnItChildUser.email
             self.password.text = self.earnItChildUser.password
@@ -678,20 +825,44 @@ class AddChildPage : UIViewController, UINavigationControllerDelegate, UITextFie
             
             self.phone.text = self.getPhoneNumber()
             
+            if  let imgurl = self.earnItChildUser.childUserImageUrl{
+                if imgurl.count > 0 {
+                    self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + imgurl)
+                }
+                else {
+                    self.userImageView.image = UIImage(named: "user-pic")
+                }
+            }
+            else {
+                
+                
+                self.userImageView.image = UIImage(named: "user-pic")
+                
+            }
+            /*
             if self.earnItChildUser.childUserImageUrl != nil{
+                
+                
             self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUser.childUserImageUrl!)
+                
+                
             }else
             {
-                self.userImageView.image = EarnItImage.defaultUserImage()
+                    self.userImageView.image = UIImage(named: "user-pic")
+               // self.userImageView.image = EarnItImage.defaultUserImage()
             }
+            */
             
             self.saveButton.setTitle("Update", for: .normal)
+            self.topTextLabel.text = ""
+            
             self.childImageUrl = self.earnItChildUser.childUserImageUrl?.replacingOccurrences(of: "\"", with:  " ")
             self.isConfirmPasswordCorrect = true
             self.isEmailValid = true
             
             self.setCountryCode()
         }
+        
     }
     
     

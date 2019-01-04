@@ -13,12 +13,13 @@ protocol WeeklyDelegate: class {
 import UIKit
 
 class WeeklyTaskVC: UIViewController {
-    let selected_color = UIColor(red: 218.0/255.0, green: 71.0/255.0, blue: 156.0/255.0, alpha: 1)
+     let selected_color = UIColor(red: 115.0/255.0, green: 244.0/255.0, blue: 64.0/255.0, alpha: 1)
+   // let selected_color = UIColor(red: 218.0/255.0, green: 71.0/255.0, blue: 156.0/255.0, alpha: 1)
     weak var delegate: WeeklyDelegate?
     @IBOutlet weak var Collecview: UICollectionView!
     @IBOutlet var repeatsField: UITextField!
     var dataSelectedArray: [String] = []
-      let dataArray = ["S","M","T","W","T","F","S"]
+      let dataArray = ["SUN","MON","TUE","WED","THU","FRI","SAT"]
       let daysTasks = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
     override func viewDidLoad() {
         super.viewDidLoad()

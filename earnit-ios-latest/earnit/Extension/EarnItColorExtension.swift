@@ -50,6 +50,11 @@ extension UIColor {
         return UIColor.init(netHex: 0xda479c )
     }
     
+    class func earnItAppLightGreenColorColor() -> UIColor {
+        return UIColor(red: 18.0/255.0, green: 248.0/255.0, blue: 28.0/255.0, alpha: 1)
+    }
+    
+    
     //EarnItAppCheckInColor
     class func earnItAppCheckInColor() -> UIColor{
         return UIColor.init(netHex: 0x07FF05)

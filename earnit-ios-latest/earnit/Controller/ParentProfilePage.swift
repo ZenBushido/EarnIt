@@ -72,7 +72,27 @@ class ParentProfilePage : UIViewController, UIImagePickerControllerDelegate, UIT
         self.childUserTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         self.childUserTable.tableFooterView = UIView()
         self.scrollView.contentSize = CGSize(290, 1000)
-        self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + EarnItAccount.currentUser.avatar!)
+        
+        
+       // self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + EarnItAccount.currentUser.avatar!)
+        
+        if  let imgurl = EarnItAccount.currentUser.avatar{
+            if imgurl.count > 0 {
+                  self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + imgurl)
+              //  profileImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + imgurl)
+            }
+            else {
+                self.userImageView.image = UIImage(named: "user-pic")
+            }
+        }
+        else {
+            
+            
+            self.userImageView.image = UIImage(named: "user-pic")
+            
+        }
+        
+        
         self.creatLeftPadding(textField: firstName)
         self.creatLeftPadding(textField: lastName)
         self.creatLeftPadding(textField: email)
@@ -85,9 +105,61 @@ class ParentProfilePage : UIViewController, UIImagePickerControllerDelegate, UIT
         
         counrtyPicker.dataSource = self
         counrtyPicker.delegate = self
+        
+        
+        
+        
+        
+
+        
+        var rightViewBtn_email: UIButton!
+        rightViewBtn_email = UIButton.init(frame: CGRect(x: 0, y: 0, width: 41, height: 41))
+        rightViewBtn_email.setImage(UIImage(named: "emailBox") , for: .normal)
+        rightViewBtn_email.setImage(UIImage(named: "emailBox"), for: .selected)
+        
+        email.rightView = rightViewBtn_email
+        email.rightViewMode =  .always
+        
+        var rightViewBtn_fname: UIButton!
+        rightViewBtn_fname = UIButton.init(frame: CGRect(x: 0, y: 0, width: 41, height: 41))
+        rightViewBtn_fname.setImage(UIImage(named: "fnameBox") , for: .normal)
+        rightViewBtn_fname.setImage(UIImage(named: "fnameBox"), for: .selected)
+        
+        firstName.rightView = rightViewBtn_fname
+        firstName.rightViewMode =  .always
+        
+        var rightViewBtn_lname: UIButton!
+        rightViewBtn_lname = UIButton.init(frame: CGRect(x: 0, y: 0, width: 41, height: 41))
+        rightViewBtn_lname.setImage(UIImage(named: "fnameBox") , for: .normal)
+        rightViewBtn_lname.setImage(UIImage(named: "fnameBox"), for: .selected)
+        
+        lastName.rightView = rightViewBtn_lname
+        lastName.rightViewMode =  .always
+        
+        var rightViewBtn_mobile: UIButton!
+        rightViewBtn_mobile = UIButton.init(frame: CGRect(x: 0, y: 0, width: 41, height: 41))
+        rightViewBtn_mobile.setImage(UIImage(named: "phoneBox") , for: .normal)
+        rightViewBtn_mobile.setImage(UIImage(named: "phoneBox"), for: .selected)
+        
+        contactNumber.rightView = rightViewBtn_mobile
+        contactNumber.rightViewMode =  .always
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.Imageuploaded(notification:)), name: Notification.Name("imageUploaded"), object: nil)
+
 //        self.countryNameLabel.text = selectedCountryDetails["code"]
 //        self.countryCodeLabel.text = selectedCountryDetails["dial_code"]
     }
+    @objc func Imageuploaded(notification: Notification) {
+        
+        print("Imageuploaded call notification cal")
+           _ = Timer.scheduledTimer(timeInterval: 300.0, target: self, selector: #selector(self.fetchParentUserDetailFromBackground), userInfo: nil, repeats: true)
+      //  self.fetchParentUserDetailFromBackground()
+       // self.performSelector
+        self.earnItChildUsers = EarnItAccount.currentUser.earnItChildUsers
+        self.childUserTable.reloadData()
+        
+    }
+
     
     override func viewDidAppear(_ animated: Bool) {
         print("Inside viewDidAppear")
@@ -649,10 +721,40 @@ class ParentProfilePage : UIViewController, UIImagePickerControllerDelegate, UIT
     @IBAction func viewDidTapped(_ sender: Any) {
         self.view.endEditing(true)
     }
+
     
     @IBAction func changePasswordButtonClicked(_ sender: Any) {
     
         changePasswordView = (Bundle.main.loadNibNamed("ChangePasswordView", owner: self, options: nil)?[0] as? ChangePasswordView)!
+        
+        
+        var rightViewBtn_pass: UIButton!
+        rightViewBtn_pass = UIButton.init(frame: CGRect(x: 0, y: 0, width: 41, height: 41))
+        rightViewBtn_pass.setImage(UIImage(named: "passBox") , for: .normal)
+        rightViewBtn_pass.setImage(UIImage(named: "passBox"), for: .selected)
+        
+        changePasswordView.currentPassword.rightView = rightViewBtn_pass
+        changePasswordView.currentPassword.rightViewMode =  .always
+        
+        
+        var rightViewBtn_npass: UIButton!
+        rightViewBtn_npass = UIButton.init(frame: CGRect(x: 0, y: 0, width: 41, height: 41))
+        rightViewBtn_npass.setImage(UIImage(named: "passBox") , for: .normal)
+        rightViewBtn_npass.setImage(UIImage(named: "passBox"), for: .selected)
+        
+        changePasswordView.newPassword.rightView = rightViewBtn_npass
+        changePasswordView.newPassword.rightViewMode =  .always
+        
+        
+        
+        var rightViewBtn_cpass: UIButton!
+        rightViewBtn_cpass = UIButton.init(frame: CGRect(x: 0, y: 0, width: 41, height: 41))
+        rightViewBtn_cpass.setImage(UIImage(named: "passBox") , for: .normal)
+        rightViewBtn_cpass.setImage(UIImage(named: "passBox"), for: .selected)
+        
+        changePasswordView.confirmPassword.rightView = rightViewBtn_cpass
+        changePasswordView.confirmPassword.rightViewMode =  .always
+        
         let changePasswordContainer = UIView()
         changePasswordContainer.frame = CGRect(0 , 0, self.view.frame.width, self.view.frame.height)
         changePasswordContainer.backgroundColor = UIColor.clear
@@ -905,7 +1007,7 @@ class ParentProfilePage : UIViewController, UIImagePickerControllerDelegate, UIT
 //        }
 
     func requestToUploadImage(profileImage:UIImage, parameters: [String : Any], onCompletion: ((JSON?) -> Void)? = nil, onError: ((Error?) -> Void)? = nil){
-        
+        //farmood upload image
 //        let EarnItApp_PARENT_IMAGE_FOLDER = "/parents/profile/images"
 //        let EarnItApp_CHILD_IMAGE_FOLDER = "/childrens/profile/images"
 
@@ -914,12 +1016,15 @@ class ParentProfilePage : UIViewController, UIImagePickerControllerDelegate, UIT
         
         let imageData = UIImagePNGRepresentation(profileImage)
         if(imageData == nil)  { return; }
-        
+        var basic = ""
+        if let basicTemp = keychain.get("user_auth") {
+            basic = basicTemp
+        }
         let url = "\(EarnItApp_BASE_URL)\(EarnItApp_PARENT_IMAGE_FOLDER)"
         let headers: HTTPHeaders = [
 //            "Content-Type": "application/json",
             "accept": "application/json",
-            "Authorization": "Basic \(keychain.get("user_auth")!)",
+            "Authorization": "Basic \(basic)",
 //            "Content-type": "multipart/form-data"
         ]
         Alamofire.upload(multipartFormData: { (multipartFormData) in
@@ -1204,7 +1309,21 @@ class ParentProfilePage : UIViewController, UIImagePickerControllerDelegate, UIT
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let childCell = self.childUserTable.dequeueReusableCell(withIdentifier: "ChildCell", for: indexPath as IndexPath) as! ChildCell
         childCell.childName.text = self.earnItChildUsers[indexPath.row].firstName
-        childCell.childImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUsers[indexPath.row].childUserImageUrl!)
+        
+        print("self.earnItChildUsers[indexPath.row].childUserImageUrl by farmood",self.earnItChildUsers[indexPath.row].childUserImageUrl!)
+        
+        if self.earnItChildUsers[indexPath.row].childUserImageUrl!.count > 1 {
+            
+               childCell.childImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUsers[indexPath.row].childUserImageUrl!)
+        }
+        else {
+            
+               childCell.childImageView.image = UIImage(named: "user-pic")
+        }
+     
+        
+        
+        
         childCell.btnDeleteChildRow.tag = self.earnItChildUsers[indexPath.row].childUserId
         childCell.btnDeleteChildRow.setTitleColor(UIColor.clear, for: UIControlState.normal)
         childCell.btnDeleteChildRow.titleLabel?.text = self.earnItChildUsers[indexPath.row].firstName

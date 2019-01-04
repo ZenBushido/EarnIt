@@ -36,12 +36,15 @@ func callUpdateProfileApiForParentt(firstName: String, lastName: String, phoneNu
     var headers : HTTPHeaders = [:]
     
     if let authorizationHeader = Request.authorizationHeader(user: email, password: password){
-        
+        var basic = ""
+        if let basicTemp = keychain.get("user_auth") {
+            basic = basicTemp
+        }
         headers = [
             "Accept": "application/json",
 //            "Authorization": authorizationHeader.value,
             "Content-Type": "application/json",
-            "Authorization": "Basic \(keychain.get("user_auth")!)"
+            "Authorization": "Basic \(basic)"
         ]
     }
 //    
@@ -101,11 +104,16 @@ func callUpdateProfileImageApiForParent(firstName: String, lastName: String, pho
     
     if let authorizationHeader = Request.authorizationHeader(user: email, password: password){
         
+        var basic = ""
+        if let basicTemp = keychain.get("user_auth") {
+            basic = basicTemp
+        }
+        
         headers = [
             "Accept": "application/json",
 //            "Authorization": authorizationHeader.value,
             "Content-Type": "application/json",
-            "Authorization": "Basic \(keychain.get("user_auth")!)"
+            "Authorization": "Basic \(basic)"
         ]
     }
     
@@ -155,7 +163,7 @@ func callSignUpApiForParent(email: String, password: String,success: @escaping(J
             let base64LoginString = loginString.base64Encoded()
             let keychain = KeychainSwift()
             keychain.set("\(String(describing: base64LoginString!))", forKey: "user_auth")
-            print(keychain.get("user_auth")!)
+           /// print(keychain.get("user_auth")!)
             
             let responseJSON = JSON(response.result.value)
             print("response.result.value EarnIt Parent User,\(responseJSON)")
@@ -230,11 +238,16 @@ func callForDeleteGoal(goal_id: Int, success: @escaping(String)-> (),failure: @e
     let password : String = keychain.get("password") as! String
     var headers : HTTPHeaders = [:]
     if let authorizationHeader = Request.authorizationHeader(user: user, password: password){
+        
+        var basic = ""
+        if let basicTemp = keychain.get("user_auth") {
+            basic = basicTemp
+        }
         headers = [
             "Accept": "application/json",
 //            "Authorization": authorizationHeader.value,
             "Content-Type": "application/json",
-            "Authorization": "Basic \(keychain.get("user_auth")!)"
+            "Authorization": "Basic \(basic)"
         ]
     }    
     Alamofire.request("\(EarnItApp_BASE_URL)/goals/\(goal_id)", method: .delete, encoding: JSONEncoding.default, headers: headers).responseJSON{ response in
@@ -266,11 +279,16 @@ func callForDeleteChild(children_id: Int, success: @escaping(String)-> (),failur
     let password : String = keychain.get("password") as! String
     var headers : HTTPHeaders = [:]
     if let authorizationHeader = Request.authorizationHeader(user: user, password: password){
+        var basic = ""
+        if let basicTemp = keychain.get("user_auth") {
+            basic = basicTemp
+        }
+        
         headers = [
             "Accept": "application/json",
 //            "Authorization": authorizationHeader.value,
             "Content-Type": "application/json",
-            "Authorization": "Basic \(keychain.get("user_auth")!)"
+            "Authorization": "Basic \(basic)"
         ]
     }
     Alamofire.request("\(EarnItApp_BASE_URL)/childrens/\(children_id)", method: .delete, encoding: JSONEncoding.default, headers: headers).responseJSON{ response in
@@ -337,11 +355,17 @@ func callAdjustBalanceApiForUser(amount: Int, strReason: String!, strOperation: 
     let password : String = keychain.get("password")! //as! String
     var headers : HTTPHeaders = [:]
     if let authorizationHeader = Request.authorizationHeader(user: userEmail, password: password){
+        
+        var basic = ""
+        if let basicTemp = keychain.get("user_auth") {
+            basic = basicTemp
+        }
+        
         headers = [
             "Accept": "application/json",
 //            "Authorization": authorizationHeader.value,
             "Content-Type": "application/json",
-            "Authorization": "Basic \(keychain.get("user_auth")!)"
+            "Authorization": "Basic \(basic)"
         ]
     }
     var params = [String:Any]()
@@ -380,11 +404,17 @@ func callUpdateApiForChild(firstName: String,childEmail: String, childPassword: 
     
     var headers : HTTPHeaders = [:]
     if let authorizationHeader = Request.authorizationHeader(user: email, password: password){
+        
+        var basic = ""
+        if let basicTemp = keychain.get("user_auth") {
+            basic = basicTemp
+        }
+        
         headers = [
             "Accept": "application/json",
 //            "Authorization": authorizationHeader.value,
             "Content-Type": "application/json",
-            "Authorization": "Basic \(keychain.get("user_auth")!)"
+            "Authorization": "Basic \(basic)"
         ]
     }
     var params = [String:Any]()
@@ -464,12 +494,16 @@ func createEarnItAppChildUser(success: @escaping([EarnItChildUser])-> (),failure
     var headers : HTTPHeaders = [:]
     
     if let authorizationHeader = Request.authorizationHeader(user: user, password: password){
+        var basic = ""
+        if let basicTemp = keychain.get("user_auth") {
+            basic = basicTemp
+        }
         
         headers = [
             "Accept": "application/json",
 //            "Authorization": authorizationHeader.value,
             "Content-Type": "application/json",
-            "Authorization": "Basic \(keychain.get("user_auth")!)"
+            "Authorization": "Basic \(basic)"
         ]
     }
     print("header value \(headers)")
@@ -482,6 +516,8 @@ func createEarnItAppChildUser(success: @escaping([EarnItChildUser])-> (),failure
         case .success:
             
             let responseJSON = JSON(response.result.value)
+            
+            
             var earnItChildUsers = [EarnItChildUser]()
             
             let formatter = DateFormatter()
@@ -514,6 +550,8 @@ func createEarnItAppChildUser(success: @escaping([EarnItChildUser])-> (),failure
 
 func addTaskForChild(childId: Int, earnItTask: EarnItTask,earnItSelectedGoal: EarnItChildGoal,success: @escaping(Bool)-> (),failure: @escaping(Bool)-> ()){
     
+
+    
     let keychain = KeychainSwift()
     
     guard  let _ = keychain.get("email") else  {
@@ -525,16 +563,21 @@ func addTaskForChild(childId: Int, earnItTask: EarnItTask,earnItSelectedGoal: Ea
     var headers : HTTPHeaders = [:]
     if let authorizationHeader = Request.authorizationHeader(user: user, password: password){
         
+        var basic = ""
+        if let basicTemp = keychain.get("user_auth") {
+            basic = basicTemp
+        }
+        
         headers = [
             "Accept": "application/json",
             //            "Authorization": authorizationHeader.value,
             "Content-Type": "application/json",
-            "Authorization": "Basic \(keychain.get("user_auth")!)"
+            "Authorization": "Basic \(basic)"
         ]
     }
     var param = [String: Any]()
     var status = ""
-    var str_id = ""
+    var str_id = 0
     var taskName = ""
     var allowance = 0.00
     var updateDateTimeStamp : Int64 = 0
@@ -549,7 +592,7 @@ func addTaskForChild(childId: Int, earnItTask: EarnItTask,earnItSelectedGoal: Ea
         status = statusTemp
     }
     if let idTemp = earnItSelectedGoal.id {
-        str_id = idTemp.description
+        str_id = idTemp
     }
     
     if let taskNameTemp = earnItTask.taskName {
@@ -568,7 +611,16 @@ func addTaskForChild(childId: Int, earnItTask: EarnItTask,earnItSelectedGoal: Ea
         createdDateTimeStamp = createdDateTimeStampTemp
     }
     
-
+    let timestamp = Double(dueDateTimeStamp)
+    let exactDate = NSDate(timeIntervalSince1970: timestamp)
+    
+    
+  //  let exactDate = NSDate(timeIntervalSince1970: TimeInterval (truncating: NSNumber(timestamp)))
+    let dateFormatt = DateFormatter()
+    dateFormatt.dateFormat = "dd/MM/yyy hh:mm:ss a"
+    print(dateFormatt.string(from: exactDate as Date))
+    
+    
     if earnItTask.repeatMode.rawValue == "none"{
         
         print("selected goal for Api \(earnItSelectedGoal.id)")
@@ -606,7 +658,13 @@ func addTaskForChild(childId: Int, earnItTask: EarnItTask,earnItSelectedGoal: Ea
         
     }
     else if earnItTask.repeatMode.rawValue == "daily"{
+        var everyNRepeat = ""
+        if let er = earnItTask.everyNRepeat {
+            everyNRepeat = er
+        }
+        param = [:]
         
+        if str_id == 0 {
         
         param = [
             
@@ -620,49 +678,151 @@ func addTaskForChild(childId: Int, earnItTask: EarnItTask,earnItSelectedGoal: Ea
             "updateDate": updateDateTimeStamp,
             "taskComments": [],
             "description" : earnItTask.taskDescription!,
-            "goal" : ["id": str_id],
-            "repititionSchedule":["startTime":"10:00", "endTime" : "11:00","repeated": "daily"]
+           // "goal" : ["id": str_id],
+            "repititionSchedule":["startTime":"10:00 AM", "endTime" : "11:00 PM","repeated": "daily","everyNRepeat":everyNRepeat]]
+        }else{
             
-            
-        ]
+            param = [
+                
+                "children": ["id": childId],
+                "allowance": allowance,
+                "createDate":createdDateTimeStamp,
+                "dueDate": dueDateTimeStamp,
+                "name": taskName,
+                "pictureRequired": isPictureRequired,
+                "status": status,
+                "updateDate": updateDateTimeStamp,
+                "taskComments": [],
+                "description" : earnItTask.taskDescription!,
+                "goal" : ["id": str_id],
+                "repititionSchedule":["startTime":"10:00 AM", "endTime" : "11:00 PM","repeated": "daily","everyNRepeat":everyNRepeat]]
+        }
         
     }
     else if earnItTask.repeatMode.rawValue == "weekly"{
-        param = [
-            
-            "children": ["id": childId],
-            "allowance": allowance,
-            "createDate":createdDateTimeStamp,
-            "dueDate": dueDateTimeStamp,
-            "name": taskName,
-            "pictureRequired": isPictureRequired,
-            "status": status,
-            "updateDate": updateDateTimeStamp,
-            "taskComments": [],
-            "description" : earnItTask.taskDescription!,
-            "goal" : ["id": str_id],
-            "repititionSchedule":["startTime":"00:00", "endTime" : "23:59","repeated": "weekly","specificDays":earnItTask.specificDays]
-            
-            
-        ]
+        
+        var everyNRepeat = ""
+        if let er = earnItTask.everyNRepeat {
+            everyNRepeat = er
+        }
+        param = [:]
+        
+        if str_id == 0 {
+            param = [
+                
+                "children": ["id": childId],
+                "allowance": allowance,
+                "createDate":createdDateTimeStamp,
+                "dueDate": dueDateTimeStamp,
+                "name": taskName,
+                "pictureRequired": isPictureRequired,
+                "status": status,
+                "updateDate": updateDateTimeStamp,
+                "taskComments": [],
+                "description" : earnItTask.taskDescription!,
+                //"goal" : ["id": ""],
+                "everyNRepeat": "2",
+                "repititionSchedule":["repeat":"weekly","startTime":"10:13:05 ПП","endTime":"12:20:00 PM","everyNRepeat":everyNRepeat,"specificDays":earnItTask.specificDays]
+                
+                
+            ]
+        }
+        else {
+            param = [
+                
+                "children": ["id": childId],
+                "allowance": allowance,
+                "createDate":createdDateTimeStamp,
+                "dueDate": dueDateTimeStamp,
+                "name": taskName,
+                "pictureRequired": isPictureRequired,
+                "status": status,
+                "updateDate": updateDateTimeStamp,
+                "taskComments": [],
+                "description" : earnItTask.taskDescription!,
+                "goal" : ["id": str_id],
+                "everyNRepeat": "2",
+                "repititionSchedule":["repeat":"weekly","startTime":"10:13:05 ПП","endTime":"12:20:00 PM","everyNRepeat":everyNRepeat,"specificDays":earnItTask.specificDays]
+                
+                
+            ]
+        }
+
         
     }
     else if earnItTask.repeatMode.rawValue == "monthly"{
+        
+        
+        var everyNRepeat = ""
+        if let er = earnItTask.everyNRepeat {
+            everyNRepeat = er
+        }
+        param = [:]
+        
+        if str_id == 0 {
         param = [
+            "children":["id": childId],"allowance":allowance,"name":taskName,"pictureRequired":isPictureRequired,"shouldLockAppsIfTaskOverdue":true,"updateDate":updateDateTimeStamp,"taskComments":[],"dueDate":createdDateTimeStamp,"repititionSchedule":["repeat":"monthly","startTime":"22:18:44 ПП","endTime":"8:0:00 AM","everyNRepeat":everyNRepeat,"specificDays":earnItTask.specificDays]
             
+            
+            
+            
+          //  ["taskComments": [], "shouldLockAppsIfTaskOverdue": true, "name": "sk8", "pictureRequired": 1, "updateDate": 1544980980728, "description": "TestSK8", "repititionSchedule": ["repeat": "monthly", "endTime": "11:45", "startTime": "10:30", "specificDays": ["11", "20"], "everyNRepeat": "2"], "dueDate": "Dec5, 2018 7:48:04 AM", "status": "Created", "allowance": 308.0, "isDeleted": false, "createDate": 1544980980728, "children": ["id": 2469]]
+            
+            /*
+            "isDeleted": false,
+            "shouldLockAppsIfTaskOverdue": true,
             "children": ["id": childId],
             "allowance": allowance,
             "createDate": createdDateTimeStamp,
-            "dueDate": dueDateTimeStamp,
+            "dueDate": "Dec5, 2018 7:48:04 AM",
             "name": taskName,
             "pictureRequired": isPictureRequired,
             "status": status,
             "updateDate": updateDateTimeStamp,
             "taskComments": [],
             "description" : earnItTask.taskDescription!,
-            "goal" : ["id": str_id],
-            "repititionSchedule":["startTime":"10:30", "endTime" : "11:45","repeated": "monthly","specificDays":earnItTask.specificDays]
+            "repititionSchedule":["repeat":"monthly","startTime":"22:18:44 ПП","endTime":"8:0:00 AM","everyNRepeat":2,"specificDays":["11","20"]]
+            */
+            //"goal" : ["id": str_id],
+            
+            /*
+            "repititionSchedule": [
+                "everyNRepeat" : everyNRepeat,
+                "startTime": "10:30",
+                "endTime": "11:45",
+                "repeat": "monthly",
+                "specificDays": earnItTask.specificDays,
+                
+            ]
+            */
         ]
+        }else{
+            
+            param = [
+                "isDeleted": false,
+                "shouldLockAppsIfTaskOverdue": true,
+                "children": ["id": childId],
+                "allowance": allowance,
+                "createDate": createdDateTimeStamp,
+                "dueDate": "Dec5, 2018 7:48:04 AM",
+                "name": taskName,
+                "pictureRequired": isPictureRequired,
+                "status": status,
+                "updateDate": updateDateTimeStamp,
+                "taskComments": [],
+                "description" : earnItTask.taskDescription!,
+                "goal" : ["id": str_id],
+                "repititionSchedule": [
+                    "everyNRepeat" : everyNRepeat,
+                    "startTime": "10:30",
+                    "endTime": "11:45",
+                    "repeat": "monthly",
+                    "specificDays": earnItTask.specificDays
+                ]
+            ]
+            
+            
+        }
         
     }
     else {
@@ -694,7 +854,26 @@ func addTaskForChild(childId: Int, earnItTask: EarnItTask,earnItSelectedGoal: Ea
     Alamofire.request("\(EarnItApp_BASE_URL)/tasks",method: .post,parameters: param, encoding: JSONEncoding.default,  headers: headers).responseJSON{ response in
         switch(response.result){
         case .success:
+            var completedTask = EarnItTask()
+           if  let json = response.result.value as? [String: Any]  {
             
+            if let allowance = json["allowance"] as? Double {
+            
+            completedTask.allowance = allowance
+            }
+            if let createDate = json["createDate"] as? String {
+                
+                completedTask.createdDateTime = createDate
+            }
+            if let dueDate = json["dueDate"] as? String {
+                
+                //completedTask.dueDate = dueDate
+            }
+            if let id = json["id"] as? String {
+                
+             //   completedTask.dueDate = dueDate
+            }
+            }
             success(true)
             print("response.result.value  addTaskForChild,\(response.result.value)")
             
@@ -716,11 +895,18 @@ func getGoalsForChild(childId : Int,success: @escaping([EarnItChildGoal])-> (),f
     let password : String = keychain.get("password") as! String
     var headers : HTTPHeaders = [:]
     if let authorizationHeader = Request.authorizationHeader(user: user, password: password){
+        
+        
+        var basic = ""
+        if let basicTemp = keychain.get("user_auth") {
+            basic = basicTemp
+        }
+        
         headers = [
             "Accept": "application/json",
 //            "Authorization": authorizationHeader.value,
             "Content-Type": "application/json",
-            "Authorization": "Basic \(keychain.get("user_auth")!)"
+            "Authorization": "Basic \(basic)"
         ]
     }
     Alamofire.request("\(EarnItApp_BASE_URL)/goals/\(childId)",method: .get,parameters: nil, encoding: JSONEncoding.default,  headers: headers).responseJSON{ response in
@@ -754,11 +940,17 @@ func getAllTasksForChild(childId : Int,success: @escaping([(EarnItTask)])-> (),f
     let password : String = keychain.get("password") as! String
     var headers : HTTPHeaders = [:]
     if let authorizationHeader = Request.authorizationHeader(user: user, password: password){
+        
+        var basic = ""
+        if let basicTemp = keychain.get("user_auth") {
+            basic = basicTemp
+        }
+        
         headers = [
             "Accept": "application/json",
 //            "Authorization": authorizationHeader.value,
             "Content-Type": "application/json",
-            "Authorization": "Basic \(keychain.get("user_auth")!)"
+            "Authorization": "Basic \(basic)"
         ]
     }
     Alamofire.request("\(EarnItApp_BASE_URL)/tasks/\(childId)",method: .get,parameters: nil, encoding: JSONEncoding.default,  headers: headers).responseJSON{ response in
@@ -798,11 +990,16 @@ func addGoalForChild(childId: Int, amount: Int,createdDate: Int64,goalName: Stri
     
     var headers : HTTPHeaders = [:]
     if let authorizationHeader = Request.authorizationHeader(user: user, password: password){
+        var basic = ""
+        if let basicTemp = keychain.get("user_auth") {
+            basic = basicTemp
+        }
+        
         headers = [
             "Accept": "application/json",
 //            "Authorization": authorizationHeader.value,
             "Content-Type": "application/json",
-            "Authorization": "Basic \(keychain.get("user_auth")!)"
+            "Authorization": "Basic \(basic)"
         ]
     }
     var param = [String: Any]()
@@ -839,12 +1036,16 @@ func editGoalForChild(id:Int, childId: Int, amount: Int,createdDate: Int64,goalN
     let password : String = keychain.get("password") as! String
     var headers : HTTPHeaders = [:]
     if let authorizationHeader = Request.authorizationHeader(user: user, password: password){
+        var basic = ""
+        if let basicTemp = keychain.get("user_auth") {
+            basic = basicTemp
+        }
         
         headers = [
             "Accept": "application/json",
 //            "Authorization": authorizationHeader.value,
             "Content-Type": "application/json",
-            "Authorization": "Basic \(keychain.get("user_auth")!)"
+            "Authorization": "Basic \(basic)"
         ]
     }
     var param = [String: Any]()

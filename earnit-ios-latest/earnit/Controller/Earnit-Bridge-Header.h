@@ -8,8 +8,8 @@
 
 #ifndef Earnit_Bridge_Header_h
 #define Earnit_Bridge_Header_h
-
-#import "FSCalendar.h"
+#import "UITextView+Placeholder.h"
+//#import "FSCalendar.h"
 
 #endif /* Earnit_Bridge_Header_h */
 

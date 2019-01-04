@@ -59,7 +59,20 @@ class VCAdjustBalance : UIViewController, UITextViewDelegate, UIGestureRecognize
         self.messageView.messageText.delegate = self
         
         let userAvatarUrlString = self.earnItChildUser.childUserImageUrl
-        self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + userAvatarUrlString!)
+       
+        
+        
+        if userAvatarUrlString!.count > 1 {
+            
+            self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + userAvatarUrlString!)
+            
+        }
+        else {
+            
+            self.userImageView.image = UIImage(named: "user-pic")
+        }
+        
+        
         self.setupUI()
         self.changeGoalValues(indexx: self.indexObject)
     }
@@ -326,12 +339,12 @@ class VCAdjustBalance : UIViewController, UITextViewDelegate, UIGestureRecognize
     
         optionView.center = self.view.center
         optionView.userImageView.image = self.userImageView.image
-        optionView.frame.origin.y = self.userImageView.frame.origin.y
+        optionView.frame.origin.y = self.userImageView.frame.origin.y + 50
         optionView.frame.origin.x = self.view.frame.origin.x + 160
         
         childOptionView.center = self.view.center
         childOptionView.userImageView.image = self.userImageView.image
-        childOptionView.frame.origin.y = self.userImageView.frame.origin.y
+        childOptionView.frame.origin.y = self.userImageView.frame.origin.y + 50 
         childOptionView.frame.origin.x = self.view.frame.origin.x + 160
         
         if UIDevice().userInterfaceIdiom == .phone {

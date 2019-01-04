@@ -54,7 +54,7 @@ class VCChildCalendar: UIViewController, FSCalendarDataSource, FSCalendarDelegat
         }
         self.lblBarTitle.text = "Task Schedule" // "Task Due Date"
         self.view.backgroundColor = UIColor.EarnItAppBackgroundColor()
-        self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUser.childUserImageUrl!)
+     
         self.dateTextField?.attributedPlaceholder = NSAttributedString(string:"None", attributes: [NSForegroundColorAttributeName: UIColor.gray])
         self.dateTextField.text = "None"
         self.tfDay?.attributedPlaceholder = NSAttributedString(string:"None", attributes: [NSForegroundColorAttributeName: UIColor.gray])
@@ -65,6 +65,19 @@ class VCChildCalendar: UIViewController, FSCalendarDataSource, FSCalendarDelegat
         self.tfDayCount.isUserInteractionEnabled = true
         self.tfDayCount.text = "First"
         self.tfDayCount.delegate = self
+        
+        
+        if self.earnItChildUser.childUserImageUrl!.count > 1 {
+               self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUser.childUserImageUrl!)
+        
+            
+        }
+        else {
+            
+            self.userImageView.image = UIImage(named: "user-pic")
+        }
+        
+        
         
         self.setupRepeatView()
         self.setupCalendarView()
@@ -88,7 +101,8 @@ class VCChildCalendar: UIViewController, FSCalendarDataSource, FSCalendarDelegat
     func setupCalendarView() {
         self.calendar.dataSource = self
         self.calendar.delegate = self
-        self.calendar.backgroundColor = UIColor.EarnItAppBackgroundColor()
+      //  self.calendar.backgroundColor = UIColor.EarnItAppBackgroundColor()
+      self.calendar.backgroundColor =   UIColor(red: 105.0/255.0, green: 141.0/255.0, blue: 235.0/255.0, alpha: 1)
         //Style the calendar view
         self.calendar.appearance.headerTitleColor = UIColor.white
         self.calendar.appearance.titleDefaultColor = UIColor.white
@@ -96,9 +110,16 @@ class VCChildCalendar: UIViewController, FSCalendarDataSource, FSCalendarDelegat
         self.calendar.appearance.selectionColor = UIColor.clear //UIColor.earnItAppPinkColor()
         self.calendar.appearance.todayColor = UIColor.earnItAppPinkColor()
         self.calendar.appearance.eventOffset = CGPoint(x: 0, y: -7)
+        
 //         self.calendar.appearance.borderRadius = 1.0
 //        self.calendar.appearance.borderDefaultColor = UIColor.earnItAppPinkColor()
         self.calendar.appearance.eventSelectionColor = UIColor.white
+        
+        self.calendar.appearance.selectionColor = UIColor.earnItAppLightGreenColorColor()
+        
+        
+        self.calendar.appearance.todayColor = UIColor.earnItAppLightGreenColorColor()
+        
     }
 
     //MARK: Get All Tasks From Server

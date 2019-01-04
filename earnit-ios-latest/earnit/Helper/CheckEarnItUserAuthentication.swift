@@ -49,8 +49,8 @@ import KeychainSwift
                 let keychain = KeychainSwift()
                 keychain.set(password, forKey: "password")
                 keychain.set("\(String(describing: base64LoginString!))", forKey: "user_auth")
-                print(keychain.get("user_auth")!)
-                print(keychain.get("password")!)
+               // print(keychain.get("user_auth")!)
+               //  print(keychain.get("password")!)
 
             case .failure(_):
                 print("response.result.error Login--- \(response.result.error)")
@@ -66,12 +66,27 @@ func callApiToSendToken(token: String!,success: @escaping(JSON) ->(),failure: @e
         print(" /n Unable to fetch user credentials from keychain \n")
         return
     }
-    let email = keychain.get("email")
-    let password = keychain.get("password")
+    var email = ""
+    var password = ""
+    
+    
+    if let emailTemp = keychain.get("email") {
+        email = emailTemp
+    }
+    if let password = keychain.get("password") {
+        email = password
+    }
+    
+    
+    var basic = ""
+    if let basicTemp = keychain.get("user_auth") {
+        basic = basicTemp
+    }
+    
     let headers: HTTPHeaders = [
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Authorization": "Basic \(keychain.get("user_auth")!)"
+        "Authorization": "Basic \(basic)"
     ]
     
     Alamofire.request("\(EarnItApp_BASE_URL)/token",method: .post, parameters: nil, encoding: JSONEncoding.default, headers: headers)

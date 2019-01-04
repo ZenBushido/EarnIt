@@ -12,6 +12,7 @@ import FontAwesome_swift
 import SlideMenuControllerSwift
 import CircleMenu
 import KeychainSwift
+import SDWebImage
 
 class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataSource, CircleMenuDelegate, UITextViewDelegate, UIGestureRecognizerDelegate {
 
@@ -153,7 +154,11 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
     //override
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
+        
+        
         var numberOfRows = 0
+        
+        /*
         if self.earnItChildUsers[section].earnItPendingApprovalTasks.count > 3 || self.earnItChildUsers[section].earnItTopThreePendingApprovalTask.count == 0{
             
             numberOfRows = self.earnItChildUsers[section].earnItTopThreePendingApprovalTask.count + 2
@@ -161,6 +166,7 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
             
             numberOfRows = self.earnItChildUsers[section].earnItTopThreePendingApprovalTask.count + 1
         }
+        */
         return  numberOfRows
     }
     
@@ -168,7 +174,7 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         
         //print("cellForRowAt")
-        var taskCell = self.childUserTable.dequeueReusableCell(withIdentifier: "childTaskCellForParent", for: indexPath as IndexPath) as! ChildTaskCellForParent
+        let taskCell = self.childUserTable.dequeueReusableCell(withIdentifier: "childTaskCellForParent", for: indexPath as IndexPath) as! ChildTaskCellForParent
         //taskCell.addTaskButton.isHidden = false
         taskCell.taskTime.isHidden = false
         taskCell.taskName.isHidden = false
@@ -248,8 +254,52 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
         view.childUserName.text = self.earnItChildUsers[section].firstName
         //print(self.earnItChildUsers[section])
         print(self.earnItChildUsers[section].childUserImageUrl!)
-        print(EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUsers[section].childUserImageUrl!)
-        view.checkInImage.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUsers[section].childUserImageUrl!)
+          print(EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUsers[section].childUserImageUrl!)
+        if self.earnItChildUsers[section].childUserImageUrl!.count > 1 {
+              view.childUserAvatar.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUsers[section].childUserImageUrl!)
+      
+        }
+        else {
+            
+            view.childUserAvatar.image = UIImage(named: "user-pic")
+        }
+        
+        print("self.earnItChildUsers[section].childUserImageUrl!",self.earnItChildUsers[section].childUserImageUrl!)
+        
+    if self.earnItChildUsers[section].earnItPendingApprovalTasks.count == 0 {
+            
+            view.checkInPendingApproval.text = "None"
+            
+        }
+        else {
+        
+        //let str = ""
+             view.checkInPendingApproval.text = " \(self.earnItChildUsers[section].earnItPendingApprovalTasks.count)"
+        }
+        
+        if self.earnItChildUsers[section].overDueTaskList.count == 0 {
+            
+            view.checkInPastDue.text = "None"
+            
+        }
+        else {
+            
+            //let str = ""
+            view.checkInPastDue.text = " \(self.earnItChildUsers[section].overDueTaskList.count)"
+        }
+        
+        //overDueTaskList
+      
+        
+       // view.childUserAvatar.sd_setImage(with: URL(string: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUsers[section].childUserImageUrl!), placeholderImage: UIImage(named: "user-pic"))
+        
+        
+          view.checkInImage.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUsers[section].childUserImageUrl!)
+        
+       
+        
+        print("placeHolder Image -->",EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUsers[section].childUserImageUrl!)
+        
         view.showActionButton = {
             
             //            let checkInButtonFrame = view.checkInButton.superview?.convert(view.checkInButton.frame, to: self.view)
@@ -296,7 +346,7 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
             
             let visibleRect = optionView.frame.intersection(self.view.bounds)
             
-            optionView.frame.origin.y = (checkInImageFrame?.origin.y)! - (optionView.frame.size.height - visibleRect.size.height)
+            optionView.frame.origin.y = 8 + (checkInImageFrame?.origin.y)! - (optionView.frame.size.height - visibleRect.size.height)
             
             self.selectedChildUser = self.earnItChildUsers[section]
             
@@ -944,10 +994,10 @@ class ParentLandingPage: UIViewController, UITableViewDelegate, UITableViewDataS
             
             let slideMenuController  = SlideMenuViewController(mainViewController: pendingTasksScreen, leftMenuViewController: optionViewControllerPD)
             
-            slideMenuController.automaticallyAdjustsScrollViewInsets = true
+           // slideMenuController.automaticallyAdjustsScrollViewInsets = true
             //slideMenuController.delegate = pendingTasksScreen
             self.present(slideMenuController, animated:false, completion:nil)
-            
+    // self.navigationController?.pushViewController(pendingTasksScreen, animated: true)
         }
         
     }

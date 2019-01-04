@@ -57,7 +57,7 @@ class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextF
     
     @IBOutlet var lblTitle: UILabel!
     @IBOutlet var showSideMenuButton: UIButton!
-    @IBOutlet var btnCancel: UIButton!
+    //@IBOutlet var btnCancel: UIButton!
     @IBOutlet var saveButton: UIButton!
 
     //MARK: View Cycle
@@ -66,8 +66,8 @@ class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextF
         _ = Timer.scheduledTimer(timeInterval: 300.0, target: self, selector: #selector(self.fetchParentUserDetailFromBackground), userInfo: nil, repeats: true)
         self.readJson()
         self.childImageUrl = ""
-        self.userImageView.image = EarnItImage.defaultUserImage()
-       
+      //  self.userImageView.image = EarnItImage.defaultUserImage()
+        self.userImageView.image = UIImage(named: "user-pic")
         self.isImageChanged = false
         self.requestObserver()
         self.assignLeftPaddingForTF()
@@ -85,13 +85,13 @@ class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextF
         self.setUpEditViewForChild()
         
         if (EarnItAccount.currentUser.firstName != nil) {
-            self.lblTitle.text = "Hi" + " " + EarnItAccount.currentUser.firstName
+            //self.lblTitle.text = "Hi" + " " + EarnItAccount.currentUser.firstName
         }
         else {
-            self.lblTitle.text = "Hi" + " " + self.earnItChildUser.firstName!
+          //  self.lblTitle.text = "Hi" + " " + self.earnItChildUser.firstName!
         }
-        self.btnCancel.isUserInteractionEnabled = false
-        self.btnCancel.isHidden = true
+       // self.btnCancel.isUserInteractionEnabled = false
+      //  self.btnCancel.isHidden = true
     }
     
     func assignLeftPaddingForTF() {
@@ -303,6 +303,38 @@ class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextF
         self.view.endEditing(true)
         self.dismiss(animated: true, completion: nil)
     }
+    @IBAction func userImageViewBtbGotTapped(Btn: UIButton) {
+        
+        print("ImageView got tapped")
+        
+        var libraryEnabled: Bool = true
+        var croppingEnabled: Bool = true
+        var allowResizing: Bool = true
+        var allowMoving: Bool = true
+        var minimumSize: CGSize = CGSize(width: 200, height: 200)
+        
+        var croppingParameters: CroppingParameters {
+            return CroppingParameters(isEnabled: croppingEnabled, allowResizing: allowResizing, allowMoving: allowMoving, minimumSize: minimumSize)
+        }
+        
+        let cameraViewController = CameraViewController(croppingParameters: croppingParameters, allowsLibraryAccess: libraryEnabled) { [weak self] image, asset in
+            
+            if image != nil
+            {
+                let resizedImage = self?.resizeImage(image!, newWidth: 300)
+                self?.userImage = resizedImage
+                self?.userImageView.image = resizedImage
+                self?.isImageChanged = true
+            }
+            self?.dismiss(animated: true, completion: nil)
+            
+        }
+        present(cameraViewController, animated: true, completion: nil)
+        
+        return
+
+        
+    }
     
     @IBAction func userImageViewGotTapped(_ sender: UITapGestureRecognizer) {
         
@@ -437,9 +469,15 @@ class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextF
 //        let url = "\(EarnItApp_BASE_URL)\(EarnItApp_CHILD_IMAGE_FOLDER)"
         let url = "\(EarnItApp_BASE_URL)/parents/children/\(self.earnItChildUser.childUserId)/profile/images"
         print(self.earnItChildUser.childUserId)
+        
+        var basic = ""
+        if let basicTemp = keychain.get("user_auth") {
+            basic = basicTemp
+        }
+        
         let headers: HTTPHeaders = [
             "accept": "application/json",
-            "Authorization": "Basic \(keychain.get("user_auth")!)",
+            "Authorization": "Basic \(basic)",
         ]
         Alamofire.upload(multipartFormData: { (multipartFormData) in
             if let data = imageData{
@@ -458,7 +496,17 @@ class VCHomeAddChild : UIViewController, UINavigationControllerDelegate, UITextF
                     }
                     self.childImageUrl = String("\(String(describing: response.value!))")
                     if (self.childImageUrl != nil){
-                        self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.childImageUrl!)
+                        
+                        if self.childImageUrl!.count > 1 {
+                            self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.childImageUrl!)
+                            
+                        }
+                        else {
+                            
+                            self.userImageView.image = UIImage(named: "user-pic")
+                        }
+                        
+                       
                         
                     }
                     

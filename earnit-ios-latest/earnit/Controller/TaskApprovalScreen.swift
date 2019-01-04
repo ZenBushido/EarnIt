@@ -39,7 +39,17 @@ class TaskApprovalScreen: UIViewController {
         if completedTask.isPictureRequired == 1 {
             print("has task image")
             if taskComment?.taskImageUrl != nil{
-                self.taskImageView.loadImageUsingCacheForTask(withUrl: EarnItApp_Image_BASE_URL_PREFIX + (taskComment?.taskImageUrl)!)
+                
+                if ((taskComment?.taskImageUrl)?.count)! > 1 {
+                     self.taskImageView.loadImageUsingCacheForTask(withUrl: EarnItApp_Image_BASE_URL_PREFIX + (taskComment?.taskImageUrl)!)
+                }
+                else {
+                    
+                    self.taskImageView.image = UIImage(named: "user-pic")
+                }
+                
+                
+               
             }
             self.isPhotoRequiredLabel.text = colonSpace +  "Yes"
         }

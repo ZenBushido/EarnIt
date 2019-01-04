@@ -62,7 +62,18 @@ class BalanceScreeen : UIViewController,UITextViewDelegate,UIGestureRecognizerDe
         self.messageView.messageText.delegate = self
         
         let userAvatarUrlString = self.earnItChildUser.childUserImageUrl
-        self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUser.childUserImageUrl!)
+       // self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUser.childUserImageUrl!)
+        
+        if self.earnItChildUser.childUserImageUrl!.count > 1 {
+            self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUser.childUserImageUrl!)
+            
+            
+        }
+        else {
+            
+            self.userImageView.image = UIImage(named: "user-pic")
+        }
+        
         self.messageView.messageToLabel.text = "Message to  \(self.earnItChildUser.firstName!):"
         
         self.GoalName.isHidden = true
@@ -160,307 +171,316 @@ class BalanceScreeen : UIViewController,UITextViewDelegate,UIGestureRecognizerDe
     }
     
     @IBAction func userImageViewGotTapped(_ sender: UITapGestureRecognizer) {
+         self.addActionView()
+    }
+      @IBAction func userImageBtnDidTapped(gesture: UIButton) {
         
-        var childOptionView = (Bundle.main.loadNibNamed("ChildOptionView", owner: self, options: nil)?[0] as? ChildOptionView)!
-        var optionView  = (Bundle.main.loadNibNamed("OptionView", owner: self, options: nil)?[0] as? OptionView)!
+        self.addActionView()
+    }
     
-        optionView.center = self.view.center
-        optionView.userImageView.image = self.userImageView.image
-        optionView.frame.origin.y = self.userImageView.frame.origin.y
-        optionView.frame.origin.x = self.view.frame.origin.x + 160
-        
-        childOptionView.center = self.view.center
-        childOptionView.userImageView.image = self.userImageView.image
-        childOptionView.frame.origin.y = self.userImageView.frame.origin.y
-        childOptionView.frame.origin.x = self.view.frame.origin.x + 160
-        
-        if UIDevice().userInterfaceIdiom == .phone {
-            switch UIScreen.main.nativeBounds.height {
-            case 480:
-                childOptionView.frame.origin.x = self.view.frame.origin.x + 160
-                optionView.frame.origin.x = self.view.frame.origin.x + 160
-                
-            case 960:
-                childOptionView.frame.origin.x = self.view.frame.origin.x + 160
-                optionView.frame.origin.x = self.view.frame.origin.x + 160
-                
-            case 1136:
-                childOptionView.frame.origin.x = self.view.frame.origin.x + 100
-                optionView.frame.origin.x = self.view.frame.origin.x + 100
-                
-            case 1334:
-                childOptionView.frame.origin.x = self.view.frame.origin.x + 160
-                optionView.frame.origin.x = self.view.frame.origin.x + 160
-                
-            case 2208:
-                childOptionView.frame.origin.x = self.view.frame.origin.x + 200
-                optionView.frame.origin.x = self.view.frame.origin.x + 200
-                
-            default:
-                print("unknown")
-            }
-            
-        }
-        else if  UIDevice().userInterfaceIdiom == .pad {
-            
-            childOptionView.frame.origin.x = self.view.frame.origin.x + 200
-            optionView.frame.origin.x = self.view.frame.origin.x + 200
-        }
-        
-        //        optionView.addTaskButton.setImage(EarnItImage.setEarnItAddIcon(), for: .normal)
-        //        optionView.showAllTaskButton.setImage(EarnItImage.setEarnItPageIcon(), for: .normal)
-        //        optionView.approveTaskButton.setImage(EarnItImage.setEarnItAppShowTaskIcon(), for: .normal)
-        //        optionView.showBalanceButton.setImage(EarnItImage.setEarnItAppBalanceIcon(), for: .normal)
-        //        optionView.showGoalButton.setImage(EarnItImage.setEarnItGoalIcon(), for: .normal)
-        //        optionView.messageButton.setImage(EarnItImage.setEarnItCommentIcon(), for: .normal)
-        
-        
-        if self.isActiveUserChild == true {
-            
-            childOptionView.firstOption.setImage(EarnItImage.setEarnItPageIcon(), for: .normal)
-            childOptionView.secondOption.setImage(EarnItImage.setEarnItAppBalanceIcon(), for: .normal)
-            childOptionView.thirdOption.setImage(EarnItImage.setEarnItLogoutIcon(), for: .normal)
-            //optionView.sixthOption.setImage(EarnItImage.setEarnItCommentIcon(), for: .normal)
-            
-            childOptionView.firstOption.setTitle("View Tasks", for: .normal)
-            childOptionView.secondOption.setTitle("Balances", for: .normal)
-            childOptionView.thirdOption.setTitle("Logout", for: .normal)
-            childOptionView.doActionForFirstOption = {
-                self.removeActionView()
-                let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                let childDashBoard = storyBoard.instantiateViewController(withIdentifier: "childDashBoard") as! ChildDashBoard
-                self.present(childDashBoard, animated: true, completion: nil)
-            }
-            childOptionView.doActionForSecondOption = {
-                self.removeActionView()
-            }
-            childOptionView.doActionForThirdOption = {
-                self.removeActionView()
-                let keychain = KeychainSwift()
-                keychain.delete("isActiveUser")
-                keychain.delete("email")
-                keychain.delete("password")
-
-                keychain.delete("isProfileUpdated")
-                keychain.delete("token")
-                //keychain.delete("token")
-                //self.stopTimerForFetchingUserDetail()
-                let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
-                let loginController = storyBoard.instantiateViewController(withIdentifier: "LoginController") as! LoginPageController
-                self.present(loginController, animated: false, completion: nil)
-            }
-            self.actionView.addSubview(childOptionView)
-            self.actionView.backgroundColor = UIColor.clear
-            self.view.addSubview(self.actionView)
-        }
-        else {
-            optionView.firstOption.setImage(EarnItImage.setEarnItAddIcon(), for: .normal)
-            optionView.secondOption.setImage(EarnItImage.setEarnItPageIcon(), for: .normal)
-            optionView.thirdOption.setImage(EarnItImage.setEarnItAppShowTaskIcon(), for: .normal)
-            optionView.forthOption.setImage(EarnItImage.setEarnItAppBalanceIcon(), for: .normal)
-            optionView.fifthOption.setImage(EarnItImage.setEarnItGoalIcon(), for: .normal)
-            optionView.sixthOption.setImage(EarnItImage.setEarnItCommentIcon(), for: .normal)
-            optionView.btnAppsMonitorOption.setImage(EarnItImage.setEarnItAppShowTaskIcon(), for: .normal)
-
-            optionView.firstOption.setTitle(MENU_ADD_TASKS, for: .normal)
-            optionView.secondOption.setTitle(MENU_ALL_TASKS, for: .normal)
-            optionView.thirdOption.setTitle(MENU_APPROVE_TASKS, for: .normal)
-            optionView.forthOption.setTitle(MENU_BALANCES, for: .normal)
-            optionView.fifthOption.setTitle(MENU_GOALS, for: .normal)
-            optionView.sixthOption.setTitle(MENU_MESSAGE, for: .normal)
-            optionView.btnAppsMonitorOption.setTitle(MENU_APPS_MONITOR, for: .normal)
-
-            self.actionView.addSubview(optionView)
-            self.actionView.backgroundColor = UIColor.clear
-            self.view.addSubview(self.actionView)
-            optionView.doActionForSecondOption = {
-                self.removeActionView()
-                if self.earnItChildUser.earnItTasks.count > 0{
-                    let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
-                    let parentDashBoardCheckin = storyBoard.instantiateViewController(withIdentifier: "parentDashBoard") as! ParentDashBoard
-                    parentDashBoardCheckin.prepareData(earnItChildUserForParent: self.earnItChildUser, earnItChildUsers: self.earnItChildUsers)
-                    let optionViewControllerPD = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
-                    
-                    let slideMenuController  = SlideMenuViewController(mainViewController: parentDashBoardCheckin, leftMenuViewController: optionViewControllerPD)
-                    
-                    slideMenuController.automaticallyAdjustsScrollViewInsets = true
-                    slideMenuController.delegate = parentDashBoardCheckin
-                    self.present(slideMenuController, animated:false, completion:nil)
-                }else {
-                    self.view.makeToast("No task available")
-                }
-            }
-            
-            optionView.doActionForFirstOption = {
-                
-                self.removeActionView()
-                let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
-                let taskViewController = storyBoard.instantiateViewController(withIdentifier: "TaskView") as! TaskViewController
-                taskViewController.earnItChildUserId = self.earnItChildUser.childUserId
-                taskViewController.earnItChildUsers = self.earnItChildUsers
-                self.present(taskViewController, animated:false, completion:nil)
-            }
-            
-            optionView.doActionForFifthOption = {
-                
-                self.removeActionView()
-                print("self.selectedChildUser");
-                
-                getGoalsForChild(childId : self.earnItChildUser.childUserId,success: {
-                    (earnItGoalList) ->() in
-                    
-                    //print("GOAL", earnItGoalList.count);
-                    // print(earnItGoalList);
-                    
-                    let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
-                    let addGoalVC = storyBoard.instantiateViewController(withIdentifier: "VCAddDeleteGoal") as! VCAddDeleteGoal
-                    
-                    if(self.earnItChildUser.earnItGoal.name == "" || self.earnItChildUser.earnItGoal.name == nil){
-                        addGoalVC.IS_ADD = true
-                    }else {
-                        
-                        addGoalVC.IS_ADD = false
-                    }
-                    addGoalVC.IS_ADD = false
-                    addGoalVC.earnItChildUser = self.earnItChildUser
-                    addGoalVC.earnItChildUsers = self.earnItChildUsers
-                    self.present(addGoalVC, animated:true, completion:nil)
-                })
-                { (error) -> () in
-                    
-                    let alert = showAlertWithOption(title: "Opps, Please try it again later.", message: "")
-                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
-                }
-            }
-            
-            optionView.doActionForFourthOption = {
-                self.removeActionView()
-            }
-            
-            optionView.doActionForThirdOption = {
-                
-                self.removeActionView()
-                var hasPendingTask = false
-                for pendingTask in self.earnItChildUser.earnItTasks {
-                    
-                    if pendingTask.status == TaskStatus.completed{
-                        
-                        hasPendingTask = true
-                        break
-                        
-                    }else {
-                        continue
-                    }
-                }
-                
-                if hasPendingTask == false {
-                    
-                    self.view.makeToast("There are no tasks for approval")
-                    //            let alert = showAlert(title: "", message: "There are no tasks for approval")
-                    //            self.present(alert, animated: true, completion: nil)
-                    
-                }else {
-                    
-                    let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
-                    let pendingTasksScreen = storyBoard.instantiateViewController(withIdentifier: "PendingTasksScreen") as! PendingTasksScreen
-                    pendingTasksScreen.prepareData(earnItChildUserForParent: self.earnItChildUser, earnItChildUsers: self.earnItChildUsers)
-                    let optionViewControllerPD = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
-                    let slideMenuController  = SlideMenuViewController(mainViewController: pendingTasksScreen, leftMenuViewController: optionViewControllerPD)
-                    slideMenuController.automaticallyAdjustsScrollViewInsets = true
-                    //slideMenuController.delegate = pendingTasksScreen
-                    self.present(slideMenuController, animated:false, completion:nil)
-                }
-            }
-            
-            optionView.doActionForSixthOption = {
-                
-                self.removeActionView()
-                
-                let messageContainerView = UIView()
-                messageContainerView.frame = CGRect(0 , 0, self.view.frame.width, self.view.frame.height)
-                messageContainerView.backgroundColor = UIColor.clear
-                self.messageView.messageText.text = ""
-                messageContainerView.addSubview(self.messageView)
-                self.view.addSubview(messageContainerView)
-                
-                let tap = UITapGestureRecognizer(target: self, action: #selector(self.messageContainerDidTap(_:)))
-                tap.delegate = self
-                messageContainerView.addGestureRecognizer(tap)
-                
-                self.messageView.dissmissMe = {
-                    self.messageView.removeFromSuperview()
-                    messageContainerView.removeFromSuperview()
-                    //self.enableBackgroundView()
-                }
-                self.messageView.callControllerForSendMessage = {
-                    
-                    self.showLoadingView()
-                    self.messageView.activityIndicator.startAnimating()
-                    if self.messageView.messageText.text.characters.count == 0 || self.messageView.messageText.text.isEmptyField == true{
-                        
-                        self.view.endEditing(true)
-                        self.view.makeToast("Please enter a message")
-                        self.hideLoadingView()
-                        self.messageView.activityIndicator.stopAnimating()
-                        //                let alert = showAlert(title: "", message: "Please enter a message")
-                        //                self.present(alert, animated: true, completion: nil)
-                        
-                    }
-                    else {
-                        callUpdateApiForChild(firstName: self.earnItChildUser.firstName,childEmail: self.earnItChildUser.email,childPassword: self.earnItChildUser.password,childAvatar: self.earnItChildUser.childUserImageUrl!,createDate: self.earnItChildUser.createDate,childUserId: self.earnItChildUser.childUserId, childuserAccountId: self.earnItChildUser.childAccountId,phoneNumber: self.earnItChildUser.phoneNumber,fcmKey : self.earnItChildUser.fcmToken, message: self.messageView.messageText.text, success: {
-                            (childUdateInfo) ->() in
-                            createEarnItAppChildUser( success: {
-                                
-                                (earnItChildUsers) -> () in
-                                
-                                EarnItAccount.currentUser.earnItChildUsers = earnItChildUsers
-                                self.hideLoadingView()
-                                self.messageView.activityIndicator.stopAnimating()
-                                self.messageView.removeFromSuperview()
-                                messageContainerView.removeFromSuperview()
-                            }) {  (error) -> () in
-                                print("error")
-                            }
-                            
-                        }) { (error) -> () in
-                            self.hideLoadingView()
-                            self.messageView.activityIndicator.stopAnimating()
-                            self.view.makeToast("Send Message Failed")
-                            //                let alert = showAlert(title: "Error", message: "Update Child Failed")
-                            //                self.present(alert, animated: true, completion: nil)
-                            print(" Set status completed failed")
-                        }
-                    }
-                }
-                var dView:[String:UIView] = [:]
-                dView["MessageView"] = self.messageView
-                
-                let h_Pin = NSLayoutConstraint.constraints(withVisualFormat: "H:|-(36)-[MessageView]-(36)-|", options: NSLayoutFormatOptions(rawValue: 0) , metrics: nil, views: dView)
-                self.view.addConstraints(h_Pin)
-                
-                let v_Pin = NSLayoutConstraint.constraints(withVisualFormat: "V:|-(36)-[MessageView]-(36)-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: dView)
-                self.view.addConstraints(v_Pin)
-                
-                self.constY = NSLayoutConstraint(item: self.messageView, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0)
-                self.view.addConstraint(self.constY!)
-                
-                self.constX = NSLayoutConstraint(item: self.messageView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0)
-                self.view.addConstraint(self.constX!)
-                
-                UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 0.3, initialSpringVelocity: 0.50, options: UIViewAnimationOptions.layoutSubviews, animations: { () -> Void in
-                    self.messageView.alpha = 1
-                    
-                    self.view.layoutIfNeeded()
-                }) { (value:Bool) -> Void in
-                    
-                }
-            }
-            optionView.doActionForButtonAppsMonitorOption = {
-                self.removeActionView()
-                self.goToAppsMonitorScreen()
-            }
-        }
+   @IBAction func addActionView (){
+    return
+    
+    var childOptionView = (Bundle.main.loadNibNamed("ChildOptionView", owner: self, options: nil)?[0] as? ChildOptionView)!
+    var optionView  = (Bundle.main.loadNibNamed("OptionView", owner: self, options: nil)?[0] as? OptionView)!
+    
+    optionView.center = self.view.center
+    optionView.userImageView.image = self.userImageView.image
+    optionView.frame.origin.y = self.userImageView.frame.origin.y + 50
+    optionView.frame.origin.x = self.view.frame.origin.x + 160
+    
+    childOptionView.center = self.view.center
+    childOptionView.userImageView.image = self.userImageView.image
+    childOptionView.frame.origin.y = self.userImageView.frame.origin.y + 50
+    childOptionView.frame.origin.x = self.view.frame.origin.x + 160
+    
+    if UIDevice().userInterfaceIdiom == .phone {
+    switch UIScreen.main.nativeBounds.height {
+    case 480:
+    childOptionView.frame.origin.x = self.view.frame.origin.x + 160
+    optionView.frame.origin.x = self.view.frame.origin.x + 160
+    
+    case 960:
+    childOptionView.frame.origin.x = self.view.frame.origin.x + 160
+    optionView.frame.origin.x = self.view.frame.origin.x + 160
+    
+    case 1136:
+    childOptionView.frame.origin.x = self.view.frame.origin.x + 100
+    optionView.frame.origin.x = self.view.frame.origin.x + 100
+    
+    case 1334:
+    childOptionView.frame.origin.x = self.view.frame.origin.x + 160
+    optionView.frame.origin.x = self.view.frame.origin.x + 160
+    
+    case 2208:
+    childOptionView.frame.origin.x = self.view.frame.origin.x + 200
+    optionView.frame.origin.x = self.view.frame.origin.x + 200
+    
+    default:
+    print("unknown")
+    }
+    
+    }
+    else if  UIDevice().userInterfaceIdiom == .pad {
+    
+    childOptionView.frame.origin.x = self.view.frame.origin.x + 200
+    optionView.frame.origin.x = self.view.frame.origin.x + 200
+    }
+    
+    //        optionView.addTaskButton.setImage(EarnItImage.setEarnItAddIcon(), for: .normal)
+    //        optionView.showAllTaskButton.setImage(EarnItImage.setEarnItPageIcon(), for: .normal)
+    //        optionView.approveTaskButton.setImage(EarnItImage.setEarnItAppShowTaskIcon(), for: .normal)
+    //        optionView.showBalanceButton.setImage(EarnItImage.setEarnItAppBalanceIcon(), for: .normal)
+    //        optionView.showGoalButton.setImage(EarnItImage.setEarnItGoalIcon(), for: .normal)
+    //        optionView.messageButton.setImage(EarnItImage.setEarnItCommentIcon(), for: .normal)
+    
+    
+    if self.isActiveUserChild == true {
+    
+    childOptionView.firstOption.setImage(EarnItImage.setEarnItPageIcon(), for: .normal)
+    childOptionView.secondOption.setImage(EarnItImage.setEarnItAppBalanceIcon(), for: .normal)
+    childOptionView.thirdOption.setImage(EarnItImage.setEarnItLogoutIcon(), for: .normal)
+    //optionView.sixthOption.setImage(EarnItImage.setEarnItCommentIcon(), for: .normal)
+    
+    childOptionView.firstOption.setTitle("View Tasks", for: .normal)
+    childOptionView.secondOption.setTitle("Balances", for: .normal)
+    childOptionView.thirdOption.setTitle("Logout", for: .normal)
+    childOptionView.doActionForFirstOption = {
+    self.removeActionView()
+    let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+    let childDashBoard = storyBoard.instantiateViewController(withIdentifier: "childDashBoard") as! ChildDashBoard
+    self.present(childDashBoard, animated: true, completion: nil)
+    }
+    childOptionView.doActionForSecondOption = {
+    self.removeActionView()
+    }
+    childOptionView.doActionForThirdOption = {
+    self.removeActionView()
+    let keychain = KeychainSwift()
+    keychain.delete("isActiveUser")
+    keychain.delete("email")
+    keychain.delete("password")
+    
+    keychain.delete("isProfileUpdated")
+    keychain.delete("token")
+    //keychain.delete("token")
+    //self.stopTimerForFetchingUserDetail()
+    let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
+    let loginController = storyBoard.instantiateViewController(withIdentifier: "LoginController") as! LoginPageController
+    self.present(loginController, animated: false, completion: nil)
+    }
+    self.actionView.addSubview(childOptionView)
+    self.actionView.backgroundColor = UIColor.clear
+    self.view.addSubview(self.actionView)
+    }
+    else {
+    optionView.firstOption.setImage(EarnItImage.setEarnItAddIcon(), for: .normal)
+    optionView.secondOption.setImage(EarnItImage.setEarnItPageIcon(), for: .normal)
+    optionView.thirdOption.setImage(EarnItImage.setEarnItAppShowTaskIcon(), for: .normal)
+    optionView.forthOption.setImage(EarnItImage.setEarnItAppBalanceIcon(), for: .normal)
+    optionView.fifthOption.setImage(EarnItImage.setEarnItGoalIcon(), for: .normal)
+    optionView.sixthOption.setImage(EarnItImage.setEarnItCommentIcon(), for: .normal)
+    optionView.btnAppsMonitorOption.setImage(EarnItImage.setEarnItAppShowTaskIcon(), for: .normal)
+    
+    optionView.firstOption.setTitle(MENU_ADD_TASKS, for: .normal)
+    optionView.secondOption.setTitle(MENU_ALL_TASKS, for: .normal)
+    optionView.thirdOption.setTitle(MENU_APPROVE_TASKS, for: .normal)
+    optionView.forthOption.setTitle(MENU_BALANCES, for: .normal)
+    optionView.fifthOption.setTitle(MENU_GOALS, for: .normal)
+    optionView.sixthOption.setTitle(MENU_MESSAGE, for: .normal)
+    optionView.btnAppsMonitorOption.setTitle(MENU_APPS_MONITOR, for: .normal)
+    
+    self.actionView.addSubview(optionView)
+    self.actionView.backgroundColor = UIColor.clear
+    self.view.addSubview(self.actionView)
+    optionView.doActionForSecondOption = {
+    self.removeActionView()
+    if self.earnItChildUser.earnItTasks.count > 0{
+    let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
+    let parentDashBoardCheckin = storyBoard.instantiateViewController(withIdentifier: "parentDashBoard") as! ParentDashBoard
+    parentDashBoardCheckin.prepareData(earnItChildUserForParent: self.earnItChildUser, earnItChildUsers: self.earnItChildUsers)
+    let optionViewControllerPD = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
+    
+    let slideMenuController  = SlideMenuViewController(mainViewController: parentDashBoardCheckin, leftMenuViewController: optionViewControllerPD)
+    
+    slideMenuController.automaticallyAdjustsScrollViewInsets = true
+    slideMenuController.delegate = parentDashBoardCheckin
+    self.present(slideMenuController, animated:false, completion:nil)
+    }else {
+    self.view.makeToast("No task available")
+    }
+    }
+    
+    optionView.doActionForFirstOption = {
+    
+    self.removeActionView()
+    let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
+    let taskViewController = storyBoard.instantiateViewController(withIdentifier: "TaskView") as! TaskViewController
+    taskViewController.earnItChildUserId = self.earnItChildUser.childUserId
+    taskViewController.earnItChildUsers = self.earnItChildUsers
+    self.present(taskViewController, animated:false, completion:nil)
+    }
+    
+    optionView.doActionForFifthOption = {
+    
+    self.removeActionView()
+    print("self.selectedChildUser");
+    
+    getGoalsForChild(childId : self.earnItChildUser.childUserId,success: {
+    (earnItGoalList) ->() in
+    
+    //print("GOAL", earnItGoalList.count);
+    // print(earnItGoalList);
+    
+    let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
+    let addGoalVC = storyBoard.instantiateViewController(withIdentifier: "VCAddDeleteGoal") as! VCAddDeleteGoal
+    
+    if(self.earnItChildUser.earnItGoal.name == "" || self.earnItChildUser.earnItGoal.name == nil){
+    addGoalVC.IS_ADD = true
+    }else {
+    
+    addGoalVC.IS_ADD = false
+    }
+    addGoalVC.IS_ADD = false
+    addGoalVC.earnItChildUser = self.earnItChildUser
+    addGoalVC.earnItChildUsers = self.earnItChildUsers
+    self.present(addGoalVC, animated:true, completion:nil)
+    })
+    { (error) -> () in
+    
+    let alert = showAlertWithOption(title: "Opps, Please try it again later.", message: "")
+    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+    self.present(alert, animated: true, completion: nil)
+    }
+    }
+    
+    optionView.doActionForFourthOption = {
+    self.removeActionView()
+    }
+    
+    optionView.doActionForThirdOption = {
+    
+    self.removeActionView()
+    var hasPendingTask = false
+    for pendingTask in self.earnItChildUser.earnItTasks {
+    
+    if pendingTask.status == TaskStatus.completed{
+    
+    hasPendingTask = true
+    break
+    
+    }else {
+    continue
+    }
+    }
+    
+    if hasPendingTask == false {
+    
+    self.view.makeToast("There are no tasks for approval")
+    //            let alert = showAlert(title: "", message: "There are no tasks for approval")
+    //            self.present(alert, animated: true, completion: nil)
+    
+    }else {
+    
+    let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
+    let pendingTasksScreen = storyBoard.instantiateViewController(withIdentifier: "PendingTasksScreen") as! PendingTasksScreen
+    pendingTasksScreen.prepareData(earnItChildUserForParent: self.earnItChildUser, earnItChildUsers: self.earnItChildUsers)
+    let optionViewControllerPD = storyBoard.instantiateViewController(withIdentifier: "OptionView") as! OptionViewController
+    let slideMenuController  = SlideMenuViewController(mainViewController: pendingTasksScreen, leftMenuViewController: optionViewControllerPD)
+    slideMenuController.automaticallyAdjustsScrollViewInsets = true
+    //slideMenuController.delegate = pendingTasksScreen
+    self.present(slideMenuController, animated:false, completion:nil)
+    }
+    }
+    
+    optionView.doActionForSixthOption = {
+    
+    self.removeActionView()
+    
+    let messageContainerView = UIView()
+    messageContainerView.frame = CGRect(0 , 0, self.view.frame.width, self.view.frame.height)
+    messageContainerView.backgroundColor = UIColor.clear
+    self.messageView.messageText.text = ""
+    messageContainerView.addSubview(self.messageView)
+    self.view.addSubview(messageContainerView)
+    
+    let tap = UITapGestureRecognizer(target: self, action: #selector(self.messageContainerDidTap(_:)))
+    tap.delegate = self
+    messageContainerView.addGestureRecognizer(tap)
+    
+    self.messageView.dissmissMe = {
+    self.messageView.removeFromSuperview()
+    messageContainerView.removeFromSuperview()
+    //self.enableBackgroundView()
+    }
+    self.messageView.callControllerForSendMessage = {
+    
+    self.showLoadingView()
+    self.messageView.activityIndicator.startAnimating()
+    if self.messageView.messageText.text.characters.count == 0 || self.messageView.messageText.text.isEmptyField == true{
+    
+    self.view.endEditing(true)
+    self.view.makeToast("Please enter a message")
+    self.hideLoadingView()
+    self.messageView.activityIndicator.stopAnimating()
+    //                let alert = showAlert(title: "", message: "Please enter a message")
+    //                self.present(alert, animated: true, completion: nil)
+    
+    }
+    else {
+    callUpdateApiForChild(firstName: self.earnItChildUser.firstName,childEmail: self.earnItChildUser.email,childPassword: self.earnItChildUser.password,childAvatar: self.earnItChildUser.childUserImageUrl!,createDate: self.earnItChildUser.createDate,childUserId: self.earnItChildUser.childUserId, childuserAccountId: self.earnItChildUser.childAccountId,phoneNumber: self.earnItChildUser.phoneNumber,fcmKey : self.earnItChildUser.fcmToken, message: self.messageView.messageText.text, success: {
+    (childUdateInfo) ->() in
+    createEarnItAppChildUser( success: {
+    
+    (earnItChildUsers) -> () in
+    
+    EarnItAccount.currentUser.earnItChildUsers = earnItChildUsers
+    self.hideLoadingView()
+    self.messageView.activityIndicator.stopAnimating()
+    self.messageView.removeFromSuperview()
+    messageContainerView.removeFromSuperview()
+    }) {  (error) -> () in
+    print("error")
+    }
+    
+    }) { (error) -> () in
+    self.hideLoadingView()
+    self.messageView.activityIndicator.stopAnimating()
+    self.view.makeToast("Send Message Failed")
+    //                let alert = showAlert(title: "Error", message: "Update Child Failed")
+    //                self.present(alert, animated: true, completion: nil)
+    print(" Set status completed failed")
+    }
+    }
+    }
+    var dView:[String:UIView] = [:]
+    dView["MessageView"] = self.messageView
+    
+    let h_Pin = NSLayoutConstraint.constraints(withVisualFormat: "H:|-(36)-[MessageView]-(36)-|", options: NSLayoutFormatOptions(rawValue: 0) , metrics: nil, views: dView)
+    self.view.addConstraints(h_Pin)
+    
+    let v_Pin = NSLayoutConstraint.constraints(withVisualFormat: "V:|-(36)-[MessageView]-(36)-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: dView)
+    self.view.addConstraints(v_Pin)
+    
+    self.constY = NSLayoutConstraint(item: self.messageView, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0)
+    self.view.addConstraint(self.constY!)
+    
+    self.constX = NSLayoutConstraint(item: self.messageView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0)
+    self.view.addConstraint(self.constX!)
+    
+    UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 0.3, initialSpringVelocity: 0.50, options: UIViewAnimationOptions.layoutSubviews, animations: { () -> Void in
+    self.messageView.alpha = 1
+    
+    self.view.layoutIfNeeded()
+    }) { (value:Bool) -> Void in
+    
+    }
+    }
+    optionView.doActionForButtonAppsMonitorOption = {
+    self.removeActionView()
+    self.goToAppsMonitorScreen()
+    }
+    }
     }
     
     //MARK: Void Methods

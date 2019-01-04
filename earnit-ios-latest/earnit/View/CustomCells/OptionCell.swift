@@ -40,7 +40,7 @@ open class OptionCell : UITableViewCell {
     }
     
     open func setData(_ data: Any){
-        self.backgroundColor = UIColor.EarnItAppBackgroundColor()
+        self.backgroundColor = UIColor(red: 92.0/255.0, green: 125.0/255.0, blue: 246.0/255.0, alpha: 1)
         self.textLabel?.font = FontHelper.EarnItAppLabelFont()
         self.textLabel?.textColor = UIColor.white
         if let optionText = data as? String{

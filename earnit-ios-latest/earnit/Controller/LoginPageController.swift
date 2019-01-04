@@ -37,12 +37,44 @@ class LoginPageController : UIViewController , UITextFieldDelegate , UIGestureRe
     //override View Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+
         self.requestObserver()
         self.creatLeftPadding(textField: emailTextField)
         self.creatLeftPadding(textField: passwordTextField)
+        
+        self.creatRightPadding(textField: emailTextField)
+        self.creatRightPadding(textField: passwordTextField)
+        
+        var rightViewBtn_email: UIButton!
+        rightViewBtn_email = UIButton.init(frame: CGRect(x: 0, y: 0, width: 41, height: 41))
+        rightViewBtn_email.setImage(UIImage(named: "emailBox") , for: .normal)
+        rightViewBtn_email.setImage(UIImage(named: "emailBox"), for: .selected)
+   
+        emailTextField.rightView = rightViewBtn_email
+        emailTextField.rightViewMode =  .always
+        
+        
+        var rightViewBtn_pass: UIButton!
+        rightViewBtn_pass = UIButton.init(frame: CGRect(x: 0, y: 0, width: 41, height: 41))
+        rightViewBtn_pass.setImage(UIImage(named: "passBox") , for: .normal)
+        rightViewBtn_pass.setImage(UIImage(named: "passBox"), for: .selected)
+        
+        passwordTextField.rightView = rightViewBtn_pass
+        passwordTextField.rightViewMode =  .always
+        
+        
+        
+     //   let borderC = UIColor(red: 34.0/255.0, green: 73.0/255.0, blue: 150.0/255.0, alpha: 1)
+        
+      //  emailTextField.background = UIImage(named: "emailBox")
+      //  passwordTextField.background = UIImage(named: "passBox")
+       // conf.background = UIImage(named: "myImage")
+        //emailBox
+        
         signUpButton.titleLabel?.numberOfLines = 1
         signUpButton.titleLabel?.adjustsFontSizeToFitWidth = true
         signUpButton.titleLabel?.lineBreakMode = NSLineBreakMode.byClipping
+        
         let keychain = KeychainSwift()
         if (keychain.get("email") != nil && keychain.get("password") != nil) {
             self.btnRememberMe.setImage(UIImage.init(named: "remember_me_checkbox.png"), for: UIControlState.normal)
@@ -104,8 +136,13 @@ class LoginPageController : UIViewController , UITextFieldDelegate , UIGestureRe
      */
     
     func creatLeftPadding(textField:UITextField) {
-        let leftPadding = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: textField.frame.size.height))
+        let leftPadding = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: textField.frame.size.height))
         textField.leftView = leftPadding
+        textField.leftViewMode = UITextFieldViewMode.always
+    }
+    func creatRightPadding(textField:UITextField) {
+        let rightPadding = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: textField.frame.size.height))
+        textField.rightView = rightPadding
         textField.leftViewMode = UITextFieldViewMode.always
     }
     

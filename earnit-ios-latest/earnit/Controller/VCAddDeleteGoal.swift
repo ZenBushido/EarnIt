@@ -41,8 +41,32 @@ class VCAddDeleteGoal : UIViewController, UITextFieldDelegate, UITextViewDelegat
     var delegate: VCAddDeleteGoal?
 
     //MARK: View Cycle
+//    func actionViewDidTapped(_ sender: UITapGestureRecognizer){
+//        print("actionViewDidTapped..")
+//        self.removeActionView()
+//    }
     
     override func viewDidLoad() {
+//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.actionViewDidTapped(_:)))
+//        self.actionView.addGestureRecognizer(tapGesture)
+        var rightViewBtn_fname: UIButton!
+        rightViewBtn_fname = UIButton.init(frame: CGRect(x: 0, y: 0, width: 41, height: 41))
+        rightViewBtn_fname.setImage(UIImage(named: "fnameBox") , for: .normal)
+        rightViewBtn_fname.setImage(UIImage(named: "fnameBox"), for: .selected)
+        
+        goalName.rightView = rightViewBtn_fname
+        goalName.rightViewMode =  .always
+        
+        var rightViewBtn_lname: UIButton!
+        rightViewBtn_lname = UIButton.init(frame: CGRect(x: 0, y: 0, width: 41, height: 41))
+        rightViewBtn_lname.setImage(UIImage(named: "dollarBox") , for: .normal)
+        rightViewBtn_lname.setImage(UIImage(named: "dollarBox"), for: .selected)
+        
+        goalAmount.rightView = rightViewBtn_lname
+        goalAmount.rightViewMode =  .always
+        
+        
+        
         self.earnItChildGoalList = self.earnItChildGoalList.reversed()
         if (self.earnItChildGoalList.count == 0 && self.IS_ADD == false) {
             self.getGoalsListFromServer()
@@ -53,8 +77,8 @@ class VCAddDeleteGoal : UIViewController, UITextFieldDelegate, UITextViewDelegat
         self.tvGoals.reloadData()
         
         self.actionView.frame = CGRect(0 , 0, self.view.frame.width, self.view.frame.height)
-//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.actionViewDidTapped(_:)))
-//        self.actionView.addGestureRecognizer(tapGesture)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.actionViewDidTapped(_:)))
+        self.actionView.addGestureRecognizer(tapGesture)
         
         self.messageView = (Bundle.main.loadNibNamed("MessageView", owner: self, options: nil)?[0] as? MessageView)!
         self.messageView.center = CGPoint(x: self.view.center.x,y :self.view.center.y-80)
@@ -63,7 +87,21 @@ class VCAddDeleteGoal : UIViewController, UITextFieldDelegate, UITextViewDelegat
         let userAvatarUrlString = self.earnItChildUser.childUserImageUrl
         _ = Timer.scheduledTimer(timeInterval: 300.0, target: self, selector: #selector(self.fetchParentUserDetailFromBackground), userInfo: nil, repeats: true)
         
-        self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUser.childUserImageUrl!)
+       // self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUser.childUserImageUrl!)
+        
+        
+        
+        if self.earnItChildUser.childUserImageUrl!.count > 1 {
+                self.userImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + self.earnItChildUser.childUserImageUrl!)
+        }
+            else {
+                
+                self.userImageView.image = UIImage(named: "user-pic")
+
+            
+        }
+   
+        
         
         /*if(!IS_ADD){
             print("trying to EDIT a goal")
@@ -72,7 +110,9 @@ class VCAddDeleteGoal : UIViewController, UITextFieldDelegate, UITextViewDelegat
             goalName.text = self.earnItChildUser.earnItGoal.name
             goalAmount.text = String(self.earnItChildUser.earnItGoal.ammount!)
         }*/
-        self.lblTitle.text = "\(EarnItAccount.currentUser.firstName!)'s Goals"
+    //    self.lblTitle.text = "\(EarnItAccount.currentUser.firstName!)'s Goals"
+        self.lblTitle.text = "New Goal"
+        
         saveButton1.setTitle("Save", for: UIControlState.normal)
         self.view.isUserInteractionEnabled = true
 
@@ -393,15 +433,25 @@ class VCAddDeleteGoal : UIViewController, UITextFieldDelegate, UITextViewDelegat
         self.scrollView.contentInset = contentInsets
         self.scrollView.scrollIndicatorInsets = contentInsets
         self.view.endEditing(true)
-        // self.scrollView.isScrollEnabled = false
+        // self.scrollView.isScrollEnabled = falser
     }
-
+    @IBAction func userImageBtnDidTapped(gesture: UIButton) {
+        
+        self.addActionView()
+    }
+    
     @IBAction func userImageGotTapped(_ sender: UITapGestureRecognizer) {
+        
+        self.addActionView()
+    }
+    
+    
+    @IBAction func addActionView (){
         
         let optionView  = (Bundle.main.loadNibNamed("OptionView", owner: self, options: nil)?[0] as? OptionView)!
         optionView.center = self.view.center
         optionView.userImageView.image = self.userImageView.image
-        optionView.frame.origin.y = self.userImageView.frame.origin.y
+        optionView.frame.origin.y = self.userImageView.frame.origin.y + 50
         optionView.frame.origin.x = self.view.frame.origin.x + 160
         
         if UIDevice().userInterfaceIdiom == .phone {
@@ -439,7 +489,7 @@ class VCAddDeleteGoal : UIViewController, UITextFieldDelegate, UITextViewDelegat
         optionView.fifthOption.setImage(EarnItImage.setEarnItGoalIcon(), for: .normal)
         optionView.sixthOption.setImage(EarnItImage.setEarnItCommentIcon(), for: .normal)
         optionView.btnAppsMonitorOption.setImage(EarnItImage.setEarnItAppShowTaskIcon(), for: .normal)
-
+        
         optionView.firstOption.setTitle(MENU_ADD_TASKS, for: .normal)
         optionView.secondOption.setTitle(MENU_ALL_TASKS, for: .normal)
         optionView.thirdOption.setTitle(MENU_APPROVE_TASKS, for: .normal)
@@ -447,7 +497,7 @@ class VCAddDeleteGoal : UIViewController, UITextFieldDelegate, UITextViewDelegat
         optionView.fifthOption.setTitle(MENU_GOALS, for: .normal)
         optionView.sixthOption.setTitle(MENU_MESSAGE, for: .normal)
         optionView.btnAppsMonitorOption.setTitle(MENU_APPS_MONITOR, for: .normal)
-
+        
         self.actionView.addSubview(optionView)
         self.actionView.backgroundColor = UIColor.clear
         self.view.addSubview(self.actionView)
@@ -471,9 +521,9 @@ class VCAddDeleteGoal : UIViewController, UITextFieldDelegate, UITextViewDelegat
         }
         
         optionView.doActionForFirstOption = {
-        
+            
             self.removeActionView()
-
+            
             let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
             let taskViewController = storyBoard.instantiateViewController(withIdentifier: "TaskView") as! TaskViewController
             taskViewController.earnItChildUserId = self.earnItChildUser.childUserId
@@ -612,6 +662,8 @@ class VCAddDeleteGoal : UIViewController, UITextFieldDelegate, UITextViewDelegat
             self.goToAppsMonitorScreen()
         }
     }
+
+
     
     //MARK: Action Methods
     
@@ -693,7 +745,8 @@ class VCAddDeleteGoal : UIViewController, UITextFieldDelegate, UITextViewDelegat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let childCell = self.tvGoals.dequeueReusableCell(withIdentifier: "ChildCell", for: indexPath as IndexPath) as! ChildCell
         let objGoal = earnItChildGoalList[indexPath.row]
-        childCell.childName.text = "\(objGoal.name!):  $\(objGoal.ammount!)"
+        childCell.childName.text = "\(objGoal.name!)"
+        childCell.lblPercentValue.text = "$\(objGoal.ammount!)"
         childCell.childName.isUserInteractionEnabled = false
         childCell.btnDeleteChildRow.tag = objGoal.id!
         childCell.btnDeleteChildRow.setTitleColor(UIColor.clear, for: UIControlState.normal)

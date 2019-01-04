@@ -24,9 +24,9 @@ protocol OptionMenuProtocol : class {
 }
 
 class OptionViewController: UIViewController, OptionMenuProtocol {
-    
+ @IBOutlet var versionBtn: UIButton!
    @IBOutlet var tableView: UITableView!
-   var options = ["Home","Account","Logout","Version"]
+   var options = ["Home","Account","Logout"]
    var imageViewHeader: ImageViewHeader!
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -49,29 +49,74 @@ class OptionViewController: UIViewController, OptionMenuProtocol {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+         let selected_color = UIColor(red: 115.0/255.0, green: 244.0/255.0, blue: 64.0/255.0, alpha: 1)
+        
+        
+        if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+            
+            versionBtn.setTitle("Version \(version)", for: .normal)
+             versionBtn.setTitle("Version \(version)", for: .selected)
+
+            
+        }
+        
         self.imageViewHeader = ImageViewHeader.loadNib()
-        self.imageViewHeader.backgroundColor = UIColor.EarnItAppBackgroundColor()
-        self.imageViewHeader.backgroundImageView.image = UIImage(named: "drawer")
-        self.imageViewHeader.userProfileImageView.image = EarnItImage.defaultUserImage()
+         self.imageViewHeader.userProfileImageView.image = UIImage(named: "user-pic")
+       
+       // self.imageViewHeader.userProfileImageView.image = EarnItImage.defaultUserImage()
         self.imageViewHeader.userName.text = EarnItAccount.currentUser.firstName
         self.imageViewHeader.email.text = EarnItAccount.currentUser.email
         
-        imageViewHeader.userProfileImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX +  EarnItAccount.currentUser.avatar!)
-        //imageViewHeader.userProfileImageView.downloadedFrom(url: url!)
+      //  imageViewHeader.userProfileImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX +  EarnItAccount.currentUser.avatar!)
+        
+        if  let imgurl = EarnItAccount.currentUser.avatar{
+            if imgurl.count > 0 {
+                imageViewHeader.userProfileImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX +  imgurl)
+            }
+            else {
+                imageViewHeader.userProfileImageView.image = UIImage(named: "user-pic")
+            }
+        }
+        else {
+            
+            
+            imageViewHeader.userProfileImageView.image = UIImage(named: "user-pic")
+            
+        }
+        
+    
         imageViewHeader.userProfileImageView.contentMode = .scaleAspectFill
-        self.tableView.backgroundView?.backgroundColor = UIColor.EarnItAppBackgroundColor()
+
         self.tableView.registerCellClass(OptionCell.self)
-        self.tableView.backgroundColor = UIColor.EarnItAppBackgroundColor()
+    
         self.tableView.isScrollEnabled = false
-        //self.tableView.isHidden = true
+    
         self.tableView.separatorStyle = .none
         self.view.addSubview(self.imageViewHeader)
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.imageViewHeader.userProfileImageView.image = EarnItImage.defaultUserImage()
+       // self.imageViewHeader.userProfileImageView.image = EarnItImage.defaultUserImage()
         DispatchQueue.main.async {
-            self.imageViewHeader.userProfileImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + EarnItAccount.currentUser.avatar!)
+           // self.imageViewHeader.userProfileImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + EarnItAccount.currentUser.avatar!)
+            if  let imgurl = EarnItAccount.currentUser.avatar{
+                if imgurl.count > 0 {
+                   self.imageViewHeader.userProfileImageView.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + imgurl)
+                }
+                else {
+                    self.imageViewHeader.userProfileImageView.image = UIImage(named: "user-pic")
+                }
+            }
+            else {
+                
+                
+                  self.imageViewHeader.userProfileImageView.image = UIImage(named: "user-pic")
+                
+            }
+            
+            
         }
         self.imageViewHeader.userName.text = EarnItAccount.currentUser.firstName
         self.imageViewHeader.email.text = EarnItAccount.currentUser.email
@@ -90,7 +135,7 @@ class OptionViewController: UIViewController, OptionMenuProtocol {
 extension OptionViewController : UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 40
+        return 55
     }
     
     
@@ -168,19 +213,38 @@ extension OptionViewController : UITableViewDataSource {
                      case .home, .account,  .logout, .version :
                     
                     let cell = OptionCell(style: UITableViewCellStyle.subtitle, reuseIdentifier: OptionCell.identifier)
-                    cell.imageView?.image = self.faImage(menuItem: OptionMenu(rawValue: indexPath.row)!)
+                   cell.imageView?.image = self.faImage(menuItem: OptionMenu(rawValue: indexPath.row)!)
+                    switch OptionMenu(rawValue: indexPath.row) {
+                    case .home?:
+                         cell.imageView?.image = UIImage(named: "home")
+                    case .account?:
+                       cell.imageView?.image = UIImage(named: "account")
+                    case .logout?:
+                   cell.imageView?.image = UIImage(named: "logout")
+                    case .version?:
+                        print("")
+                       //cell.imageView?.image = UIImage(named: "")
+                    case .none:
+                        print("")
+                    }
+                    
+                    
+                    
+                    
                     cell.setData(options[indexPath.row])
+                      cell.layer.addBorder(edge: .top, color: UIColor.white, thickness: 0.5)
                     if indexPath.row == 3{
                         
                         if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
                             cell.setData("        Version \(version)")
-                            cell.layer.addBorder(edge: .top, color: UIColor.black, thickness: 0.5)
+                          
                         }
                         
                     }
                     cell.backgroundColor = self.menuBackColor(menuItem: OptionMenu(rawValue: indexPath.row)!)
                     cell.textLabel?.textColor = self.menuTextColor(menuItem: OptionMenu(rawValue: indexPath.row)!)
                     cell.selectionStyle = .none
+                    cell.backgroundColor = UIColor(red: 92.0/255.0, green: 125.0/255.0, blue: 246.0/255.0, alpha: 1)
                     
                 return cell
             }
@@ -189,6 +253,7 @@ extension OptionViewController : UITableViewDataSource {
         return UITableViewCell()
     }
     
+    /*
     //HIGHLIGHT ON CLICK TABLE CELL
     
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
@@ -210,6 +275,8 @@ extension OptionViewController : UITableViewDataSource {
         cell?.imageView?.maskWith(color: UIColor.white)
         cell?.backgroundColor = UIColor.EarnItAppBackgroundColor()
     }
+    
+    */
     
     
     func faImage(menuItem: OptionMenu) -> UIImage {
@@ -239,7 +306,8 @@ extension OptionViewController : UITableViewDataSource {
     func menuTextColor(menuItem: OptionMenu) -> UIColor {
         switch menuItem {
         case .home:
-            return UIColor.EarnItAppBackgroundColor()
+              return UIColor.white
+             //return UIColor.EarnItAppBackgroundColor()
      //   case .account, .logout , .settings, .version:
 
         case .account, .logout , .version:

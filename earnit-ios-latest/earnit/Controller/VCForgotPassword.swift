@@ -23,6 +23,14 @@ class VCForgotPassword : UIViewController {
         self.requestObserver()
         self.creatLeftPadding(textField: tfEmail)
         self.lblText.text = "Enter your email address to receive your account password."
+        
+        var rightViewBtn_email: UIButton!
+        rightViewBtn_email = UIButton.init(frame: CGRect(x: 0, y: 0, width: 41, height: 41))
+        rightViewBtn_email.setImage(UIImage(named: "emailBox") , for: .normal)
+        rightViewBtn_email.setImage(UIImage(named: "emailBox"), for: .selected)
+        
+        tfEmail.rightView = rightViewBtn_email
+        tfEmail.rightViewMode =  .always
     }
     
     override func viewDidAppear(_ animated: Bool) {

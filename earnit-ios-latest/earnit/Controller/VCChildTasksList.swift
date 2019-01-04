@@ -80,7 +80,19 @@ class VCChildTasksList : UIViewController, UITableViewDelegate, UITableViewDataS
         self.pendingApprovalTasks = getPendingApprovalTasks(earnItTasks: self.tasksForTheDay)
 
         print(EarnItChildUser.currentUser.childUserImageUrl!)
-        self.userImageVieqw.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + EarnItChildUser.currentUser.childUserImageUrl!)
+       
+        
+        
+        if EarnItChildUser.currentUser.childUserImageUrl!.count > 1 {
+          self.userImageVieqw.loadImageUsingCache(withUrl: EarnItApp_Image_BASE_URL_PREFIX + EarnItChildUser.currentUser.childUserImageUrl!)
+            
+        }
+        else {
+            
+            self.userImageVieqw.image = UIImage(named: "user-pic")
+        }
+        
+        
         self.childUserTable.reloadData()
         self.getGoalForCurrentUser()
     }
@@ -861,92 +873,100 @@ class VCChildTasksList : UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func userImageDidTapped(gesture: UIGestureRecognizer) {
-        // if the tapped view is a UIImageView then set it to imageview
-        print("User Image got tapped")
-        return
-        //_ = sender.view as! UIImageView
-        let optionView  = (Bundle.main.loadNibNamed("ChildOptionView", owner: self, options: nil)?[0] as? ChildOptionView)!
-        optionView.center = self.view.center
-        optionView.userImageView.image = self.userImageVieqw.image
-        optionView.frame.origin.y = self.userImageVieqw.frame.origin.y
-        optionView.frame.origin.x = self.view.frame.origin.x + 160
-        
-        if UIDevice().userInterfaceIdiom == .phone {
-            switch UIScreen.main.nativeBounds.height {
-            case 480:
-                optionView.frame.origin.x = self.view.frame.origin.x + 160
-                
-            case 960:
-               optionView.frame.origin.x = self.view.frame.origin.x + 160
-                
-            case 1136:
-               optionView.frame.origin.x = self.view.frame.origin.x + 105
-                
-            case 1334:
-               optionView.frame.origin.x = self.view.frame.origin.x + 160
-                
-            case 2208:
-               optionView.frame.origin.x = self.view.frame.origin.x + 200
-                
-            default:
-                print("unknown")
-            }
-        }
-        else if  UIDevice().userInterfaceIdiom == .pad {   
-            optionView.frame.origin.x = self.view.frame.origin.x + 200
-        }
-        optionView.firstOption.setImage(EarnItImage.setEarnItPageIcon(), for: .normal)
-        optionView.secondOption.setImage(EarnItImage.setEarnItAppBalanceIcon(), for: .normal)
-        optionView.thirdOption.setImage(EarnItImage.setEarnItAppCalendarIcon(), for: .normal)
-        optionView.fourthOption.setImage(EarnItImage.setEarnItChangeProifleImageIcon(), for: .normal)
-        optionView.fifthOption.setImage(EarnItImage.setEarnItLogoutIcon(), for: .normal)
-
-        //optionView.sixthOption.setImage(EarnItImage.setEarnItCommentIcon(), for: .normal)
-        
-        optionView.firstOption.setTitle("View Tasks", for: .normal)
-        optionView.secondOption.setTitle("Balances", for: .normal)
-        optionView.thirdOption.setTitle("Calendar", for: .normal)
-        optionView.fourthOption.setTitle("Change My Pic", for: .normal)
-        optionView.fifthOption.setTitle("Logout", for: .normal)
-
-        self.actionView.addSubview(optionView)
-        self.actionView.backgroundColor = UIColor.clear
-        self.view.addSubview(self.actionView)
-        
-        optionView.doActionForFirstOption = {
-            self.removeActionView()
-        }
-        optionView.doActionForSecondOption = {
-            self.removeActionView()
-            self.goToBalanceScreen()
-        }
-        optionView.doActionForThirdOption = {
-            self.removeActionView()
-            //Show calendar view here
-            let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
-            let childCalendarController = storyBoard.instantiateViewController(withIdentifier: "VCChildCalendar") as! VCChildCalendar
-            childCalendarController.earnItChildUser = EarnItChildUser.currentUser
-            self.present(childCalendarController, animated: false, completion: nil)
-        }
-        optionView.doActionForFourthOption = {
-            self.removeActionView()
-//            self.requestToUploadImage(profileImage: self.userImage!)
-        }
-        optionView.doActionForFifthOption = {
-            self.removeActionView()
-            let keychain = KeychainSwift()
-            keychain.delete("isActiveUser")
-            keychain.delete("email")
-            keychain.delete("password")
-            keychain.delete("user_auth")
-            UIApplication.shared.unregisterForRemoteNotifications()
-            
-            //keychain.delete("token")
-            self.stopTimerForFetchingUserDetail()
-            let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
-            let loginController = storyBoard.instantiateViewController(withIdentifier: "LoginController") as! LoginPageController
-            self.present(loginController, animated: false, completion: nil)
-        }
+         self.addActionView()
+    }
+    
+    @IBAction func userImageBtnDidTapped(gesture: UIButton) {
+        self.addActionView()
+    }
+    
+    @IBAction func addActionView (){
+    // if the tapped view is a UIImageView then set it to imageview
+    print("User Image got tapped")
+    return
+    //_ = sender.view as! UIImageView
+    let optionView  = (Bundle.main.loadNibNamed("ChildOptionView", owner: self, options: nil)?[0] as? ChildOptionView)!
+    optionView.center = self.view.center
+    optionView.userImageView.image = self.userImageVieqw.image
+    optionView.frame.origin.y = self.userImageVieqw.frame.origin.y + 50
+    optionView.frame.origin.x = self.view.frame.origin.x + 160
+    
+    if UIDevice().userInterfaceIdiom == .phone {
+    switch UIScreen.main.nativeBounds.height {
+    case 480:
+    optionView.frame.origin.x = self.view.frame.origin.x + 160
+    
+    case 960:
+    optionView.frame.origin.x = self.view.frame.origin.x + 160
+    
+    case 1136:
+    optionView.frame.origin.x = self.view.frame.origin.x + 105
+    
+    case 1334:
+    optionView.frame.origin.x = self.view.frame.origin.x + 160
+    
+    case 2208:
+    optionView.frame.origin.x = self.view.frame.origin.x + 200
+    
+    default:
+    print("unknown")
+    }
+    }
+    else if  UIDevice().userInterfaceIdiom == .pad {
+    optionView.frame.origin.x = self.view.frame.origin.x + 200
+    }
+    optionView.firstOption.setImage(EarnItImage.setEarnItPageIcon(), for: .normal)
+    optionView.secondOption.setImage(EarnItImage.setEarnItAppBalanceIcon(), for: .normal)
+    optionView.thirdOption.setImage(EarnItImage.setEarnItAppCalendarIcon(), for: .normal)
+    optionView.fourthOption.setImage(EarnItImage.setEarnItChangeProifleImageIcon(), for: .normal)
+    optionView.fifthOption.setImage(EarnItImage.setEarnItLogoutIcon(), for: .normal)
+    
+    //optionView.sixthOption.setImage(EarnItImage.setEarnItCommentIcon(), for: .normal)
+    
+    optionView.firstOption.setTitle("View Tasks", for: .normal)
+    optionView.secondOption.setTitle("Balances", for: .normal)
+    optionView.thirdOption.setTitle("Calendar", for: .normal)
+    optionView.fourthOption.setTitle("Change My Pic", for: .normal)
+    optionView.fifthOption.setTitle("Logout", for: .normal)
+    
+    self.actionView.addSubview(optionView)
+    self.actionView.backgroundColor = UIColor.clear
+    self.view.addSubview(self.actionView)
+    
+    optionView.doActionForFirstOption = {
+    self.removeActionView()
+    }
+    optionView.doActionForSecondOption = {
+    self.removeActionView()
+    self.goToBalanceScreen()
+    }
+    optionView.doActionForThirdOption = {
+    self.removeActionView()
+    //Show calendar view here
+    let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
+    let childCalendarController = storyBoard.instantiateViewController(withIdentifier: "VCChildCalendar") as! VCChildCalendar
+    childCalendarController.earnItChildUser = EarnItChildUser.currentUser
+    self.present(childCalendarController, animated: false, completion: nil)
+    }
+    optionView.doActionForFourthOption = {
+    self.removeActionView()
+    //            self.requestToUploadImage(profileImage: self.userImage!)
+    }
+    optionView.doActionForFifthOption = {
+    self.removeActionView()
+    let keychain = KeychainSwift()
+    keychain.delete("isActiveUser")
+    keychain.delete("email")
+    keychain.delete("password")
+    keychain.delete("user_auth")
+    UIApplication.shared.unregisterForRemoteNotifications()
+    
+    //keychain.delete("token")
+    self.stopTimerForFetchingUserDetail()
+    let storyBoard : UIStoryboard = UIStoryboard(name: "Main",bundle: nil)
+    let loginController = storyBoard.instantiateViewController(withIdentifier: "LoginController") as! LoginPageController
+    self.present(loginController, animated: false, completion: nil)
+    }
     }
     
     func actionViewDidTapped(_ sender: UITapGestureRecognizer){
@@ -1003,10 +1023,17 @@ class VCChildTasksList : UIViewController, UITableViewDelegate, UITableViewDataS
         if(imageData == nil)  { return; }
         let keychain = KeychainSwift()
         let url = "\(EarnItApp_BASE_URL)\(EarnItApp_CHILD_IMAGE_FOLDER)"
-        print("Basic \(keychain.get("user_auth")!)")
+        
+        var basic = ""
+        if let basicTemp = keychain.get("user_auth") {
+            basic = basicTemp
+        }
+        
+       // print("Basic \(keychain.get("user_auth")!)")
+        
         let headers: HTTPHeaders = [
             "accept": "application/json",
-            "Authorization": "Basic \(keychain.get("user_auth")!)",
+            "Authorization": "Basic \(basic)",
         ]
         Alamofire.upload(multipartFormData: { (multipartFormData) in
             if let data = imageData{

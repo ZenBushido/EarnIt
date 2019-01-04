@@ -264,14 +264,19 @@ class TaskSubmitScreen : UIViewController, UIGestureRecognizerDelegate, UIImageP
     //MARK: Image upload Method
     
     func requestToUploadImage(profileImage:UIImage, onCompletion: ((JSON?) -> Void)? = nil, onError: ((Error?) -> Void)? = nil){
-        
+    
         let imageData = UIImagePNGRepresentation(profileImage)
         if(imageData == nil)  { return; }
         let keychain = KeychainSwift()
         let url = "\(EarnItApp_BASE_URL)/tasks/\(self.earnItTask.taskId!)/images"
+        var basic = ""
+        if let basicTemp = keychain.get("user_auth") {
+            basic = basicTemp
+        }
+        
         let headers: HTTPHeaders = [
             "accept": "application/json",
-            "Authorization": "Basic \(keychain.get("user_auth")!)",
+            "Authorization": "Basic \(basic)",
         ]
         Alamofire.upload(multipartFormData: { (multipartFormData) in
             if let data = imageData{

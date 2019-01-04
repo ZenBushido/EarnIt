@@ -26,9 +26,10 @@ class ImageViewHeader : UIView {
         self.userProfileImageView.clipsToBounds = true
         self.userProfileImageView.layer.borderWidth = 1
         self.userProfileImageView.layer.borderColor = UIColor.white.cgColor
-        self.backgroundImageView.backgroundColor = UIColor.white
+        self.backgroundImageView.backgroundColor = UIColor.clear
         self.userProfileImageView.contentMode = .scaleAspectFill
         self.userProfileImageView.backgroundColor = UIColor.white
+      //   self.backgroundImageView.backgroundColor = UIColor(red: 38.0/255.0, green: 60.0/255.0, blue: 161.0/255.0, alpha: 1)
 
     }
     

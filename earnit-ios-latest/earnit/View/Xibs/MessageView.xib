@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -22,7 +21,7 @@
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="86p-nq-YU7">
                     <rect key="frame" x="31" y="154" width="93" height="30"/>
-                    <color key="backgroundColor" red="0.85490196080000003" green="0.2784313725" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.16470588235294117" green="0.28665110468864441" blue="0.59087294340133667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="93" id="EnK-pf-OAq"/>
                         <constraint firstAttribute="height" constant="30" id="b7j-DQ-G7F"/>
@@ -39,7 +38,7 @@
                             <real key="value" value="1"/>
                         </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                            <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="value" red="0.40894496440887451" green="0.87433701753616333" blue="0.3262559175491333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                     <connections>
@@ -48,12 +47,12 @@
                 </button>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="293-ib-eVv">
                     <rect key="frame" x="16" y="56" width="254" height="87"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" red="0.72126621010000003" green="0.83122694490000004" blue="0.98395746949999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="87" id="PwV-9W-EKK"/>
                         <constraint firstAttribute="width" constant="254" id="irF-6V-Btz"/>
                     </constraints>
-                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="textColor" red="0.15822371839999999" green="0.27688330410000001" blue="0.56813424830000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                     <userDefinedRuntimeAttributes>
@@ -74,7 +73,7 @@
                 </activityIndicatorView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yiz-3o-YVA">
                     <rect key="frame" x="165" y="154" width="93" height="30"/>
-                    <color key="backgroundColor" red="0.85490196080000003" green="0.2784313725" blue="0.61176470589999998" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.16470588235294117" green="0.28665110468864441" blue="0.59087294340133667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="30" id="WRz-JV-ZaO"/>
                         <constraint firstAttribute="width" constant="93" id="fyA-T8-qjP"/>
@@ -91,7 +90,7 @@
                             <real key="value" value="1"/>
                         </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                            <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="value" red="0.40894496440887451" green="0.87433701753616333" blue="0.3262559175491333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                     <connections>
@@ -108,8 +107,19 @@
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nqz-sO-5Dh">
+                    <rect key="frame" x="256" y="0.0" width="30" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="VnS-am-I1j"/>
+                        <constraint firstAttribute="width" constant="30" id="rKB-Te-u7i"/>
+                    </constraints>
+                    <state key="normal" image="CrossImage"/>
+                    <connections>
+                        <action selector="cancelButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="Ncg-Qr-AWJ"/>
+                    </connections>
+                </button>
             </subviews>
-            <color key="backgroundColor" red="0.1843137255" green="0.1529411765" blue="0.27450980390000002" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.1582237184047699" green="0.27688330411911011" blue="0.56813424825668335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="293-ib-eVv" secondAttribute="trailing" constant="16" id="AEh-cg-3G8"/>
                 <constraint firstItem="yiz-3o-YVA" firstAttribute="leading" secondItem="86p-nq-YU7" secondAttribute="trailing" constant="41" id="Fqb-gl-ZCV"/>
@@ -120,6 +130,8 @@
                 <constraint firstItem="FCc-tO-XcC" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="15" id="UgZ-ke-rYn"/>
                 <constraint firstAttribute="trailing" secondItem="yiz-3o-YVA" secondAttribute="trailing" constant="28" id="aqP-35-mUz"/>
                 <constraint firstAttribute="bottom" secondItem="yiz-3o-YVA" secondAttribute="bottom" constant="14" id="eNu-IN-qRg"/>
+                <constraint firstAttribute="trailing" secondItem="Nqz-sO-5Dh" secondAttribute="trailing" id="h8V-kK-5S8"/>
+                <constraint firstItem="Nqz-sO-5Dh" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="hec-DU-dqB"/>
                 <constraint firstItem="yiz-3o-YVA" firstAttribute="width" secondItem="86p-nq-YU7" secondAttribute="width" id="pGh-Rd-dfA"/>
                 <constraint firstAttribute="trailing" secondItem="FCc-tO-XcC" secondAttribute="trailing" constant="16" id="r03-FZ-Qo3"/>
                 <constraint firstItem="86p-nq-YU7" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="31" id="vgk-vf-eKV"/>
@@ -158,4 +170,7 @@
             <point key="canvasLocation" x="-14" y="-283"/>
         </view>
     </objects>
+    <resources>
+        <image name="CrossImage" width="25" height="25"/>
+    </resources>
 </document>
